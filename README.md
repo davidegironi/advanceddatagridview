@@ -5,7 +5,7 @@ About
 
 ## Download
 
-Download **[Latest Release](releases/latest)**
+**[Latest Release](/releases/latest)**
 
 ## Requirements
 
