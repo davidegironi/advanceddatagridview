@@ -1,7 +1,7 @@
 About
 ===
 
-**Advanced DataGridView** is a .NET WinForm **DataGridView with advanced Filtering and Sorting** capabilities.
+**[Advanced DataGridView](https://github.com/davidegironi/advanceddatagridview)** is a .NET WinForm **DataGridView with advanced Filtering and Sorting** capabilities.
 
 ## Download
 
