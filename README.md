@@ -3,6 +3,9 @@ About
 
 **Advanced DataGridView** is a .NET WinForm **DataGridView with advanced Filtering and Sorting** capabilities.
 
+## Download
+
+Download **[Latest Release](../releases/latest)**
 
 ## Requirements
 
