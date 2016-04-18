@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedDataGridView", "AdvancedDataGridView\AdvancedDataGridView.csproj", "{6EBA0A55-B390-4479-A564-58D46094998D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedDataGridViewSample", "AdvancedDataGridViewSample\AdvancedDataGridViewSample.csproj", "{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6EBA0A55-B390-4479-A564-58D46094998D}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FB1EC6B4-8A98-4FC4-9092-3F86E6B32D7C}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,15 @@
+﻿=========================================================
+Advanced DataGridView
+=========================================================
+
+A .NET WinForm DataGridView with advanced Filtering and
+Sorting capabilities.
+
+Copyright (c), 2014 Davide Gironi <davide.gironi@gmail.com>
+http://sourceforge.net/projects/advanceddatagridview/
+
+Original work
+  Copyright (c), 2013 Zuby <zuby@me.com> 
+  http://adgv.codeplex.com
+
+Please refer to LICENSE file for licensing information.
