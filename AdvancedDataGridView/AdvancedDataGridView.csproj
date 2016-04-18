@@ -90,9 +90,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="Resources\Images\ColumnHeader_Filtered.png" />
     <Content Include="Resources\Images\ColumnHeader_FilteredAndOrderedASC.png" />
     <Content Include="Resources\Images\ColumnHeader_FilteredAndOrderedDESC.png" />
@@ -112,11 +109,6 @@
     <Content Include="Resources\Images\SearchToolBar_buttonFromBegin.png" />
     <Content Include="Resources\Images\SearchToolBar_buttonSearch.png" />
     <Content Include="Resources\Images\SearchToolBar_ButtonWholeWord.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="LICENSE">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

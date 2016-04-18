@@ -1,0 +1,1 @@
+Third-Party folder contains documentation for third-party Software.
