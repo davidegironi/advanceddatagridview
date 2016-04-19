@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace AdvancedDataGridViewSample
@@ -55,6 +57,7 @@ namespace AdvancedDataGridViewSample
             _dataTable.Columns.Add("string", typeof(string));
             _dataTable.Columns.Add("boolean", typeof(bool));
             _dataTable.Columns.Add("guid", typeof(Guid));
+			_dataTable.Columns.Add("image", typeof(Bitmap));
 
             bindingSource_main.DataMember = _dataTable.TableName;
 
@@ -63,8 +66,16 @@ namespace AdvancedDataGridViewSample
 
         private void AddTestData()
         {
+			Random r = new Random();
+			Image[] sampleimages = new Image[2];
+			sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
+			sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
+			int imageindex = 0;
+
             for (int i = 0; i <= 100; i++)
             {
+				imageindex = r.Next(0, 2);
+
                 object[] newrow = new object[] { 
                     i, 
                     (decimal)i*2/3,
@@ -73,7 +84,8 @@ namespace AdvancedDataGridViewSample
                     DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
                     i*2 % 3 == 0 ? null : i.ToString()+" str", 
                     i % 2 == 0 ? true:false, 
-                    Guid.NewGuid()
+                    Guid.NewGuid(),
+					sampleimages[imageindex]
                 };
                 
                 _dataTable.Rows.Add(newrow);
@@ -90,6 +102,7 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);
             advancedDataGridView_main.SortDESC(advancedDataGridView_main.Columns["double"]);
+			//advancedDataGridView_main.DisableFilterAndSort(advancedDataGridView_main.Columns["image"]);
         }
 
         private void advancedDataGridView_main_FilterStringChanged(object sender, EventArgs e)
