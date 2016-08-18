@@ -19,7 +19,7 @@ namespace AdvancedDataGridViewSample
         public FormMain()
         {
             InitializeComponent();
-            
+
             //set filter and sort saved
             _filtersaved.Add(0, "");
             _sortsaved.Add(0, "");
@@ -46,6 +46,12 @@ namespace AdvancedDataGridViewSample
             SetTestData();
         }
 
+        private void button_reload_Click(object sender, EventArgs e)
+        {
+            //add test data to bindsource
+            AddTestData();
+        }
+
         private void SetTestData()
         {
             _dataTable = _dataSet.Tables.Add("TableTest");
@@ -57,7 +63,7 @@ namespace AdvancedDataGridViewSample
             _dataTable.Columns.Add("string", typeof(string));
             _dataTable.Columns.Add("boolean", typeof(bool));
             _dataTable.Columns.Add("guid", typeof(Guid));
-			_dataTable.Columns.Add("image", typeof(Bitmap));
+            _dataTable.Columns.Add("image", typeof(Bitmap));
 
             bindingSource_main.DataMember = _dataTable.TableName;
 
@@ -66,32 +72,32 @@ namespace AdvancedDataGridViewSample
 
         private void AddTestData()
         {
-			Random r = new Random();
-			Image[] sampleimages = new Image[2];
-			sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
-			sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
-			int imageindex = 0;
+            Random r = new Random();
+            Image[] sampleimages = new Image[2];
+            sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
+            sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
+            int imageindex = 0;
 
             for (int i = 0; i <= 100; i++)
             {
-				imageindex = r.Next(0, 2);
+                imageindex = r.Next(0, 2);
 
-                object[] newrow = new object[] { 
-                    i, 
+                object[] newrow = new object[] {
+                    i,
                     (decimal)i*2/3,
-                    i % 2 == 0 ? (double)i*2/3 : (double)i/2, 
+                    i % 2 == 0 ? (double)i*2/3 : (double)i/2,
                     DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0).Date,
                     DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
-                    i*2 % 3 == 0 ? null : i.ToString()+" str", 
-                    i % 2 == 0 ? true:false, 
+                    i*2 % 3 == 0 ? null : i.ToString()+" str",
+                    i % 2 == 0 ? true:false,
                     Guid.NewGuid(),
-					sampleimages[imageindex]
+                    sampleimages[imageindex]
                 };
-                
+
                 _dataTable.Rows.Add(newrow);
             }
         }
-        
+
         private void FormMain_Load(object sender, EventArgs e)
         {
             //add test data to bindsource
@@ -102,7 +108,7 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);
             advancedDataGridView_main.SortDESC(advancedDataGridView_main.Columns["double"]);
-			//advancedDataGridView_main.DisableFilterAndSort(advancedDataGridView_main.Columns["image"]);
+            //advancedDataGridView_main.DisableFilterAndSort(advancedDataGridView_main.Columns["image"]);
         }
 
         private void advancedDataGridView_main_FilterStringChanged(object sender, EventArgs e)
@@ -124,12 +130,12 @@ namespace AdvancedDataGridViewSample
 
         private void button_savefilters_Click(object sender, EventArgs e)
         {
-            _filtersaved.Add((comboBox_filtersaved.Items.Count-1) + 1, advancedDataGridView_main.FilterString);
+            _filtersaved.Add((comboBox_filtersaved.Items.Count - 1) + 1, advancedDataGridView_main.FilterString);
             comboBox_filtersaved.DataSource = new BindingSource(_filtersaved, null);
-            comboBox_filtersaved.SelectedIndex = comboBox_filtersaved.Items.Count-1;
-            _sortsaved.Add((comboBox_sortsaved.Items.Count-1) + 1, advancedDataGridView_main.SortString);
+            comboBox_filtersaved.SelectedIndex = comboBox_filtersaved.Items.Count - 1;
+            _sortsaved.Add((comboBox_sortsaved.Items.Count - 1) + 1, advancedDataGridView_main.SortString);
             comboBox_sortsaved.DataSource = new BindingSource(_sortsaved, null);
-            comboBox_sortsaved.SelectedIndex = comboBox_sortsaved.Items.Count-1;
+            comboBox_sortsaved.SelectedIndex = comboBox_sortsaved.Items.Count - 1;
         }
 
         private void button_setsavedfilter_Click(object sender, EventArgs e)
@@ -175,6 +181,6 @@ namespace AdvancedDataGridViewSample
             if (c != null)
                 advancedDataGridView_main.CurrentCell = c;
         }
-        
+
     }
 }
