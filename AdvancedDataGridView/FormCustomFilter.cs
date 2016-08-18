@@ -24,11 +24,12 @@ namespace Zuby.ADGV
         {
             Unknown,
             DateTime,
+            TimeSpan,
             String,
             Float,
             Integer
         }
-        
+
         private FilterType _filterType = FilterType.Unknown;
         private Control _valControl1 = null;
         private Control _valControl2 = null;
@@ -39,7 +40,7 @@ namespace Zuby.ADGV
         private string _filterStringDescription = null;
 
         private Hashtable _textStrings = new Hashtable();
-        
+
         #endregion
 
 
@@ -94,6 +95,8 @@ namespace Zuby.ADGV
 
             if (dataType == typeof(DateTime))
                 _filterType = FilterType.DateTime;
+            else if (dataType == typeof(TimeSpan))
+                _filterType = FilterType.TimeSpan;
             else if (dataType == typeof(Int32) || dataType == typeof(Int64) || dataType == typeof(Int16) ||
                     dataType == typeof(UInt32) || dataType == typeof(UInt64) || dataType == typeof(UInt16) ||
                     dataType == typeof(Byte) || dataType == typeof(SByte))
@@ -133,6 +136,15 @@ namespace Zuby.ADGV
                         _textStrings["EARLIER_THAN"].ToString(),
                         _textStrings["LATER_THAN"].ToString(),
                         _textStrings["BETWEEN"].ToString()
+                    });
+                    break;
+
+                case FilterType.TimeSpan:
+                    _valControl1 = new TextBox();
+                    _valControl2 = new TextBox();
+                    comboBox_filterType.Items.AddRange(new string[] {
+                        _textStrings["CONTAINS"].ToString(),
+                        _textStrings["DOES_NOT_CONTAIN"].ToString()
                     });
                     break;
 
@@ -289,6 +301,26 @@ namespace Zuby.ADGV
                     }
                     break;
 
+                case FilterType.TimeSpan:
+                    try
+                    {
+                        TimeSpan ts = TimeSpan.Parse(control1.Text);
+
+                        if (filterTypeConditionText == _textStrings["CONTAINS"].ToString())
+                        {
+                            filterString = "(Convert([{0}], 'System.String') LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')";
+                        }
+                        else if (filterTypeConditionText == _textStrings["DOES_NOT_CONTAIN"].ToString())
+                        {
+                            filterString = "(Convert([{0}], 'System.String') NOT LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')";
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        filterString = null;
+                    }
+                    break;
+
                 case FilterType.Integer:
                 case FilterType.Float:
 
@@ -360,8 +392,8 @@ namespace Zuby.ADGV
             return result.Replace("'", "''");
         }
 
-        
-        #endregion 
+
+        #endregion
 
 
         #region buttons events
@@ -393,8 +425,8 @@ namespace Zuby.ADGV
             }
 
             string filterString = BuildCustomFilter(_filterType, _filterDateAndTimeEnabled, comboBox_filterType.Text, _valControl1, _valControl2);
-            
-            if (filterString != null)
+
+            if (!String.IsNullOrEmpty(filterString))
             {
                 _filterString = filterString;
                 _filterStringDescription = String.Format(_textStrings["FILTER_STRING_DESCRIPTION"].ToString(), comboBox_filterType.Text, _valControl1.Text);
@@ -498,6 +530,6 @@ namespace Zuby.ADGV
         }
 
         #endregion
- 
+
     }
 }

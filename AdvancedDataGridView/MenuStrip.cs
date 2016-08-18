@@ -53,7 +53,7 @@ namespace Zuby.ADGV
         #region class properties
 
         private Hashtable _textStrings = new Hashtable();
-        
+
         private FilterType _activeFilterType = FilterType.None;
         private SortType _activeSortType = SortType.None;
         private TreeNodeItemSelector[] _startingNodes = null;
@@ -67,7 +67,7 @@ namespace Zuby.ADGV
 
 
         #region costructors
-        
+
 
         /// <summary>
         /// MenuStrip constructor
@@ -101,7 +101,7 @@ namespace Zuby.ADGV
             DataType = dataType;
 
             //set components values
-            if (DataType == typeof(DateTime))
+            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
             {
                 customFilterLastFiltersListMenuItem.Text = _textStrings["CUSTOMFILTER"].ToString();
                 sortASCMenuItem.Text = _textStrings["SORTDATETIMEASC"].ToString();
@@ -202,7 +202,7 @@ namespace Zuby.ADGV
 
         #endregion
 
-        
+
         #region public events
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace Zuby.ADGV
         /// Get the DataType for the MenuStrip Filter
         /// </summary>
         public Type DataType { get; private set; }
-        
+
         /// <summary>
         /// Get or Set the Filter Sort enabled
         /// </summary>
@@ -518,7 +518,7 @@ namespace Zuby.ADGV
                             if (FilterString.Length > 0)
                                 FilterString += " OR ";
 
-                            if (DataType == typeof(DateTime))
+                            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
                                 FilterString += filter;
                             else if (DataType == typeof(bool))
                                 FilterString += "{0}=" + filter;
@@ -526,9 +526,9 @@ namespace Zuby.ADGV
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
                                 FilterString += "[{0}] IN (" + filter + ")";
-							else if (DataType == typeof(Bitmap))
-							{ }
-							else
+                            else if (DataType == typeof(Bitmap))
+                            { }
+                            else
                                 FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
                         }
                     }
@@ -549,7 +549,7 @@ namespace Zuby.ADGV
         private string BuildNodesFilterString(IEnumerable<TreeNodeItemSelector> nodes)
         {
             StringBuilder sb = new StringBuilder("");
-            string appx = DataType == typeof(DateTime) ? " OR " : ", ";
+            string appx = (DataType == typeof(DateTime) || DataType == typeof(TimeSpan)) ? " OR " : ", ";
 
             if (nodes != null && nodes.Count() > 0)
             {
@@ -561,6 +561,23 @@ namespace Zuby.ADGV
                         {
                             DateTime dt = (DateTime)n.Value;
                             sb.Append("(Convert([{0}], 'System.String') LIKE '%" + Convert.ToString((IsFilterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%')" + appx);
+                        }
+                        else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
+                        {
+                            string subnode = BuildNodesFilterString(n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked));
+                            if (subnode.Length > 0)
+                                sb.Append(subnode + appx);
+                        }
+                    }
+                }
+                else if (DataType == typeof(TimeSpan))
+                {
+                    foreach (TreeNodeItemSelector n in nodes)
+                    {
+                        if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
+                        {
+                            TimeSpan ts = (TimeSpan)n.Value;
+                            sb.Append("(Convert([{0}], 'System.String') LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')" + appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
                         {
@@ -590,9 +607,9 @@ namespace Zuby.ADGV
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
-				else if (DataType == typeof(Bitmap))
-				{ }
-				else
+                else if (DataType == typeof(Bitmap))
+                { }
+                else
                 {
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append("'" + FormatFilterString(n.Value.ToString()) + "'" + appx);
@@ -734,6 +751,55 @@ namespace Zuby.ADGV
                         }
                     }
 
+                    //add timespan nodes
+                    else if (DataType == typeof(TimeSpan))
+                    {
+                        var days =
+                            from day in nonulls
+                            group day by ((TimeSpan)day.Value).Days into cd
+                            orderby cd.Key ascending
+                            select cd;
+
+                        foreach (var day in days)
+                        {
+                            TreeNodeItemSelector daysnode = TreeNodeItemSelector.CreateNode(day.Key.ToString("D2"), day.Key, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.DateTimeNode);
+                            checkList.Nodes.Add(daysnode);
+
+                            var hours =
+                                from hour in day
+                                group hour by ((TimeSpan)hour.Value).Hours into ch
+                                orderby ch.Key ascending
+                                select ch;
+
+                            foreach (var hour in hours)
+                            {
+                                TreeNodeItemSelector hoursnode = daysnode.CreateChildNode(hour.Key.ToString("D2") + " " + "h", hour.Key);
+
+                                var mins =
+                                    from min in hour
+                                    group min by ((TimeSpan)min.Value).Minutes into cmin
+                                    orderby cmin.Key ascending
+                                    select cmin;
+
+                                foreach (var min in mins)
+                                {
+                                    TreeNodeItemSelector minsnode = hoursnode.CreateChildNode(min.Key.ToString("D2") + " " + "m", min.Key);
+
+                                    var secs =
+                                        from sec in min
+                                        group sec by ((TimeSpan)sec.Value).Seconds into cs
+                                        orderby cs.Key ascending
+                                        select cs;
+
+                                    foreach (var sec in secs)
+                                    {
+                                        TreeNodeItemSelector secsnode = minsnode.CreateChildNode(sec.Key.ToString("D2") + " " + "s", sec.First().Value);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     //add boolean nodes
                     else if (DataType == typeof(bool))
                     {
@@ -752,9 +818,9 @@ namespace Zuby.ADGV
                         }
                     }
 
-					//ignore image nodes
-					else if (DataType == typeof(Bitmap))
-					{ }
+                    //ignore image nodes
+                    else if (DataType == typeof(Bitmap))
+                    { }
 
                     //add string nodes
                     else
@@ -845,7 +911,7 @@ namespace Zuby.ADGV
                 }
                 else
                     if (result != n.CheckState)
-                        isAllNodesSomeCheckState = false;
+                    isAllNodesSomeCheckState = false;
             }
 
             if (isAllNodesSomeCheckState)
@@ -954,7 +1020,7 @@ namespace Zuby.ADGV
 
 
         #region checklist filter events
-        
+
         /// <summary>
         /// CheckList NodeMouseClick event
         /// </summary>
@@ -1136,7 +1202,7 @@ namespace Zuby.ADGV
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
         }
-        
+
         /// <summary>
         /// Custom Filter Click event
         /// </summary>
@@ -1144,9 +1210,9 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void customFilterMenuItem_Click(object sender, EventArgs e)
         {
-			//ignore image nodes
-			if (DataType == typeof(Bitmap))
-				return;
+            //ignore image nodes
+            if (DataType == typeof(Bitmap))
+                return;
 
             //open a new Custom filter window
             FormCustomFilter flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled);
@@ -1194,7 +1260,7 @@ namespace Zuby.ADGV
                 SetCustomFilter(index);
             }
         }
-        
+
         /// <summary>
         /// Custom Filter preset MouseEnter event
         /// </summary>
@@ -1258,9 +1324,9 @@ namespace Zuby.ADGV
             (sender as ToolStripMenuItem).Available = true;
             (sender as ToolStripMenuItem).TextChanged -= customFilterLastFilterMenuItem_TextChanged;
         }
-        
+
         #endregion
-        
+
 
         #region sort events
 
@@ -1271,9 +1337,9 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void sortASCMenuItem_Click(object sender, EventArgs e)
         {
-			//ignore image nodes
-			if (DataType == typeof(Bitmap))
-				return;
+            //ignore image nodes
+            if (DataType == typeof(Bitmap))
+                return;
 
             sortASCMenuItem.Checked = true;
             sortDESCMenuItem.Checked = false;
@@ -1306,9 +1372,9 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void sortDESCMenuItem_Click(object sender, EventArgs e)
         {
-			//ignore image nodes
-			if (DataType == typeof(Bitmap))
-				return;
+            //ignore image nodes
+            if (DataType == typeof(Bitmap))
+                return;
 
             sortASCMenuItem.Checked = false;
             sortDESCMenuItem.Checked = true;
@@ -1508,7 +1574,7 @@ namespace Zuby.ADGV
         {
             e.Graphics.DrawImage(Properties.Resources.MenuStrip_ResizeGrip, 0, 0);
         }
-        
+
         #endregion
 
     }

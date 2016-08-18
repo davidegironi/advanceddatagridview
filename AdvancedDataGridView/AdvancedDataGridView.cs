@@ -28,7 +28,7 @@ namespace Zuby.ADGV
 
         #endregion
 
-        
+
         #region class properties
 
         private List<string> _sortOrderList = new List<string>();
@@ -57,7 +57,7 @@ namespace Zuby.ADGV
             }
         }
         private bool _filterAndSortEnabled = true;
-        
+
 
         #region constructors
 
@@ -312,7 +312,7 @@ namespace Zuby.ADGV
                 }
             }
         }
-        
+
         /// <summary>
         /// Enable or disable Filter capabilities for a DataGridViewColumn
         /// </summary>
@@ -353,7 +353,7 @@ namespace Zuby.ADGV
         }
 
         #endregion
-        
+
 
         #region public Find methods
 
@@ -420,7 +420,7 @@ namespace Zuby.ADGV
 
         #endregion
 
-        
+
         #region cells methods
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace Zuby.ADGV
             if (ColumnHeadersHeight < cell.MinimumSize.Height)
                 ColumnHeadersHeight = cell.MinimumSize.Height;
             e.Column.HeaderCell = cell;
-            
+
             base.OnColumnAdded(e);
         }
 

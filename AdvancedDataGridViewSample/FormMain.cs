@@ -64,6 +64,7 @@ namespace AdvancedDataGridViewSample
             _dataTable.Columns.Add("boolean", typeof(bool));
             _dataTable.Columns.Add("guid", typeof(Guid));
             _dataTable.Columns.Add("image", typeof(Bitmap));
+            _dataTable.Columns.Add("timespan", typeof(TimeSpan));
 
             bindingSource_main.DataMember = _dataTable.TableName;
 
@@ -76,12 +77,11 @@ namespace AdvancedDataGridViewSample
             Image[] sampleimages = new Image[2];
             sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
             sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
-            int imageindex = 0;
+
+            int maxMinutes = (int)((TimeSpan.FromHours(20) - TimeSpan.FromHours(10)).TotalMinutes);
 
             for (int i = 0; i <= 100; i++)
             {
-                imageindex = r.Next(0, 2);
-
                 object[] newrow = new object[] {
                     i,
                     (decimal)i*2/3,
@@ -91,7 +91,8 @@ namespace AdvancedDataGridViewSample
                     i*2 % 3 == 0 ? null : i.ToString()+" str",
                     i % 2 == 0 ? true:false,
                     Guid.NewGuid(),
-                    sampleimages[imageindex]
+                    sampleimages[r.Next(0, 2)],
+                    TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(r.Next(maxMinutes)))
                 };
 
                 _dataTable.Rows.Add(newrow);
@@ -139,7 +140,8 @@ namespace AdvancedDataGridViewSample
 
         private void button_setsavedfilter_Click(object sender, EventArgs e)
         {
-            advancedDataGridView_main.LoadFilterAndSort(comboBox_filtersaved.SelectedValue.ToString(), comboBox_sortsaved.SelectedValue.ToString());
+            if (comboBox_filtersaved.SelectedIndex != -1 && comboBox_sortsaved.SelectedIndex != -1)
+                advancedDataGridView_main.LoadFilterAndSort(comboBox_filtersaved.SelectedValue.ToString(), comboBox_sortsaved.SelectedValue.ToString());
         }
 
         private void button_unloadfilters_Click(object sender, EventArgs e)

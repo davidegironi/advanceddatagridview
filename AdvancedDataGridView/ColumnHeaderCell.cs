@@ -25,7 +25,7 @@ namespace Zuby.ADGV
 
         #endregion
 
-        
+
         #region class properties
 
         private Image _filterImage = Properties.Resources.ColumnHeader_UnFiltered;
@@ -108,7 +108,7 @@ namespace Zuby.ADGV
         }
 
         #endregion
-        
+
 
         #region public methods
 
@@ -351,10 +351,10 @@ namespace Zuby.ADGV
                 MenuStrip.SetFilterEnabled(enabled);
             }
         }
-        
+
         #endregion
-        
-        
+
+
         #region menustrip events
 
         /// <summary>
@@ -463,9 +463,9 @@ namespace Zuby.ADGV
                 cellState, value, formattedValue,
                 errorText, cellStyle, advancedBorderStyle, paintParts);
 
-			// Don't display a dropdown for Image columns
-			if (this.OwningColumn.ValueType == typeof(System.Drawing.Bitmap))
-				return;
+            // Don't display a dropdown for Image columns
+            if (this.OwningColumn.ValueType == typeof(System.Drawing.Bitmap))
+                return;
 
             if (FilterAndSortEnabled && paintParts.HasFlag(DataGridViewPaintParts.ContentBackground))
             {
