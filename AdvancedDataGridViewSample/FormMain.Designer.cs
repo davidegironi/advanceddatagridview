@@ -49,6 +49,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.advancedDataGridView_main = new Zuby.ADGV.AdvancedDataGridView();
             this.bindingSource_main = new System.Windows.Forms.BindingSource(this.components);
+            this.button_reload = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -58,6 +59,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button_reload);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.textBox_total);
             this.panel1.Controls.Add(this.textBox_sort);
@@ -261,6 +263,16 @@
             // 
             this.bindingSource_main.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_main_ListChanged);
             // 
+            // button_reload
+            // 
+            this.button_reload.Location = new System.Drawing.Point(397, 85);
+            this.button_reload.Name = "button_reload";
+            this.button_reload.Size = new System.Drawing.Size(75, 23);
+            this.button_reload.TabIndex = 17;
+            this.button_reload.Text = "Reload";
+            this.button_reload.UseVisualStyleBackColor = true;
+            this.button_reload.Click += new System.EventHandler(this.button_reload_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,6 +316,7 @@
         private System.Windows.Forms.TextBox textBox_filter;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button_reload;
     }
 }
 
