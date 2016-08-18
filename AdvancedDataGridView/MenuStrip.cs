@@ -527,9 +527,7 @@ namespace Zuby.ADGV
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
                                 FilterString += "[{0}] IN (" + filter + ")";
 							else if (DataType == typeof(Bitmap))
-							{
-								// ignore
-							}
+							{ }
 							else
                                 FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
                         }
@@ -593,9 +591,7 @@ namespace Zuby.ADGV
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
 				else if (DataType == typeof(Bitmap))
-				{
-					// ignore
-				}
+				{ }
 				else
                 {
                     foreach (TreeNodeItemSelector n in nodes)
@@ -758,9 +754,7 @@ namespace Zuby.ADGV
 
 					//ignore image nodes
 					else if (DataType == typeof(Bitmap))
-					{
-						//
-					}
+					{ }
 
                     //add string nodes
                     else
