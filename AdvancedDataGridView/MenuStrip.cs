@@ -526,7 +526,11 @@ namespace Zuby.ADGV
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
                                 FilterString += "[{0}] IN (" + filter + ")";
-                            else
+							else if (DataType == typeof(Bitmap))
+							{
+								// ignore
+							}
+							else
                                 FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
                         }
                     }
@@ -588,7 +592,11 @@ namespace Zuby.ADGV
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
-                else
+				else if (DataType == typeof(Bitmap))
+				{
+					// ignore
+				}
+				else
                 {
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append("'" + FormatFilterString(n.Value.ToString()) + "'" + appx);
@@ -747,6 +755,12 @@ namespace Zuby.ADGV
                             checkList.Nodes.Add(node);
                         }
                     }
+
+					//ignore image nodes
+					else if (DataType == typeof(Bitmap))
+					{
+						//
+					}
 
                     //add string nodes
                     else
@@ -1136,6 +1150,10 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void customFilterMenuItem_Click(object sender, EventArgs e)
         {
+			//ignore image nodes
+			if (DataType == typeof(Bitmap))
+				return;
+
             //open a new Custom filter window
             FormCustomFilter flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled);
 
@@ -1259,6 +1277,10 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void sortASCMenuItem_Click(object sender, EventArgs e)
         {
+			//ignore image nodes
+			if (DataType == typeof(Bitmap))
+				return;
+
             sortASCMenuItem.Checked = true;
             sortDESCMenuItem.Checked = false;
             _activeSortType = SortType.ASC;
@@ -1290,6 +1312,10 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void sortDESCMenuItem_Click(object sender, EventArgs e)
         {
+			//ignore image nodes
+			if (DataType == typeof(Bitmap))
+				return;
+
             sortASCMenuItem.Checked = false;
             sortDESCMenuItem.Checked = true;
             _activeSortType = SortType.DESC;

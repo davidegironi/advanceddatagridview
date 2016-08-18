@@ -463,6 +463,10 @@ namespace Zuby.ADGV
                 cellState, value, formattedValue,
                 errorText, cellStyle, advancedBorderStyle, paintParts);
 
+			// Don't display a dropdown for Image columns
+			if (this.OwningColumn.ValueType == typeof(System.Drawing.Bitmap))
+				return;
+
             if (FilterAndSortEnabled && paintParts.HasFlag(DataGridViewPaintParts.ContentBackground))
             {
                 _filterButtonOffsetBounds = GetFilterBounds(true);
