@@ -244,5 +244,12 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
-#_DevTools
-_DevTools/
+# packages Ext
+!packages/Ext/
+
+# _DevTools
+_DevTools/out.txt
+_DevTools/TestResult.xml
+
+# App.config
+App.*.config
