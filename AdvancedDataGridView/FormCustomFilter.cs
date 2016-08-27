@@ -378,7 +378,7 @@ namespace Zuby.ADGV
         {
             string result = "";
             string s;
-            string[] replace = { "%", "[", "]", "*", "\"", "`", "\\" };
+            string[] replace = { "%", "[", "]", "*", "\"", "\\" };
 
             for (int i = 0; i < text.Length; i++)
             {

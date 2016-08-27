@@ -629,20 +629,7 @@ namespace Zuby.ADGV
         /// <returns></returns>
         private string FormatFilterString(string text)
         {
-            string result = "";
-            string s;
-            string[] replace = { "%", "[", "]", "*", "\"", "`", "\\" };
-
-            for (int i = 0; i < text.Length; i++)
-            {
-                s = text[i].ToString();
-                if (replace.Contains(s))
-                    result += "[" + s + "]";
-                else
-                    result += s;
-            }
-
-            return result.Replace("'", "''");
+            return text.Replace("'", "''");
         }
 
         /// <summary>
