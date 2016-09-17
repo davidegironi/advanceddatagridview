@@ -524,6 +524,7 @@ namespace Zuby.ADGV
                                 FilterString += "{0}=" + filter;
                             else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
+                                        DataType == typeof(Decimal) || DataType == typeof(Double) ||
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
                                 FilterString += "[{0}] IN (" + filter + ")";
                             else if (DataType == typeof(Bitmap))
