@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button_reload = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox_total = new System.Windows.Forms.TextBox();
             this.textBox_sort = new System.Windows.Forms.TextBox();
@@ -38,7 +39,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.advancedDataGridViewSearchToolBar_main = new Zuby.ADGV.AdvancedDataGridViewSearchToolBar();
             this.button_unloadfilters = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -47,14 +47,14 @@
             this.button_savefilters = new System.Windows.Forms.Button();
             this.comboBox_filtersaved = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.advancedDataGridView_main = new Zuby.ADGV.AdvancedDataGridView();
             this.bindingSource_main = new System.Windows.Forms.BindingSource(this.components);
-            this.button_reload = new System.Windows.Forms.Button();
+            this.advancedDataGridView_main = new Zuby.ADGV.AdvancedDataGridView();
+            this.advancedDataGridViewSearchToolBar_main = new Zuby.ADGV.AdvancedDataGridViewSearchToolBar();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -79,6 +79,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(834, 142);
             this.panel1.TabIndex = 0;
+            // 
+            // button_reload
+            // 
+            this.button_reload.Location = new System.Drawing.Point(397, 85);
+            this.button_reload.Name = "button_reload";
+            this.button_reload.Size = new System.Drawing.Size(75, 23);
+            this.button_reload.TabIndex = 17;
+            this.button_reload.Text = "Reload";
+            this.button_reload.UseVisualStyleBackColor = true;
+            this.button_reload.Click += new System.EventHandler(this.button_reload_Click);
             // 
             // label5
             // 
@@ -145,20 +155,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(834, 28);
             this.panel3.TabIndex = 10;
-            // 
-            // advancedDataGridViewSearchToolBar_main
-            // 
-            this.advancedDataGridViewSearchToolBar_main.AllowMerge = false;
-            this.advancedDataGridViewSearchToolBar_main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.advancedDataGridViewSearchToolBar_main.Location = new System.Drawing.Point(0, 0);
-            this.advancedDataGridViewSearchToolBar_main.MaximumSize = new System.Drawing.Size(0, 27);
-            this.advancedDataGridViewSearchToolBar_main.MinimumSize = new System.Drawing.Size(0, 27);
-            this.advancedDataGridViewSearchToolBar_main.Name = "advancedDataGridViewSearchToolBar_main";
-            this.advancedDataGridViewSearchToolBar_main.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.advancedDataGridViewSearchToolBar_main.Size = new System.Drawing.Size(834, 27);
-            this.advancedDataGridViewSearchToolBar_main.TabIndex = 0;
-            this.advancedDataGridViewSearchToolBar_main.Text = "advancedDataGridViewSearchToolBar_main";
-            this.advancedDataGridViewSearchToolBar_main.Search += new Zuby.ADGV.AdvancedDataGridViewSearchToolBarSearchEventHandler(this.advancedDataGridViewSearchToolBar_main_Search);
             // 
             // button_unloadfilters
             // 
@@ -240,6 +236,10 @@
             this.panel2.Size = new System.Drawing.Size(834, 320);
             this.panel2.TabIndex = 1;
             // 
+            // bindingSource_main
+            // 
+            this.bindingSource_main.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_main_ListChanged);
+            // 
             // advancedDataGridView_main
             // 
             this.advancedDataGridView_main.AllowUserToAddRows = false;
@@ -259,19 +259,19 @@
             this.advancedDataGridView_main.SortStringChanged += new System.EventHandler(this.advancedDataGridView_main_SortStringChanged);
             this.advancedDataGridView_main.FilterStringChanged += new System.EventHandler(this.advancedDataGridView_main_FilterStringChanged);
             // 
-            // bindingSource_main
+            // advancedDataGridViewSearchToolBar_main
             // 
-            this.bindingSource_main.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_main_ListChanged);
-            // 
-            // button_reload
-            // 
-            this.button_reload.Location = new System.Drawing.Point(397, 85);
-            this.button_reload.Name = "button_reload";
-            this.button_reload.Size = new System.Drawing.Size(75, 23);
-            this.button_reload.TabIndex = 17;
-            this.button_reload.Text = "Reload";
-            this.button_reload.UseVisualStyleBackColor = true;
-            this.button_reload.Click += new System.EventHandler(this.button_reload_Click);
+            this.advancedDataGridViewSearchToolBar_main.AllowMerge = false;
+            this.advancedDataGridViewSearchToolBar_main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.advancedDataGridViewSearchToolBar_main.Location = new System.Drawing.Point(0, 0);
+            this.advancedDataGridViewSearchToolBar_main.MaximumSize = new System.Drawing.Size(0, 27);
+            this.advancedDataGridViewSearchToolBar_main.MinimumSize = new System.Drawing.Size(0, 27);
+            this.advancedDataGridViewSearchToolBar_main.Name = "advancedDataGridViewSearchToolBar_main";
+            this.advancedDataGridViewSearchToolBar_main.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.advancedDataGridViewSearchToolBar_main.Size = new System.Drawing.Size(834, 27);
+            this.advancedDataGridViewSearchToolBar_main.TabIndex = 0;
+            this.advancedDataGridViewSearchToolBar_main.Text = "advancedDataGridViewSearchToolBar_main";
+            this.advancedDataGridViewSearchToolBar_main.Search += new Zuby.ADGV.AdvancedDataGridViewSearchToolBarSearchEventHandler(this.advancedDataGridViewSearchToolBar_main_Search);
             // 
             // FormMain
             // 
@@ -289,8 +289,8 @@
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).EndInit();
             this.ResumeLayout(false);
 
         }

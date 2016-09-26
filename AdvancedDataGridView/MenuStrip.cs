@@ -68,7 +68,6 @@ namespace Zuby.ADGV
 
         #region costructors
 
-
         /// <summary>
         /// MenuStrip constructor
         /// </summary>
@@ -137,13 +136,15 @@ namespace Zuby.ADGV
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
             }
 
+            //set default NOT IN logic
+            IsFilterNOTINLogicEnabled = false;
+
             //set default compoents
             customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             customFilterLastFiltersListMenuItem.Checked = ActiveFilterType == FilterType.Custom;
             MinimumSize = new Size(PreferredSize.Width, PreferredSize.Height);
             //resize
             ResizeBox(MinimumSize.Width, MinimumSize.Height);
-
         }
 
         /// <summary>
@@ -261,6 +262,11 @@ namespace Zuby.ADGV
         /// Get or Set the Filter DateAndTime enabled
         /// </summary>
         public bool IsFilterDateAndTimeEnabled { get; set; }
+
+        /// <summary>
+        /// Get or Set the NOT IN logic for Filter
+        /// </summary>
+        public bool IsFilterNOTINLogicEnabled { get; set; }
 
         #endregion
 
@@ -506,11 +512,17 @@ namespace Zuby.ADGV
                     if (checkList.Nodes.Count > 2 || selectAllNode == null)
                     {
                         string filter = BuildNodesFilterString(
-                            checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
-                                n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
-                                    && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
-                                    && n.CheckState != CheckState.Unchecked
-                            )
+                            (IsFilterNOTINLogicEnabled ?
+                                checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
+                                    n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
+                                        && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
+                                        && n.CheckState == CheckState.Unchecked
+                                ) :
+                                checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
+                                    n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
+                                        && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
+                                        && n.CheckState != CheckState.Unchecked
+                                ))
                         );
 
                         if (filter.Length > 0)
@@ -526,11 +538,21 @@ namespace Zuby.ADGV
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
                                         DataType == typeof(Decimal) || DataType == typeof(Double) ||
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
-                                FilterString += "[{0}] IN (" + filter + ")";
+                            {
+                                if (IsFilterNOTINLogicEnabled)
+                                    FilterString += "[{0}] NOT IN (" + filter + ")";
+                                else
+                                    FilterString += "[{0}] IN (" + filter + ")";
+                            }
                             else if (DataType == typeof(Bitmap))
                             { }
                             else
-                                FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
+                            {
+                                if (IsFilterNOTINLogicEnabled)
+                                    FilterString += "Convert([{0}],System.String) NOT IN (" + filter + ")";
+                                else
+                                    FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
+                            }
                         }
                     }
                 }

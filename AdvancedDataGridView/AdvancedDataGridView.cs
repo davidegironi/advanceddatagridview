@@ -176,6 +176,16 @@ namespace Zuby.ADGV
             CleanSort();
         }
 
+        /// <summary>
+        /// Set the NOTIN Logic for checkbox filter
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetMenuStripFilterNOTINLogic(bool enabled)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.IsMenuStripFilterNOTINLogicEnabled = enabled;
+        }
+
         #endregion
 
 

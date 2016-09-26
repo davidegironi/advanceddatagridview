@@ -282,21 +282,6 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
-        /// Get or Set the FilterDateAndTime enabled status
-        /// </summary>
-        public bool IsFilterDateAndTimeEnabled
-        {
-            get
-            {
-                return MenuStrip.IsFilterDateAndTimeEnabled;
-            }
-            set
-            {
-                MenuStrip.IsFilterDateAndTimeEnabled = value;
-            }
-        }
-
-        /// <summary>
         /// Get or Set the Sort enabled status
         /// </summary>
         public bool IsSortEnabled
@@ -323,6 +308,36 @@ namespace Zuby.ADGV
             set
             {
                 MenuStrip.IsFilterEnabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the FilterDateAndTime enabled status
+        /// </summary>
+        public bool IsFilterDateAndTimeEnabled
+        {
+            get
+            {
+                return MenuStrip.IsFilterDateAndTimeEnabled;
+            }
+            set
+            {
+                MenuStrip.IsFilterDateAndTimeEnabled = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or Set the NOT IN logic for Filter
+        /// </summary>
+        public bool IsMenuStripFilterNOTINLogicEnabled
+        {
+            get
+            {
+                return MenuStrip.IsFilterNOTINLogicEnabled;
+            }
+            set
+            {
+                MenuStrip.IsFilterNOTINLogicEnabled = value;
             }
         }
 
