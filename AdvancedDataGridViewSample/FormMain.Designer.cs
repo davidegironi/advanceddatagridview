@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.button_reload = new System.Windows.Forms.Button();
+            this.button_load = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox_total = new System.Windows.Forms.TextBox();
             this.textBox_sort = new System.Windows.Forms.TextBox();
@@ -59,7 +59,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.button_reload);
+            this.panel1.Controls.Add(this.button_load);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.textBox_total);
             this.panel1.Controls.Add(this.textBox_sort);
@@ -80,15 +80,15 @@
             this.panel1.Size = new System.Drawing.Size(834, 142);
             this.panel1.TabIndex = 0;
             // 
-            // button_reload
+            // button_load
             // 
-            this.button_reload.Location = new System.Drawing.Point(397, 85);
-            this.button_reload.Name = "button_reload";
-            this.button_reload.Size = new System.Drawing.Size(75, 23);
-            this.button_reload.TabIndex = 17;
-            this.button_reload.Text = "Reload";
-            this.button_reload.UseVisualStyleBackColor = true;
-            this.button_reload.Click += new System.EventHandler(this.button_reload_Click);
+            this.button_load.Location = new System.Drawing.Point(397, 85);
+            this.button_load.Name = "button_load";
+            this.button_load.Size = new System.Drawing.Size(75, 23);
+            this.button_load.TabIndex = 17;
+            this.button_load.Text = "Load";
+            this.button_load.UseVisualStyleBackColor = true;
+            this.button_load.Click += new System.EventHandler(this.button_load_Click);
             // 
             // label5
             // 
@@ -244,8 +244,8 @@
             // 
             this.advancedDataGridView_main.AllowUserToAddRows = false;
             this.advancedDataGridView_main.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.advancedDataGridView_main.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.advancedDataGridView_main.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.advancedDataGridView_main.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -316,7 +316,7 @@
         private System.Windows.Forms.TextBox textBox_filter;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button_reload;
+        private System.Windows.Forms.Button button_load;
     }
 }
 

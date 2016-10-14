@@ -512,7 +512,7 @@ namespace Zuby.ADGV
                     if (checkList.Nodes.Count > 2 || selectAllNode == null)
                     {
                         string filter = BuildNodesFilterString(
-                            (IsFilterNOTINLogicEnabled ?
+                            (IsFilterNOTINLogicEnabled && (DataType != typeof(DateTime) && DataType != typeof(TimeSpan) && DataType != typeof(bool)) ?
                                 checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
                                     n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
                                         && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
