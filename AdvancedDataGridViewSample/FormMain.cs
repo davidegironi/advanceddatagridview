@@ -105,7 +105,6 @@ namespace AdvancedDataGridViewSample
             AddTestData();
 
             //setup datagridview
-            advancedDataGridView_main.SetMenuStripFilterNOTINLogic(true);
             advancedDataGridView_main.DisableFilterAndSort(advancedDataGridView_main.Columns["int"]);
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);

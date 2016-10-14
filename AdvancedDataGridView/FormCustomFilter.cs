@@ -215,8 +215,7 @@ namespace Zuby.ADGV
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void FormCustomFilter_Load(object sender, EventArgs e)
-        {
-        }
+        { }
 
         #endregion
 
