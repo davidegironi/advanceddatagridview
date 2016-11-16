@@ -56,7 +56,7 @@ namespace Zuby.ADGV
 
             //initialize components
             InitializeComponent();
-            
+
             this.comboBox_columns.Items.AddRange(new object[] { _textStrings["COMBOBOXCOLUMNSALL"].ToString() });
             this.button_close.ToolTipText = _textStrings["BUTTONCLOSETOOLTIP"].ToString();
             this.label_search.Text = _textStrings["LABELSEARCH"].ToString();
@@ -92,16 +92,16 @@ namespace Zuby.ADGV
                 {
                     DataGridViewColumn[] cols = _columnsList.Cast<DataGridViewColumn>().Where(col => col.Visible).ToArray<DataGridViewColumn>();
 
-                    if (cols.Length == comboBox_columns.Items.Count-1)
+                    if (cols.Length == comboBox_columns.Items.Count - 1)
                     {
                         if (cols[comboBox_columns.SelectedIndex - 1].HeaderText == comboBox_columns.SelectedItem.ToString())
                             c = cols[comboBox_columns.SelectedIndex - 1];
                     }
                 }
-                
+
                 AdvancedDataGridViewSearchToolBarSearchEventArgs args = new AdvancedDataGridViewSearchToolBarSearchEventArgs(
                     textBox_search.Text,
-                    c, 
+                    c,
                     button_casesensitive.Checked,
                     button_wholeword.Checked,
                     button_frombegin.Checked
@@ -196,7 +196,7 @@ namespace Zuby.ADGV
             comboBox_columns.BeginUpdate();
             comboBox_columns.Items.Clear();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedDataGridViewSearchToolBar));
-            comboBox_columns.Items.AddRange(new object[] {"(All columns)"});
+            comboBox_columns.Items.AddRange(new object[] { "(All columns)" });
             if (_columnsList != null)
                 foreach (DataGridViewColumn c in _columnsList)
                     if (c.Visible)
@@ -240,7 +240,7 @@ namespace Zuby.ADGV
                     GetResizeBoxSize(PreferredSize.Width - oldW + w1 + w2, ref w1, ref w2);
                     width = PreferredSize.Width - oldW + w1 + w2;
                 }
-                
+
                 if (Width < width)
                 {
                     button_wholeword.Overflow = ToolStripItemOverflow.Always;
@@ -269,8 +269,8 @@ namespace Zuby.ADGV
                 {
                     button_search.Overflow = ToolStripItemOverflow.Always;
                     w2 = Math.Max(Width - PreferredSize.Width + textBox_search.Width, 75);
-                    width = PreferredSize.Width - textBox_search.Width + w2 ;
-                } 
+                    width = PreferredSize.Width - textBox_search.Width + w2;
+                }
                 if (Width < width)
                 {
                     button_close.Overflow = ToolStripItemOverflow.Always;
@@ -278,7 +278,7 @@ namespace Zuby.ADGV
                     w2 = Math.Max(Width - PreferredSize.Width + textBox_search.Width, 75);
                     width = PreferredSize.Width - textBox_search.Width + w2;
                 }
-                
+
                 if (Width < width)
                 {
                     w2 = Math.Max(Width - PreferredSize.Width + textBox_search.Width, 20);
@@ -300,7 +300,7 @@ namespace Zuby.ADGV
                 comboBox_columns.Width = w1;
             if (textBox_search.Width != w2)
                 textBox_search.Width = w2;
-            
+
             ResumeLayout();
         }
 
