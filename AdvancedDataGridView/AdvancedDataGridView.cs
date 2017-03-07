@@ -136,6 +136,19 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Enabled or disable Filter and Sort capabilities on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="enabled"></param>
+        public void SetFilterAndSortEnabled(DataGridViewColumn column, bool enabled)
+        {
+            if (enabled)
+                EnableFilterAndSort(column);
+            else
+                DisableFilterAndSort(column);
+        }
+
+        /// <summary>
         /// Load a Filter and Sort preset
         /// </summary>
         /// <param name="filter"></param>
@@ -310,15 +323,15 @@ namespace Zuby.ADGV
         /// Set FilterDateAndTime status for a DataGridViewColumn
         /// </summary>
         /// <param name="column"></param>
-        /// <param name="filterDateAndTimeEnabled"></param>
-        public void SetFilterDateAndTimeEnabled(DataGridViewColumn column, bool filterDateAndTimeEnabled)
+        /// <param name="enabled"></param>
+        public void SetFilterDateAndTimeEnabled(DataGridViewColumn column, bool enabled)
         {
             if (Columns.Contains(column))
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
                 if (cell != null)
                 {
-                    cell.IsFilterDateAndTimeEnabled = filterDateAndTimeEnabled;
+                    cell.IsFilterDateAndTimeEnabled = enabled;
                 }
             }
         }
