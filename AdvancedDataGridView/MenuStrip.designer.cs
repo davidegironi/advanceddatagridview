@@ -51,6 +51,8 @@ namespace Zuby.ADGV
             this.checkFilterListButtonsPanel = new System.Windows.Forms.Panel();
             this.checkFilterListButtonsControlHost = new System.Windows.Forms.ToolStripControlHost(checkFilterListButtonsPanel);
             this.checkFilterListControlHost = new System.Windows.Forms.ToolStripControlHost(checkFilterListPanel);
+            this.checkTextFilter = new System.Windows.Forms.TextBox();
+            this.checkTextFilterControlHost = new System.Windows.Forms.ToolStripControlHost(checkTextFilter);
             this.resizeBoxControlHost = new System.Windows.Forms.ToolStripControlHost(new System.Windows.Forms.Control());
             this.SuspendLayout();
             //
@@ -60,7 +62,7 @@ namespace Zuby.ADGV
             this.AutoSize = false;
             this.Padding = new System.Windows.Forms.Padding(0);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Size = new System.Drawing.Size(287, 340);
+            this.Size = new System.Drawing.Size(287, 370);
             this.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(MenuStrip_Closed);
             this.LostFocus += new System.EventHandler(MenuStrip_LostFocus);
             this.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -71,6 +73,7 @@ namespace Zuby.ADGV
             cancelFilterMenuItem,
             customFilterLastFiltersListMenuItem,
             toolStripSeparator3MenuItem,
+            checkTextFilterControlHost,
             checkFilterListControlHost,
             checkFilterListButtonsControlHost,
             resizeBoxControlHost});
@@ -244,9 +247,17 @@ namespace Zuby.ADGV
             //
             this.checkFilterListControlHost.Name = "checkFilterListControlHost";
             this.checkFilterListControlHost.AutoSize = false;
-            this.checkFilterListControlHost.Size = new System.Drawing.Size(Width - 35, 180);
+            this.checkFilterListControlHost.Size = new System.Drawing.Size(Width - 35, 194);
             this.checkFilterListControlHost.Padding = new System.Windows.Forms.Padding(0);
             this.checkFilterListControlHost.Margin = new System.Windows.Forms.Padding(0);
+            //
+            // checkTextFilterControlHost
+            //
+            this.checkTextFilterControlHost.Name = "checkTextFilterControlHost";
+            this.checkTextFilterControlHost.AutoSize = false;
+            this.checkTextFilterControlHost.Size = new System.Drawing.Size(Width - 35, 20);
+            this.checkTextFilterControlHost.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.checkTextFilterControlHost.Margin = new System.Windows.Forms.Padding(0);
             //
             // checkFilterListButtonsControlHost
             //
@@ -281,6 +292,15 @@ namespace Zuby.ADGV
             this.checkList.KeyDown += new System.Windows.Forms.KeyEventHandler(checkList_KeyDown);
             this.checkList.MouseEnter += checkList_MouseEnter;
             this.checkList.NodeMouseDoubleClick += checkList_NodeMouseDoubleClick;
+            //
+            // checkTextFilter
+            //
+            this.checkTextFilter.Name = "checkTextFilter";
+            this.checkTextFilter.Padding = new System.Windows.Forms.Padding(0);
+            this.checkTextFilter.Margin = new System.Windows.Forms.Padding(0);
+            this.checkTextFilter.Size = checkTextFilterControlHost.Size;
+            this.checkTextFilter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkTextFilter.TextChanged += new System.EventHandler(checkTextFilter_TextChanged);
             //
             // checkFilterListButtonsPanel
             //
@@ -324,5 +344,7 @@ namespace Zuby.ADGV
         private System.Windows.Forms.ToolStripControlHost resizeBoxControlHost;
         private System.Windows.Forms.Panel checkFilterListPanel;
         private System.Windows.Forms.Panel checkFilterListButtonsPanel;
+        private System.Windows.Forms.TextBox checkTextFilter;
+        private System.Windows.Forms.ToolStripControlHost checkTextFilterControlHost;
     }
 }

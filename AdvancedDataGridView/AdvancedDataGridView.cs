@@ -42,23 +42,6 @@ namespace Zuby.ADGV
         #endregion
 
 
-        /// <summary>
-        /// Get or Set Filter and Sort status
-        /// </summary>
-        public bool FilterAndSortEnabled
-        {
-            get
-            {
-                return _filterAndSortEnabled;
-            }
-            set
-            {
-                _filterAndSortEnabled = value;
-            }
-        }
-        private bool _filterAndSortEnabled = true;
-
-
         #region constructors
 
         /// <summary>
@@ -198,6 +181,22 @@ namespace Zuby.ADGV
             foreach (ColumnHeaderCell c in FilterableCells)
                 c.IsMenuStripFilterNOTINLogicEnabled = enabled;
         }
+
+        /// <summary>
+        /// Get or Set Filter and Sort status
+        /// </summary>
+        public bool FilterAndSortEnabled
+        {
+            get
+            {
+                return _filterAndSortEnabled;
+            }
+            set
+            {
+                _filterAndSortEnabled = value;
+            }
+        }
+        private bool _filterAndSortEnabled = true;
 
         #endregion
 
@@ -686,7 +685,6 @@ namespace Zuby.ADGV
         }
 
         #endregion
-
 
     }
 }

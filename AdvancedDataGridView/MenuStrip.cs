@@ -63,6 +63,8 @@ namespace Zuby.ADGV
         private static Point _resizeStartPoint = new Point(1, 1);
         private Point _resizeEndPoint = new Point(-1, -1);
 
+        private static bool _checkTextFilterRemoveNodesOnSearch = true;
+
         #endregion
 
 
@@ -136,6 +138,10 @@ namespace Zuby.ADGV
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
             }
 
+            //set check filter textbox
+            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan) || DataType == typeof(bool))
+                checkTextFilter.Enabled = false;
+
             //set default NOT IN logic
             IsFilterNOTINLogicEnabled = false;
 
@@ -156,6 +162,7 @@ namespace Zuby.ADGV
         {
             ResizeClean();
 
+            checkTextFilter.Text = "";
             _startingNodes = null;
         }
 
@@ -362,14 +369,23 @@ namespace Zuby.ADGV
             int valsx = vals.Count();
             BuildNodes(vals);
 
+            checkTextFilter.Text = "";
             if (_activeFilterType == FilterType.Custom)
                 SetNodesCheckState(checkList.Nodes, false);
             DuplicateNodes();
             base.Show(control, x, y);
         }
 
+        /// <summary>
+        /// Show the menuStrip
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="_restoreFilter"></param>
         public void Show(Control control, int x, int y, bool _restoreFilter)
         {
+            checkTextFilter.Text = "";
             if (_restoreFilter)
                 RestoreFilterNodes();
             DuplicateNodes();
@@ -536,13 +552,20 @@ namespace Zuby.ADGV
                                 FilterString += "{0}=" + filter;
                             else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                                        DataType == typeof(Decimal) || DataType == typeof(Double) ||
+                                        DataType == typeof(Decimal) ||
                                         DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
                             {
                                 if (IsFilterNOTINLogicEnabled)
                                     FilterString += "[{0}] NOT IN (" + filter + ")";
                                 else
                                     FilterString += "[{0}] IN (" + filter + ")";
+                            }
+                            else if (DataType == typeof(Double))
+                            {
+                                if (IsFilterNOTINLogicEnabled)
+                                    FilterString += "Convert([{0}],System.String) NOT IN (" + filter + ")";
+                                else
+                                    FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
                             }
                             else if (DataType == typeof(Bitmap))
                             { }
@@ -1335,6 +1358,41 @@ namespace Zuby.ADGV
             (sender as ToolStripMenuItem).TextChanged -= customFilterLastFilterMenuItem_TextChanged;
         }
 
+        /// <summary>
+        /// Check list filter changer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkTextFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (_checkTextFilterRemoveNodesOnSearch)
+            {
+                checkList.BeginUpdate();
+                RestoreNodes();
+            }
+            for (int i = checkList.Nodes.Count - 1; i > 0; i--)
+            {
+                TreeNodeItemSelector node = checkList.Nodes[i] as TreeNodeItemSelector;
+                if (checkList.Nodes[i].Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                    node.Checked = false;
+                else
+                    node.Checked = true;
+                NodeCheckChange(node as TreeNodeItemSelector);
+            }
+            if (_checkTextFilterRemoveNodesOnSearch)
+            {
+                checkList.EndUpdate();
+            }
+            for (int i = checkList.Nodes.Count - 1; i > 0; i--)
+            {
+                if (_checkTextFilterRemoveNodesOnSearch)
+                {
+                    if (!checkList.Nodes[i].Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                        checkList.Nodes[i].Remove();
+                }
+            }
+        }
+
         #endregion
 
 
@@ -1455,10 +1513,10 @@ namespace Zuby.ADGV
             cancelFilterMenuItem.Width = w - 1;
             customFilterMenuItem.Width = w - 1;
             customFilterLastFiltersListMenuItem.Width = w - 1;
-            checkFilterListControlHost.Size = new System.Drawing.Size(w - 35, h - 160);
-            checkFilterListPanel.Size = new System.Drawing.Size(w - 35, h - 160);
-            checkList.Bounds = new Rectangle(4, 4, w - 35 - 8, h - 160 - 8);
-            checkFilterListButtonsControlHost.Size = new System.Drawing.Size(w - 35, 24);
+            checkFilterListControlHost.Size = new Size(w - 35, h - 160 - 25);
+            checkFilterListPanel.Size = new Size(w - 35, h - 160 - 25);
+            checkTextFilterControlHost.Size = new Size(w - 35, h - 160 - 160 - 25 - 8);
+            checkList.Bounds = new Rectangle(4, 4, w - 35 - 8, h - 160 - 25 - 8);
             checkFilterListButtonsControlHost.Size = new Size(w - 35, 24);
             button_ok.Location = new Point(w - 35 - 164, 0);
             button_cancel.Location = new Point(w - 35 - 79, 0);
