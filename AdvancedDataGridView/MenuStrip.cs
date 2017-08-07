@@ -62,7 +62,13 @@ namespace Zuby.ADGV
         private string _filterString = null;
         private static Point _resizeStartPoint = new Point(1, 1);
         private Point _resizeEndPoint = new Point(-1, -1);
+        private bool _checkTextFilterChangedEnabled = true;
+        private TreeNodeItemSelector[] _initialNodes = new TreeNodeItemSelector[] { };
+        private bool _checkTextFilterSetByText = false;
 
+        /// <summary>
+        /// Text filer on nodes excel like behaviour
+        /// </summary>
         private static bool _checkTextFilterRemoveNodesOnSearch = true;
 
         #endregion
@@ -75,7 +81,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="dataType"></param>
         public MenuStrip(Type dataType)
-            : base()
+                : base()
         {
             //set localization strings
             _textStrings.Add("SORTDATETIMEASC", "Sort Oldest to Newest");
@@ -162,8 +168,11 @@ namespace Zuby.ADGV
         {
             ResizeClean();
 
-            checkTextFilter.Text = "";
             _startingNodes = null;
+
+            _checkTextFilterChangedEnabled = false;
+            checkTextFilter.Text = "";
+            _checkTextFilterChangedEnabled = true;
         }
 
         /// <summary>
@@ -366,14 +375,26 @@ namespace Zuby.ADGV
         /// <param name="vals"></param>
         public void Show(Control control, int x, int y, IEnumerable<DataGridViewCell> vals)
         {
-            int valsx = vals.Count();
             BuildNodes(vals);
+            if (_checkTextFilterRemoveNodesOnSearch && checkList.Nodes.Count != _initialNodes.Count())
+            {
+                _initialNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
+                int i = 0;
+                foreach (TreeNodeItemSelector n in checkList.Nodes)
+                {
+                    _initialNodes[i] = n.Clone();
+                    i++;
+                }
+            }
 
-            checkTextFilter.Text = "";
             if (_activeFilterType == FilterType.Custom)
                 SetNodesCheckState(checkList.Nodes, false);
             DuplicateNodes();
             base.Show(control, x, y);
+
+            _checkTextFilterChangedEnabled = false;
+            checkTextFilter.Text = "";
+            _checkTextFilterChangedEnabled = true;
         }
 
         /// <summary>
@@ -385,11 +406,24 @@ namespace Zuby.ADGV
         /// <param name="_restoreFilter"></param>
         public void Show(Control control, int x, int y, bool _restoreFilter)
         {
+            _checkTextFilterChangedEnabled = false;
             checkTextFilter.Text = "";
+            _checkTextFilterChangedEnabled = true;
             if (_restoreFilter)
                 RestoreFilterNodes();
             DuplicateNodes();
             base.Show(control, x, y);
+
+            if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
+            {
+                checkList.BeginUpdate();
+                checkList.Nodes.Clear();
+                foreach (TreeNodeItemSelector node in _initialNodes)
+                {
+                    checkList.Nodes.Add(node);
+                }
+                checkList.EndUpdate();
+            }
         }
 
         /// <summary>
@@ -1365,30 +1399,75 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void checkTextFilter_TextChanged(object sender, EventArgs e)
         {
+            if (!_checkTextFilterChangedEnabled)
+                return;
+            if (!String.IsNullOrEmpty(checkTextFilter.Text))
+                _checkTextFilterSetByText = true;
+            else
+                _checkTextFilterSetByText = false;
             if (_checkTextFilterRemoveNodesOnSearch)
             {
+                _startingNodes = _initialNodes;
+
                 checkList.BeginUpdate();
                 RestoreNodes();
             }
-            for (int i = checkList.Nodes.Count - 1; i > 0; i--)
+            TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode(_textStrings["NODESELECTALL"].ToString() + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+            TreeNodeItemSelector nullnode = TreeNodeItemSelector.CreateNode(_textStrings["NODESELECTEMPTY"].ToString() + "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
+            TreeNodeItemSelector allnodesel = null;
+            for (int i = checkList.Nodes.Count - 1; i >= 0; i--)
             {
                 TreeNodeItemSelector node = checkList.Nodes[i] as TreeNodeItemSelector;
-                if (checkList.Nodes[i].Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
-                    node.Checked = false;
+                if (node.Text == allnode.Text)
+                {
+                    allnodesel = node;
+                    node.CheckState = CheckState.Indeterminate;
+                }
+                else if (node.Text == nullnode.Text)
+                {
+                    node.CheckState = CheckState.Unchecked;
+                }
                 else
-                    node.Checked = true;
-                NodeCheckChange(node as TreeNodeItemSelector);
+                {
+                    if (node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                        node.Checked = false;
+                    else
+                        node.Checked = true;
+                    NodeCheckChange(node as TreeNodeItemSelector);
+                }
             }
             if (_checkTextFilterRemoveNodesOnSearch)
             {
-                checkList.EndUpdate();
-            }
-            for (int i = checkList.Nodes.Count - 1; i > 0; i--)
-            {
-                if (_checkTextFilterRemoveNodesOnSearch)
+                foreach (TreeNodeItemSelector node in _initialNodes)
                 {
-                    if (!checkList.Nodes[i].Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
-                        checkList.Nodes[i].Remove();
+                    if (node.Text == allnode.Text)
+                    {
+                        allnodesel = node;
+                        node.CheckState = CheckState.Indeterminate;
+                    }
+                    else if (node.Text == nullnode.Text)
+                    {
+                        node.CheckState = CheckState.Unchecked;
+                    }
+                    else
+                    {
+                        if (node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                            node.CheckState = CheckState.Checked;
+                        else
+                            node.CheckState = CheckState.Unchecked;
+                    }
+                }
+                checkList.EndUpdate();
+                for (int i = checkList.Nodes.Count - 1; i >= 0; i--)
+                {
+                    TreeNodeItemSelector node = checkList.Nodes[i] as TreeNodeItemSelector;
+                    if (!(node.Text == allnode.Text || node.Text == nullnode.Text))
+                    {
+                        if (!node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                        {
+                            node.Remove();
+                        }
+                    }
                 }
             }
         }
