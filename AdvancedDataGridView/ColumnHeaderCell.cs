@@ -368,6 +368,18 @@ namespace Zuby.ADGV
             }
         }
 
+        /// <summary>
+        /// Enable or disable Text filter on checklist remove node mode
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetChecklistTextFilterRemoveNodesOnSearchMode(bool enabled)
+        {
+            if (MenuStrip != null)
+            {
+                MenuStrip.SetChecklistTextFilterRemoveNodesOnSearchMode(enabled);
+            }
+        }
+
         #endregion
 
 

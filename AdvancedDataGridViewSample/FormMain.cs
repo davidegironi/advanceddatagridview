@@ -109,6 +109,7 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);
             advancedDataGridView_main.SortDESC(advancedDataGridView_main.Columns["double"]);
+            advancedDataGridView_main.SetChecklistTextFilterRemoveNodesOnSearchMode(advancedDataGridView_main.Columns["decimal"], false);
         }
 
         private void advancedDataGridView_main_FilterStringChanged(object sender, EventArgs e)

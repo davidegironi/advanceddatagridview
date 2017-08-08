@@ -353,6 +353,23 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Enable or disable Text filter on checklist remove node mode for a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="enabled"></param>
+        public void SetChecklistTextFilterRemoveNodesOnSearchMode(DataGridViewColumn column, bool enabled)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetChecklistTextFilterRemoveNodesOnSearchMode(enabled);
+                }
+            }
+        }
+
+        /// <summary>
         /// Clean Filter on all columns
         /// </summary>
         /// <param name="fireEvent"></param>

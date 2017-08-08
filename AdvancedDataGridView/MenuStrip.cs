@@ -64,12 +64,9 @@ namespace Zuby.ADGV
         private Point _resizeEndPoint = new Point(-1, -1);
         private bool _checkTextFilterChangedEnabled = true;
         private TreeNodeItemSelector[] _initialNodes = new TreeNodeItemSelector[] { };
+        private TreeNodeItemSelector[] _restoreNodes = new TreeNodeItemSelector[] { };
         private bool _checkTextFilterSetByText = false;
-
-        /// <summary>
-        /// Text filer on nodes excel like behaviour
-        /// </summary>
-        private static bool _checkTextFilterRemoveNodesOnSearch = true;
+        private bool _checkTextFilterRemoveNodesOnSearch = true;
 
         #endregion
 
@@ -317,6 +314,7 @@ namespace Zuby.ADGV
             this.button_ok.Enabled = enabled;
             this.button_cancel.Enabled = enabled;
             this.checkList.Enabled = enabled;
+            this.checkTextFilter.Enabled = enabled;
             if (enabled)
                 customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             else
@@ -379,10 +377,12 @@ namespace Zuby.ADGV
             if (_checkTextFilterRemoveNodesOnSearch && checkList.Nodes.Count != _initialNodes.Count())
             {
                 _initialNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
+                _restoreNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
                 int i = 0;
                 foreach (TreeNodeItemSelector n in checkList.Nodes)
                 {
                     _initialNodes[i] = n.Clone();
+                    _restoreNodes[i] = n.Clone();
                     i++;
                 }
             }
@@ -416,6 +416,13 @@ namespace Zuby.ADGV
 
             if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
             {
+                _restoreNodes = new TreeNodeItemSelector[_initialNodes.Count()];
+                int i = 0;
+                foreach (TreeNodeItemSelector n in _initialNodes)
+                {
+                    _restoreNodes[i] = n.Clone();
+                    i++;
+                }
                 checkList.BeginUpdate();
                 checkList.Nodes.Clear();
                 foreach (TreeNodeItemSelector node in _initialNodes)
@@ -517,6 +524,13 @@ namespace Zuby.ADGV
         /// </summary>
         public void CleanFilter()
         {
+            if (_checkTextFilterRemoveNodesOnSearch)
+            {
+                _initialNodes = new TreeNodeItemSelector[] { };
+                _restoreNodes = new TreeNodeItemSelector[] { };
+                _checkTextFilterSetByText = false;
+            }
+
             for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count - 1; i++)
             {
                 (customFilterLastFiltersListMenuItem.DropDownItems[i] as ToolStripMenuItem).Checked = false;
@@ -528,6 +542,19 @@ namespace Zuby.ADGV
             _filterNodes = null;
             customFilterLastFiltersListMenuItem.Checked = false;
             button_ok.Enabled = true;
+        }
+
+        /// <summary>
+        /// Set the text filter on checklist remove node mode
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetChecklistTextFilterRemoveNodesOnSearchMode(bool enabled)
+        {
+            if (_checkTextFilterRemoveNodesOnSearch != enabled)
+            {
+                _checkTextFilterRemoveNodesOnSearch = enabled;
+                CleanFilter();
+            }
         }
 
         #endregion
@@ -1167,7 +1194,29 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void button_cancel_Click(object sender, EventArgs e)
         {
-            RestoreNodes();
+            bool restoredByFilter = false;
+            if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
+            {
+                _initialNodes = new TreeNodeItemSelector[_restoreNodes.Count()];
+                int i = 0;
+                foreach (TreeNodeItemSelector n in _restoreNodes)
+                {
+                    _initialNodes[i] = n.Clone();
+                    i++;
+                }
+
+                restoredByFilter = true;
+                checkList.BeginUpdate();
+                checkList.Nodes.Clear();
+                foreach (TreeNodeItemSelector node in _restoreNodes)
+                {
+                    checkList.Nodes.Add(node);
+                }
+                checkList.EndUpdate();
+            }
+
+            if (!restoredByFilter)
+                RestoreNodes();
             Close();
         }
 
