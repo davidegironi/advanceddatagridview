@@ -1643,7 +1643,7 @@ namespace Zuby.ADGV
             customFilterLastFiltersListMenuItem.Width = w - 1;
             checkFilterListControlHost.Size = new Size(w - 35, h - 160 - 25);
             checkFilterListPanel.Size = new Size(w - 35, h - 160 - 25);
-            checkTextFilterControlHost.Size = new Size(w - 35, h - 160 - 160 - 25 - 8);
+            checkTextFilterControlHost.Width = w - 35;
             checkList.Bounds = new Rectangle(4, 4, w - 35 - 8, h - 160 - 25 - 8);
             checkFilterListButtonsControlHost.Size = new Size(w - 35, 24);
             button_ok.Location = new Point(w - 35 - 164, 0);
