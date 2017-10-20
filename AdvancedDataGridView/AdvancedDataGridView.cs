@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -48,7 +49,20 @@ namespace Zuby.ADGV
         /// AdvancedDataGridView constructor
         /// </summary>
         public AdvancedDataGridView()
+        { }
+
+        #endregion
+
+
+        #region Helper methods
+
+        /// <summary>
+        /// Set AdvancedDataGridView the Double Buffered
+        /// </summary>
+        public void SetDoubleBuffered()
         {
+            PropertyInfo propertyInfo = this.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            propertyInfo.SetValue(this, true, null);
         }
 
         #endregion

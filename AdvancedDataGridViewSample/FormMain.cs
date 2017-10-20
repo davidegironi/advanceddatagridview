@@ -40,6 +40,7 @@ namespace AdvancedDataGridViewSample
             bindingSource_main.DataSource = _dataSet;
 
             //initialize datagridview
+            advancedDataGridView_main.SetDoubleBuffered();
             advancedDataGridView_main.DataSource = bindingSource_main;
 
             //set bindingsource
