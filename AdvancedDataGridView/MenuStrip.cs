@@ -281,6 +281,21 @@ namespace Zuby.ADGV
         /// </summary>
         public bool IsFilterNOTINLogicEnabled { get; set; }
 
+        /// <summary>
+        /// Set the text filter search nodes behaviour
+        /// </summary>
+        public bool DoesTextFilterRemoveNodesOnSearch
+        {
+            get
+            {
+                return _checkTextFilterRemoveNodesOnSearch;
+            }
+            set
+            {
+                _checkTextFilterRemoveNodesOnSearch = value;
+            }
+        }
+
         #endregion
 
 

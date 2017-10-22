@@ -405,6 +405,34 @@ namespace Zuby.ADGV
             CleanFilter(true);
         }
 
+        /// <summary>
+        /// Set the text filter search nodes behaviour
+        /// </summary>
+        public void SetTextFilterRemoveNodesOnSearch(DataGridViewColumn column, bool enabled)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                    cell.DoesTextFilterRemoveNodesOnSearch = enabled;
+            }
+        }
+
+        /// <summary>
+        /// Get the text filter search nodes behaviour
+        /// </summary>
+        public Nullable<bool> GetTextFilterRemoveNodesOnSearch(DataGridViewColumn column)
+        {
+            Nullable<bool> ret = null;
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                    ret = cell.DoesTextFilterRemoveNodesOnSearch;
+            }
+            return ret;
+        }
+
         #endregion
 
 

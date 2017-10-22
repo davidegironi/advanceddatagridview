@@ -343,6 +343,21 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Set the text filter search nodes behaviour
+        /// </summary>
+        public bool DoesTextFilterRemoveNodesOnSearch
+        {
+            get
+            {
+                return MenuStrip.DoesTextFilterRemoveNodesOnSearch;
+            }
+            set
+            {
+                MenuStrip.DoesTextFilterRemoveNodesOnSearch = value;
+            }
+        }
+
+        /// <summary>
         /// Enabled or disable Sort capabilities
         /// </summary>
         /// <param name="enabled"></param>
