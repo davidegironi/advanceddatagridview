@@ -101,7 +101,6 @@ namespace Zuby.ADGV
         /// <param name="column"></param>
         public void EnableFilterAndSort(DataGridViewColumn column)
         {
-            //this.DataSource = SortString;
             if (Columns.Contains(column))
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
