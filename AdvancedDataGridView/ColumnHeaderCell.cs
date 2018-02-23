@@ -84,6 +84,7 @@ namespace Zuby.ADGV
             IsFilterDateAndTimeEnabled = FilterDateAndTimeDefaultEnabled;
             IsSortEnabled = true;
             IsFilterEnabled = true;
+            IsFilterChecklistEnabled = true;
         }
         ~ColumnHeaderCell()
         {
@@ -313,6 +314,21 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Get or Set the Filter enabled status
+        /// </summary>
+        public bool IsFilterChecklistEnabled
+        {
+            get
+            {
+                return MenuStrip.IsFilterChecklistEnabled;
+            }
+            set
+            {
+                MenuStrip.IsFilterChecklistEnabled = value;
+            }
+        }
+
+        /// <summary>
         /// Get or Set the FilterDateAndTime enabled status
         /// </summary>
         public bool IsFilterDateAndTimeEnabled
@@ -380,6 +396,19 @@ namespace Zuby.ADGV
             {
                 MenuStrip.IsFilterEnabled = enabled;
                 MenuStrip.SetFilterEnabled(enabled);
+            }
+        }
+
+        /// <summary>
+        /// Enable or disable Filter checklist capabilities
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetFilterChecklistEnabled(bool enabled)
+        {
+            if (MenuStrip != null)
+            {
+                MenuStrip.IsFilterChecklistEnabled = enabled;
+                MenuStrip.SetFilterChecklistEnabled(enabled);
             }
         }
 

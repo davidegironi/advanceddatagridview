@@ -145,6 +145,51 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Disable a Filter checklist on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void DisableFilterChecklist(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetFilterChecklistEnabled(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable a Filter checklist on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void EnableFilterChecklist(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetFilterChecklistEnabled(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enabled or disable Filter checklist capabilities on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="enabled"></param>
+        public void SetFilterChecklistEnabled(DataGridViewColumn column, bool enabled)
+        {
+            if (enabled)
+                EnableFilterChecklist(column);
+            else
+                DisableFilterChecklist(column);
+        }
+
+        /// <summary>
         /// Load a Filter and Sort preset
         /// </summary>
         /// <param name="filter"></param>

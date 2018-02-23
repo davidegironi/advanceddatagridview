@@ -97,6 +97,7 @@ namespace Zuby.ADGV
             _textStrings.Add("BUTTONCANCEL", "Cancel");
             _textStrings.Add("NODESELECTALL", "(Select All)");
             _textStrings.Add("NODESELECTEMPTY", "(Blanks)");
+            _textStrings.Add("FILTERCHECKLISTDISABLED", "Filter list is disabled");
 
             //initialize components
             InitializeComponent();
@@ -147,6 +148,12 @@ namespace Zuby.ADGV
 
             //set default NOT IN logic
             IsFilterNOTINLogicEnabled = false;
+
+            //sent enablers default
+            IsSortEnabled = true;
+            IsFilterEnabled = true;
+            IsFilterChecklistEnabled = true;
+            IsFilterDateAndTimeEnabled = true;
 
             //set default compoents
             customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
@@ -267,9 +274,14 @@ namespace Zuby.ADGV
         public bool IsSortEnabled { get; set; }
 
         /// <summary>
-        /// Get or Set the Filter Sort enabled
+        /// Get or Set the Filter enabled
         /// </summary>
         public bool IsFilterEnabled { get; set; }
+
+        /// <summary>
+        /// Get or Set the Filter Checklist enabled
+        /// </summary>
+        public bool IsFilterChecklistEnabled { get; set; }
 
         /// <summary>
         /// Get or Set the Filter DateAndTime enabled
@@ -334,6 +346,29 @@ namespace Zuby.ADGV
                 customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             else
                 customFilterLastFiltersListMenuItem.Enabled = false;
+        }
+
+        /// <summary>
+        /// Enable or disable Filter checklistcapabilities
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetFilterChecklistEnabled(bool enabled)
+        {
+            if (!IsFilterEnabled)
+                enabled = false;
+
+            IsFilterChecklistEnabled = enabled;
+            checkList.Enabled = enabled;
+            checkTextFilter.ReadOnly = !enabled;
+
+            if (!IsFilterChecklistEnabled)
+            {
+                checkList.BeginUpdate();
+                checkList.Nodes.Clear();
+                TreeNodeItemSelector disablednode = TreeNodeItemSelector.CreateNode(_textStrings["FILTERCHECKLISTDISABLED"].ToString() + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+                disablednode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
+                checkList.Nodes.Add(disablednode);
+            }
         }
 
         #endregion
@@ -760,6 +795,9 @@ namespace Zuby.ADGV
         /// <param name="vals"></param>
         private void BuildNodes(IEnumerable<DataGridViewCell> vals)
         {
+            if (!IsFilterChecklistEnabled)
+                return;
+
             checkList.BeginUpdate();
             checkList.Nodes.Clear();
 
