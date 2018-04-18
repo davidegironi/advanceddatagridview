@@ -11,6 +11,12 @@ About
 
 * Microsoft Windows with .NET framework 4 or later
 
+## FAQ
+
+* Filter & Sort does not work. How can i solve this?
+  * https://github.com/davidegironi/advanceddatagridview/issues/16#issuecomment-353157080
+  * https://stackoverflow.com/a/10074142/1361842
+
 ## Development
 
 If you want to contribute, or you found a bug, please send an e-mail to the software author.
