@@ -90,25 +90,29 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Images\ColumnHeader_Filtered.png" />
-    <Content Include="Resources\Images\ColumnHeader_FilteredAndOrderedASC.png" />
-    <Content Include="Resources\Images\ColumnHeader_FilteredAndOrderedDESC.png" />
-    <Content Include="Resources\Images\ColumnHeader_OrderedASC.png" />
-    <Content Include="Resources\Images\ColumnHeader_OrderedDESC.png" />
-    <Content Include="Resources\Images\ColumnHeader_SavedFilters.png" />
-    <Content Include="Resources\Images\ColumnHeader_UnFiltered.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderASCbool.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderASCnum.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderASCtxt.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderDESCbool.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderDESCnum.png" />
-    <Content Include="Resources\Images\MenuStrip_OrderDESCtxt.png" />
-    <Content Include="Resources\Images\MenuStrip_ResizeGrip.png" />
-    <Content Include="Resources\Images\SearchToolBar_buttonCaseSensitive.png" />
-    <Content Include="Resources\Images\SearchToolBar_buttonClose.png" />
-    <Content Include="Resources\Images\SearchToolBar_buttonFromBegin.png" />
-    <Content Include="Resources\Images\SearchToolBar_buttonSearch.png" />
-    <Content Include="Resources\Images\SearchToolBar_ButtonWholeWord.png" />
+    <None Include="Resources\Images\AdvancedDataGridView_logo.png" />
+    <None Include="Resources\Images\ColumnHeader_Filtered.png" />
+    <None Include="Resources\Images\ColumnHeader_FilteredAndOrderedASC.png" />
+    <None Include="Resources\Images\ColumnHeader_FilteredAndOrderedDESC.png" />
+    <None Include="Resources\Images\ColumnHeader_OrderedASC.png" />
+    <None Include="Resources\Images\ColumnHeader_OrderedDESC.png" />
+    <None Include="Resources\Images\ColumnHeader_SavedFilters.png" />
+    <None Include="Resources\Images\ColumnHeader_UnFiltered.png" />
+    <None Include="Resources\Images\MenuStrip_OrderASCbool.png" />
+    <None Include="Resources\Images\MenuStrip_OrderASCnum.png" />
+    <None Include="Resources\Images\MenuStrip_OrderASCtxt.png" />
+    <None Include="Resources\Images\MenuStrip_OrderDESCbool.png" />
+    <None Include="Resources\Images\MenuStrip_OrderDESCnum.png" />
+    <None Include="Resources\Images\MenuStrip_OrderDESCtxt.png" />
+    <None Include="Resources\Images\MenuStrip_ResizeGrip.png" />
+    <None Include="Resources\Images\SearchToolBar_buttonCaseSensitive.png" />
+    <None Include="Resources\Images\SearchToolBar_buttonClose.png" />
+    <None Include="Resources\Images\SearchToolBar_buttonFromBegin.png" />
+    <None Include="Resources\Images\SearchToolBar_buttonSearch.png" />
+    <None Include="Resources\Images\SearchToolBar_ButtonWholeWord.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AdvancedDataGridView.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

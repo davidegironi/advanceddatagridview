@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://opensource.org/licenses/MS-PL</licenseUrl>
+    <projectUrl>https://github.com/davidegironi/advanceddatagridview</projectUrl>
+    <iconUrl>https://github.com/davidegironi/advanceddatagridview/raw/master/AdvancedDataGridView/Resources/Images/AdvancedDataGridView_logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
+    <tags>DataGridView, WinForm, Advanced, Enhanced, Table, Grid, Filter, Sort</tags>
+  </metadata>
+  <files>
+    <file src="..\License\LICENSE" target="LICENSE" /> 
+  </files>
+</package>
