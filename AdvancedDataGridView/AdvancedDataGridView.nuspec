@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>DG.AdvancedDataGridView</id>
     <version>$version$</version>
-    <title>$title$</title>
+    <title>Advanced DataGridView</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://opensource.org/licenses/MS-PL</licenseUrl>
