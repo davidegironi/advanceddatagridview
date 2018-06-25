@@ -65,9 +65,10 @@ namespace Zuby.ADGV
         /// <returns></returns>
         public new TreeNodeItemSelector Clone()
         {
-            TreeNodeItemSelector n = new TreeNodeItemSelector(Text, Value, _checkState, NodeType);
-
-            n.NodeFont = NodeFont;
+            TreeNodeItemSelector n = new TreeNodeItemSelector(Text, Value, _checkState, NodeType)
+            {
+                NodeFont = NodeFont
+            };
 
             if (GetNodeCount(false) > 0)
             {

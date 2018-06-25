@@ -4,9 +4,9 @@ $solutionName = "AdvancedDataGridView"
 
 #set version
 $versionMajor = "1"
-$versionMinor = "0"
+$versionMinor = "1"
 $versionBuild = GetVersionBuild
-$versionRevision = "22"
+$versionRevision = "1"
 #build version number
 $assemblyVersion = GetVersion $versionMajor $versionMinor $versionBuild $versionRevision
 $fileVersion = $assemblyVersion

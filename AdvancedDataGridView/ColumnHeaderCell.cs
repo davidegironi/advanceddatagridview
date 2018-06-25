@@ -62,7 +62,6 @@ namespace Zuby.ADGV
             _filterEnabled = filterEnabled;
 
             ColumnHeaderCell oldCellt = oldCell as ColumnHeaderCell;
-
             if (oldCellt != null && oldCellt.MenuStrip != null)
             {
                 MenuStrip = oldCellt.MenuStrip;
@@ -71,14 +70,14 @@ namespace Zuby.ADGV
                 _filterButtonOver = oldCellt._filterButtonOver;
                 _filterButtonOffsetBounds = oldCellt._filterButtonOffsetBounds;
                 _filterButtonImageBounds = oldCellt._filterButtonImageBounds;
-                MenuStrip.FilterChanged += new EventHandler(menuStrip_FilterChanged);
-                MenuStrip.SortChanged += new EventHandler(menuStrip_SortChanged);
+                MenuStrip.FilterChanged += new EventHandler(MenuStrip_FilterChanged);
+                MenuStrip.SortChanged += new EventHandler(MenuStrip_SortChanged);
             }
             else
             {
                 MenuStrip = new MenuStrip(oldCell.OwningColumn.ValueType);
-                MenuStrip.FilterChanged += new EventHandler(menuStrip_FilterChanged);
-                MenuStrip.SortChanged += new EventHandler(menuStrip_SortChanged);
+                MenuStrip.FilterChanged += new EventHandler(MenuStrip_FilterChanged);
+                MenuStrip.SortChanged += new EventHandler(MenuStrip_SortChanged);
             }
 
             IsFilterDateAndTimeEnabled = FilterDateAndTimeDefaultEnabled;
@@ -90,8 +89,8 @@ namespace Zuby.ADGV
         {
             if (MenuStrip != null)
             {
-                MenuStrip.FilterChanged -= menuStrip_FilterChanged;
-                MenuStrip.SortChanged -= menuStrip_SortChanged;
+                MenuStrip.FilterChanged -= MenuStrip_FilterChanged;
+                MenuStrip.SortChanged -= MenuStrip_SortChanged;
             }
         }
 
@@ -137,12 +136,12 @@ namespace Zuby.ADGV
                     bool refreshed = false;
                     if (MenuStrip.FilterString.Length > 0)
                     {
-                        menuStrip_FilterChanged(this, new EventArgs());
+                        MenuStrip_FilterChanged(this, new EventArgs());
                         refreshed = true;
                     }
                     if (MenuStrip.SortString.Length > 0)
                     {
-                        menuStrip_SortChanged(this, new EventArgs());
+                        MenuStrip_SortChanged(this, new EventArgs());
                         refreshed = true;
                     }
                     if (!refreshed)
@@ -434,7 +433,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void menuStrip_FilterChanged(object sender, EventArgs e)
+        private void MenuStrip_FilterChanged(object sender, EventArgs e)
         {
             RefreshImage();
             RepaintCell();
@@ -447,7 +446,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void menuStrip_SortChanged(object sender, EventArgs e)
+        private void MenuStrip_SortChanged(object sender, EventArgs e)
         {
             RefreshImage();
             RepaintCell();

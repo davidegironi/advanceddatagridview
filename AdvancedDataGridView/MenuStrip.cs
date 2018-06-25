@@ -508,7 +508,7 @@ namespace Zuby.ADGV
         /// </summary>
         public void SortASC()
         {
-            sortASCMenuItem_Click(this, null);
+            SortASCMenuItem_Click(this, null);
         }
 
         /// <summary>
@@ -516,7 +516,7 @@ namespace Zuby.ADGV
         /// </summary>
         public void SortDESC()
         {
-            sortDESCMenuItem_Click(this, null);
+            SortDESCMenuItem_Click(this, null);
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace Zuby.ADGV
         {
             get
             {
-                return _sortString == null ? "" : _sortString;
+                return (!String.IsNullOrEmpty(_sortString) ? _sortString : "");
             }
             private set
             {
@@ -559,9 +559,8 @@ namespace Zuby.ADGV
         {
             get
             {
-                return _filterString == null ? "" : _filterString;
+                return (!String.IsNullOrEmpty(_filterString) ? _filterString : "");
             }
-
             private set
             {
                 cancelFilterMenuItem.Enabled = (value != null && value.Length > 0);
@@ -623,7 +622,7 @@ namespace Zuby.ADGV
             customFilterLastFiltersListMenuItem.Checked = false;
 
             if (selectAllNode != null && selectAllNode.Checked)
-                cancelFilterMenuItem_Click(null, new EventArgs());
+                CancelFilterMenuItem_Click(null, new EventArgs());
             else
             {
                 string oldfilter = FilterString;
@@ -1173,7 +1172,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void CheckList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeViewHitTestInfo HitTestInfo = checkList.HitTest(e.X, e.Y);
             if (HitTestInfo != null && HitTestInfo.Location == TreeViewHitTestLocations.StateImage)
@@ -1186,7 +1185,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkList_KeyDown(object sender, KeyEventArgs e)
+        private void CheckList_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
                 //check the node check status
@@ -1198,7 +1197,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void CheckList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNodeItemSelector n = e.Node as TreeNodeItemSelector;
             //set the new node check status
@@ -1206,7 +1205,7 @@ namespace Zuby.ADGV
             n.CheckState = CheckState.Unchecked;
             NodeCheckChange(n);
             //do Filter by checkList
-            button_ok_Click(this, new EventArgs());
+            Button_ok_Click(this, new EventArgs());
         }
 
         /// <summary>
@@ -1214,7 +1213,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkList_MouseEnter(object sender, EventArgs e)
+        private void CheckList_MouseEnter(object sender, EventArgs e)
         {
             checkList.Focus();
         }
@@ -1224,7 +1223,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkList_MouseLeave(object sender, EventArgs e)
+        private void CheckList_MouseLeave(object sender, EventArgs e)
         {
             Focus();
         }
@@ -1234,7 +1233,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button_ok_Click(object sender, EventArgs e)
+        private void Button_ok_Click(object sender, EventArgs e)
         {
             SetCheckListFilter();
             Close();
@@ -1245,7 +1244,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button_cancel_Click(object sender, EventArgs e)
+        private void Button_cancel_Click(object sender, EventArgs e)
         {
             bool restoredByFilter = false;
             if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
@@ -1349,7 +1348,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cancelFilterMenuItem_Click(object sender, EventArgs e)
+        private void CancelFilterMenuItem_Click(object sender, EventArgs e)
         {
             string oldfilter = FilterString;
 
@@ -1366,7 +1365,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cancelFilterMenuItem_MouseEnter(object sender, EventArgs e)
+        private void CancelFilterMenuItem_MouseEnter(object sender, EventArgs e)
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
@@ -1377,7 +1376,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterMenuItem_Click(object sender, EventArgs e)
+        private void CustomFilterMenuItem_Click(object sender, EventArgs e)
         {
             //ignore image nodes
             if (DataType == typeof(Bitmap))
@@ -1435,7 +1434,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterLastFiltersListMenuItem_MouseEnter(object sender, EventArgs e)
+        private void CustomFilterLastFiltersListMenuItem_MouseEnter(object sender, EventArgs e)
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
@@ -1446,7 +1445,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterLastFiltersListMenuItem_Paint(Object sender, PaintEventArgs e)
+        private void CustomFilterLastFiltersListMenuItem_Paint(Object sender, PaintEventArgs e)
         {
             Rectangle rect = new Rectangle(customFilterLastFiltersListMenuItem.Width - 12, 7, 10, 10);
             ControlPaint.DrawMenuGlyph(e.Graphics, rect, MenuGlyph.Arrow, Color.Black, Color.Transparent);
@@ -1457,10 +1456,10 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterLastFilter1MenuItem_VisibleChanged(object sender, EventArgs e)
+        private void CustomFilterLastFilter1MenuItem_VisibleChanged(object sender, EventArgs e)
         {
             toolStripSeparator2MenuItem.Visible = !customFilterLastFilter1MenuItem.Visible;
-            (sender as ToolStripMenuItem).VisibleChanged -= customFilterLastFilter1MenuItem_VisibleChanged;
+            (sender as ToolStripMenuItem).VisibleChanged -= CustomFilterLastFilter1MenuItem_VisibleChanged;
         }
 
         /// <summary>
@@ -1468,7 +1467,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterLastFilterMenuItem_Click(object sender, EventArgs e)
+        private void CustomFilterLastFilterMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem menuitem = sender as ToolStripMenuItem;
 
@@ -1488,10 +1487,10 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customFilterLastFilterMenuItem_TextChanged(object sender, EventArgs e)
+        private void CustomFilterLastFilterMenuItem_TextChanged(object sender, EventArgs e)
         {
             (sender as ToolStripMenuItem).Available = true;
-            (sender as ToolStripMenuItem).TextChanged -= customFilterLastFilterMenuItem_TextChanged;
+            (sender as ToolStripMenuItem).TextChanged -= CustomFilterLastFilterMenuItem_TextChanged;
         }
 
         /// <summary>
@@ -1499,7 +1498,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void checkTextFilter_TextChanged(object sender, EventArgs e)
+        private void CheckTextFilter_TextChanged(object sender, EventArgs e)
         {
             if (!_checkTextFilterChangedEnabled)
                 return;
@@ -1584,7 +1583,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void sortASCMenuItem_Click(object sender, EventArgs e)
+        private void SortASCMenuItem_Click(object sender, EventArgs e)
         {
             //ignore image nodes
             if (DataType == typeof(Bitmap))
@@ -1608,7 +1607,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void sortASCMenuItem_MouseEnter(object sender, EventArgs e)
+        private void SortASCMenuItem_MouseEnter(object sender, EventArgs e)
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
@@ -1619,7 +1618,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void sortDESCMenuItem_Click(object sender, EventArgs e)
+        private void SortDESCMenuItem_Click(object sender, EventArgs e)
         {
             //ignore image nodes
             if (DataType == typeof(Bitmap))
@@ -1643,7 +1642,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void sortDESCMenuItem_MouseEnter(object sender, EventArgs e)
+        private void SortDESCMenuItem_MouseEnter(object sender, EventArgs e)
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
@@ -1654,7 +1653,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cancelSortMenuItem_Click(object sender, EventArgs e)
+        private void CancelSortMenuItem_Click(object sender, EventArgs e)
         {
             string oldsort = SortString;
             //clean Sort
@@ -1669,7 +1668,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cancelSortMenuItem_MouseEnter(object sender, EventArgs e)
+        private void CancelSortMenuItem_MouseEnter(object sender, EventArgs e)
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
@@ -1714,13 +1713,14 @@ namespace Zuby.ADGV
             {
                 Point startPoint = PointToScreen(MenuStrip._resizeStartPoint);
 
-                Rectangle rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y);
+                Rectangle rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y)
+                {
+                    X = Math.Min(startPoint.X, _resizeEndPoint.X),
+                    Width = Math.Abs(startPoint.X - _resizeEndPoint.X),
 
-                rc.X = Math.Min(startPoint.X, _resizeEndPoint.X);
-                rc.Width = Math.Abs(startPoint.X - _resizeEndPoint.X);
-
-                rc.Y = Math.Min(startPoint.Y, _resizeEndPoint.Y);
-                rc.Height = Math.Abs(startPoint.Y - _resizeEndPoint.Y);
+                    Y = Math.Min(startPoint.Y, _resizeEndPoint.Y),
+                    Height = Math.Abs(startPoint.Y - _resizeEndPoint.Y)
+                };
 
                 ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
 
@@ -1738,7 +1738,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void resizeBoxControlHost_MouseDown(object sender, MouseEventArgs e)
+        private void ResizeBoxControlHost_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
@@ -1751,7 +1751,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void resizeBoxControlHost_MouseMove(object sender, MouseEventArgs e)
+        private void ResizeBoxControlHost_MouseMove(object sender, MouseEventArgs e)
         {
             if (Visible)
             {
@@ -1771,13 +1771,14 @@ namespace Zuby.ADGV
                     Point StartPoint = PointToScreen(MenuStrip._resizeStartPoint);
                     Point EndPoint = PointToScreen(new Point(x, y));
 
-                    Rectangle rc = new Rectangle();
+                    Rectangle rc = new Rectangle
+                    {
+                        X = Math.Min(StartPoint.X, EndPoint.X),
+                        Width = Math.Abs(StartPoint.X - EndPoint.X),
 
-                    rc.X = Math.Min(StartPoint.X, EndPoint.X);
-                    rc.Width = Math.Abs(StartPoint.X - EndPoint.X);
-
-                    rc.Y = Math.Min(StartPoint.Y, EndPoint.Y);
-                    rc.Height = Math.Abs(StartPoint.Y - EndPoint.Y);
+                        Y = Math.Min(StartPoint.Y, EndPoint.Y),
+                        Height = Math.Abs(StartPoint.Y - EndPoint.Y)
+                    };
 
                     ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
 
@@ -1792,7 +1793,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void resizeBoxControlHost_MouseUp(object sender, MouseEventArgs e)
+        private void ResizeBoxControlHost_MouseUp(object sender, MouseEventArgs e)
         {
             if (_resizeEndPoint.X != -1)
             {
@@ -1819,7 +1820,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void resizeBoxControlHost_Paint(Object sender, PaintEventArgs e)
+        private void ResizeBoxControlHost_Paint(Object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(Properties.Resources.MenuStrip_ResizeGrip, 0, 0);
         }

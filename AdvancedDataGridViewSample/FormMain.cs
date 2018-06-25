@@ -115,16 +115,35 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetChecklistTextFilterRemoveNodesOnSearchMode(advancedDataGridView_main.Columns["decimal"], false);
         }
 
-        private void advancedDataGridView_main_FilterStringChanged(object sender, EventArgs e)
+        private void advancedDataGridView_main_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
         {
-            bindingSource_main.Filter = advancedDataGridView_main.FilterString;
-            textBox_filter.Text = bindingSource_main.Filter;
+            //eventually set the FilterString here
+            //if e.Cancel is set to true one have to update the datasource here using
+            //bindingSource_main.Filter = advancedDataGridView_main.FilterString;
+            //otherwise it will be updated by the component
+
+            //sample use of the override string filter
+            string stringcolumnfilter = textBox_strfilter.Text;
+            if (!String.IsNullOrEmpty(stringcolumnfilter))
+                e.FilterString += (!String.IsNullOrEmpty(e.FilterString) ? " AND " : "") + String.Format("string LIKE '%{0}%'", stringcolumnfilter.Replace("'", "''"));
+
+            textBox_filter.Text = e.FilterString;
         }
 
-        private void advancedDataGridView_main_SortStringChanged(object sender, EventArgs e)
+        private void advancedDataGridView_main_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
         {
-            bindingSource_main.Sort = advancedDataGridView_main.SortString;
-            textBox_sort.Text = bindingSource_main.Sort;
+            //eventually set the SortString here
+            //if e.Cancel is set to true one have to update the datasource here
+            //bindingSource_main.Sort = advancedDataGridView_main.SortString;
+            //otherwise it will be updated by the component
+
+            textBox_sort.Text = e.SortString;
+        }
+
+        private void textBox_strfilter_TextChanged(object sender, EventArgs e)
+        {
+            //trigger the filter string changed function when text is changed
+            advancedDataGridView_main.TriggerFilterStringChanged();
         }
 
         private void bindingSource_main_ListChanged(object sender, ListChangedEventArgs e)
@@ -194,6 +213,5 @@ namespace AdvancedDataGridViewSample
             if (c != null)
                 advancedDataGridView_main.CurrentCell = c;
         }
-
     }
 }

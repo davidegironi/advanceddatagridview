@@ -83,8 +83,8 @@ namespace Zuby.ADGV
             this.sortASCMenuItem.Name = "sortASCMenuItem";
             this.sortASCMenuItem.AutoSize = false;
             this.sortASCMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
-            this.sortASCMenuItem.Click += new System.EventHandler(sortASCMenuItem_Click);
-            this.sortASCMenuItem.MouseEnter += new System.EventHandler(sortASCMenuItem_MouseEnter);
+            this.sortASCMenuItem.Click += new System.EventHandler(SortASCMenuItem_Click);
+            this.sortASCMenuItem.MouseEnter += new System.EventHandler(SortASCMenuItem_MouseEnter);
             this.sortASCMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             //
             // sortDESCMenuItem
@@ -92,8 +92,8 @@ namespace Zuby.ADGV
             this.sortDESCMenuItem.Name = "sortDESCMenuItem";
             this.sortDESCMenuItem.AutoSize = false;
             this.sortDESCMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
-            this.sortDESCMenuItem.Click += new System.EventHandler(sortDESCMenuItem_Click);
-            this.sortDESCMenuItem.MouseEnter += new System.EventHandler(sortDESCMenuItem_MouseEnter);
+            this.sortDESCMenuItem.Click += new System.EventHandler(SortDESCMenuItem_Click);
+            this.sortDESCMenuItem.MouseEnter += new System.EventHandler(SortDESCMenuItem_MouseEnter);
             this.sortDESCMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             //
             // cancelSortMenuItem
@@ -103,8 +103,8 @@ namespace Zuby.ADGV
             this.cancelSortMenuItem.AutoSize = false;
             this.cancelSortMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
             this.cancelSortMenuItem.Text = _textStrings["CLEARSORT"].ToString();
-            this.cancelSortMenuItem.Click += new System.EventHandler(cancelSortMenuItem_Click);
-            this.cancelSortMenuItem.MouseEnter += new System.EventHandler(cancelSortMenuItem_MouseEnter);
+            this.cancelSortMenuItem.Click += new System.EventHandler(CancelSortMenuItem_Click);
+            this.cancelSortMenuItem.MouseEnter += new System.EventHandler(CancelSortMenuItem_MouseEnter);
             //
             // toolStripSeparator1MenuItem
             //
@@ -118,8 +118,8 @@ namespace Zuby.ADGV
             this.cancelFilterMenuItem.AutoSize = false;
             this.cancelFilterMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
             this.cancelFilterMenuItem.Text = _textStrings["CLEARFILTER"].ToString();
-            this.cancelFilterMenuItem.Click += new System.EventHandler(cancelFilterMenuItem_Click);
-            this.cancelFilterMenuItem.MouseEnter += new System.EventHandler(cancelFilterMenuItem_MouseEnter);
+            this.cancelFilterMenuItem.Click += new System.EventHandler(CancelFilterMenuItem_Click);
+            this.cancelFilterMenuItem.MouseEnter += new System.EventHandler(CancelFilterMenuItem_MouseEnter);
             //
             // toolStripMenuItem2
             //
@@ -132,7 +132,7 @@ namespace Zuby.ADGV
             this.customFilterMenuItem.Name = "customFilterMenuItem";
             this.customFilterMenuItem.Size = new System.Drawing.Size(152, 22);
             this.customFilterMenuItem.Text = _textStrings["ADDCUSTOMFILTER"].ToString();
-            this.customFilterMenuItem.Click += new System.EventHandler(customFilterMenuItem_Click);
+            this.customFilterMenuItem.Click += new System.EventHandler(CustomFilterMenuItem_Click);
             //
             // customFilterLastFilter1MenuItem
             //
@@ -141,9 +141,9 @@ namespace Zuby.ADGV
             this.customFilterLastFilter1MenuItem.Tag = "0";
             this.customFilterLastFilter1MenuItem.Text = null;
             this.customFilterLastFilter1MenuItem.Visible = false;
-            this.customFilterLastFilter1MenuItem.VisibleChanged += new System.EventHandler(customFilterLastFilter1MenuItem_VisibleChanged);
-            this.customFilterLastFilter1MenuItem.Click += new System.EventHandler(customFilterLastFilterMenuItem_Click);
-            this.customFilterLastFilter1MenuItem.TextChanged += new System.EventHandler(customFilterLastFilterMenuItem_TextChanged);
+            this.customFilterLastFilter1MenuItem.VisibleChanged += new System.EventHandler(CustomFilterLastFilter1MenuItem_VisibleChanged);
+            this.customFilterLastFilter1MenuItem.Click += new System.EventHandler(CustomFilterLastFilterMenuItem_Click);
+            this.customFilterLastFilter1MenuItem.TextChanged += new System.EventHandler(CustomFilterLastFilterMenuItem_TextChanged);
             //
             // customFilterLastFilter2MenuItem
             //
@@ -152,8 +152,8 @@ namespace Zuby.ADGV
             this.customFilterLastFilter2MenuItem.Tag = "1";
             this.customFilterLastFilter2MenuItem.Text = null;
             this.customFilterLastFilter2MenuItem.Visible = false;
-            this.customFilterLastFilter2MenuItem.Click += new System.EventHandler(customFilterLastFilterMenuItem_Click);
-            this.customFilterLastFilter2MenuItem.TextChanged += new System.EventHandler(customFilterLastFilterMenuItem_TextChanged);
+            this.customFilterLastFilter2MenuItem.Click += new System.EventHandler(CustomFilterLastFilterMenuItem_Click);
+            this.customFilterLastFilter2MenuItem.TextChanged += new System.EventHandler(CustomFilterLastFilterMenuItem_TextChanged);
             //
             // customFilterLastFilter3MenuItem
             //
@@ -162,8 +162,8 @@ namespace Zuby.ADGV
             this.customFilterLastFilter3MenuItem.Tag = "2";
             this.customFilterLastFilter3MenuItem.Text = null;
             this.customFilterLastFilter3MenuItem.Visible = false;
-            this.customFilterLastFilter3MenuItem.Click += new System.EventHandler(customFilterLastFilterMenuItem_Click);
-            this.customFilterLastFilter3MenuItem.TextChanged += new System.EventHandler(customFilterLastFilterMenuItem_TextChanged);
+            this.customFilterLastFilter3MenuItem.Click += new System.EventHandler(CustomFilterLastFilterMenuItem_Click);
+            this.customFilterLastFilter3MenuItem.TextChanged += new System.EventHandler(CustomFilterLastFilterMenuItem_TextChanged);
             //
             // customFilterLastFilter3MenuItem
             //
@@ -172,8 +172,8 @@ namespace Zuby.ADGV
             this.customFilterLastFilter4MenuItem.Tag = "3";
             this.customFilterLastFilter4MenuItem.Text = null;
             this.customFilterLastFilter4MenuItem.Visible = false;
-            this.customFilterLastFilter4MenuItem.Click += new System.EventHandler(customFilterLastFilterMenuItem_Click);
-            this.customFilterLastFilter4MenuItem.TextChanged += new System.EventHandler(customFilterLastFilterMenuItem_TextChanged);
+            this.customFilterLastFilter4MenuItem.Click += new System.EventHandler(CustomFilterLastFilterMenuItem_Click);
+            this.customFilterLastFilter4MenuItem.TextChanged += new System.EventHandler(CustomFilterLastFilterMenuItem_TextChanged);
             //
             // customFilterLastFilter5MenuItem
             //
@@ -182,8 +182,8 @@ namespace Zuby.ADGV
             this.customFilterLastFilter5MenuItem.Tag = "4";
             this.customFilterLastFilter5MenuItem.Text = null;
             this.customFilterLastFilter5MenuItem.Visible = false;
-            this.customFilterLastFilter5MenuItem.Click += new System.EventHandler(customFilterLastFilterMenuItem_Click);
-            this.customFilterLastFilter5MenuItem.TextChanged += new System.EventHandler(customFilterLastFilterMenuItem_TextChanged);
+            this.customFilterLastFilter5MenuItem.Click += new System.EventHandler(CustomFilterLastFilterMenuItem_Click);
+            this.customFilterLastFilter5MenuItem.TextChanged += new System.EventHandler(CustomFilterLastFilterMenuItem_TextChanged);
             //
             // customFilterLastFiltersListMenuItem
             //
@@ -200,8 +200,8 @@ namespace Zuby.ADGV
             customFilterLastFilter3MenuItem,
             customFilterLastFilter4MenuItem,
             customFilterLastFilter5MenuItem});
-            this.customFilterLastFiltersListMenuItem.MouseEnter += new System.EventHandler(customFilterLastFiltersListMenuItem_MouseEnter);
-            this.customFilterLastFiltersListMenuItem.Paint += new System.Windows.Forms.PaintEventHandler(customFilterLastFiltersListMenuItem_Paint);
+            this.customFilterLastFiltersListMenuItem.MouseEnter += new System.EventHandler(CustomFilterLastFiltersListMenuItem_MouseEnter);
+            this.customFilterLastFiltersListMenuItem.Paint += new System.Windows.Forms.PaintEventHandler(CustomFilterLastFiltersListMenuItem_Paint);
             //
             // toolStripMenuItem3
             //
@@ -216,7 +216,7 @@ namespace Zuby.ADGV
             this.button_ok.Margin = new System.Windows.Forms.Padding(0);
             this.button_ok.Size = new System.Drawing.Size(75, 23);
             this.button_ok.Text = _textStrings["BUTTONOK"].ToString();
-            this.button_ok.Click += new System.EventHandler(button_ok_Click);
+            this.button_ok.Click += new System.EventHandler(Button_ok_Click);
             this.button_ok.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 164, 0);
             //
             // button_cancel
@@ -227,7 +227,7 @@ namespace Zuby.ADGV
             this.button_cancel.Margin = new System.Windows.Forms.Padding(0);
             this.button_cancel.Size = new System.Drawing.Size(75, 23);
             this.button_cancel.Text = _textStrings["BUTTONCANCEL"].ToString();
-            this.button_cancel.Click += new System.EventHandler(button_cancel_Click);
+            this.button_cancel.Click += new System.EventHandler(Button_cancel_Click);
             this.button_cancel.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 79, 0);
             //
             // resizeBoxControlHost
@@ -238,10 +238,10 @@ namespace Zuby.ADGV
             this.resizeBoxControlHost.Padding = new System.Windows.Forms.Padding(0);
             this.resizeBoxControlHost.Margin = new System.Windows.Forms.Padding(Width - 45, 0, 0, 0);
             this.resizeBoxControlHost.Size = new System.Drawing.Size(10, 10);
-            this.resizeBoxControlHost.Paint += new System.Windows.Forms.PaintEventHandler(resizeBoxControlHost_Paint);
-            this.resizeBoxControlHost.MouseDown += new System.Windows.Forms.MouseEventHandler(resizeBoxControlHost_MouseDown);
-            this.resizeBoxControlHost.MouseUp += new System.Windows.Forms.MouseEventHandler(resizeBoxControlHost_MouseUp);
-            this.resizeBoxControlHost.MouseMove += new System.Windows.Forms.MouseEventHandler(resizeBoxControlHost_MouseMove);
+            this.resizeBoxControlHost.Paint += new System.Windows.Forms.PaintEventHandler(ResizeBoxControlHost_Paint);
+            this.resizeBoxControlHost.MouseDown += new System.Windows.Forms.MouseEventHandler(ResizeBoxControlHost_MouseDown);
+            this.resizeBoxControlHost.MouseUp += new System.Windows.Forms.MouseEventHandler(ResizeBoxControlHost_MouseUp);
+            this.resizeBoxControlHost.MouseMove += new System.Windows.Forms.MouseEventHandler(ResizeBoxControlHost_MouseMove);
             //
             // checkFilterListControlHost
             //
@@ -287,11 +287,11 @@ namespace Zuby.ADGV
             this.checkList.Bounds = new System.Drawing.Rectangle(4, 4, this.checkFilterListPanel.Width - 8, this.checkFilterListPanel.Height - 8);
             this.checkList.StateImageList = GetCheckListStateImages();
             this.checkList.CheckBoxes = false;
-            this.checkList.MouseLeave += new System.EventHandler(checkList_MouseLeave);
-            this.checkList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(checkList_NodeMouseClick);
-            this.checkList.KeyDown += new System.Windows.Forms.KeyEventHandler(checkList_KeyDown);
-            this.checkList.MouseEnter += checkList_MouseEnter;
-            this.checkList.NodeMouseDoubleClick += checkList_NodeMouseDoubleClick;
+            this.checkList.MouseLeave += new System.EventHandler(CheckList_MouseLeave);
+            this.checkList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(CheckList_NodeMouseClick);
+            this.checkList.KeyDown += new System.Windows.Forms.KeyEventHandler(CheckList_KeyDown);
+            this.checkList.MouseEnter += CheckList_MouseEnter;
+            this.checkList.NodeMouseDoubleClick += CheckList_NodeMouseDoubleClick;
             //
             // checkTextFilter
             //
@@ -300,7 +300,7 @@ namespace Zuby.ADGV
             this.checkTextFilter.Margin = new System.Windows.Forms.Padding(0);
             this.checkTextFilter.Size = checkTextFilterControlHost.Size;
             this.checkTextFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkTextFilter.TextChanged += new System.EventHandler(checkTextFilter_TextChanged);
+            this.checkTextFilter.TextChanged += new System.EventHandler(CheckTextFilter_TextChanged);
             //
             // checkFilterListButtonsPanel
             //
