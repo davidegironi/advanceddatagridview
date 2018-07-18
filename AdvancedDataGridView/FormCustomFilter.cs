@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Zuby.ADGV
@@ -66,7 +67,9 @@ namespace Zuby.ADGV
             _textStrings.Add("EQUALS", "equals");
             _textStrings.Add("DOES_NOT_EQUAL", "does not equal");
             _textStrings.Add("EARLIER_THAN", "earlier than");
+            _textStrings.Add("EARLIER_THAN_OR_EQUAL_TO", "earlier than or equal to");
             _textStrings.Add("LATER_THAN", "later than");
+            _textStrings.Add("LATER_THAN_OR_EQUAL_TO", "later than or equal to");
             _textStrings.Add("BETWEEN", "between");
             _textStrings.Add("GREATER_THAN", "greater than");
             _textStrings.Add("GREATER_THAN_OR_EQUAL_TO", "greater than or equal to");
@@ -117,7 +120,7 @@ namespace Zuby.ADGV
                     _valControl2 = new DateTimePicker();
                     if (_filterDateAndTimeEnabled)
                     {
-                        System.Globalization.DateTimeFormatInfo dt = System.Threading.Thread.CurrentThread.CurrentCulture.DateTimeFormat;
+                        DateTimeFormatInfo dt = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 
                         (_valControl1 as DateTimePicker).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
                         (_valControl2 as DateTimePicker).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
@@ -134,7 +137,9 @@ namespace Zuby.ADGV
                         _textStrings["EQUALS"].ToString(),
                         _textStrings["DOES_NOT_EQUAL"].ToString(),
                         _textStrings["EARLIER_THAN"].ToString(),
+                        _textStrings["EARLIER_THAN_OR_EQUAL_TO"].ToString(),
                         _textStrings["LATER_THAN"].ToString(),
+                        _textStrings["LATER_THAN_OR_EQUAL_TO"].ToString(),
                         _textStrings["BETWEEN"].ToString()
                     });
                     break;
@@ -276,17 +281,15 @@ namespace Zuby.ADGV
                     dt = new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0);
 
                     if (filterTypeConditionText == _textStrings["EQUALS"].ToString())
-                    {
                         filterString = "Convert([{0}], 'System.String') LIKE '%" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%'";
-                    }
                     else if (filterTypeConditionText == _textStrings["EARLIER_THAN"].ToString())
-                    {
                         filterString += "< '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    }
+                    else if (filterTypeConditionText == _textStrings["EARLIER_THAN_OR_EQUAL_TO"].ToString())
+                        filterString += "<= '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
                     else if (filterTypeConditionText == _textStrings["LATER_THAN"].ToString())
-                    {
                         filterString += "> '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    }
+                    else if (filterTypeConditionText == _textStrings["LATER_THAN_OR_EQUAL_TO"].ToString())
+                        filterString += ">= '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
                     else if (filterTypeConditionText == _textStrings["BETWEEN"].ToString())
                     {
                         DateTime dt1 = ((DateTimePicker)control2).Value;
@@ -295,9 +298,7 @@ namespace Zuby.ADGV
                         filterString += " AND " + column + "<= '" + Convert.ToString((filterDateAndTimeEnabled ? dt1 : dt1.Date), CultureInfo.CurrentCulture) + "'";
                     }
                     else if (filterTypeConditionText == _textStrings["DOES_NOT_EQUAL"].ToString())
-                    {
                         filterString = "Convert([{0}], 'System.String') NOT LIKE '%" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%'";
-                    }
                     break;
 
                 case FilterType.TimeSpan:
