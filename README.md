@@ -16,6 +16,8 @@ About
 * Filter & Sort does not work. How can i solve this?
   * https://github.com/davidegironi/advanceddatagridview/issues/16#issuecomment-353157080
   * https://stackoverflow.com/a/10074142/1361842
+* How can i use a list of objects instead of a DataTable as DataSource?
+  * https://github.com/davidegironi/advanceddatagridview/issues/24
 
 ## Development
 
