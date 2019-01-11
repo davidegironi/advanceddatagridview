@@ -1056,8 +1056,10 @@ namespace Zuby.ADGV
                     isFirstNode = false;
                 }
                 else
+                {
                     if (result != n.CheckState)
-                    isAllNodesSomeCheckState = false;
+                        isAllNodesSomeCheckState = false;
+                }
             }
 
             if (isAllNodesSomeCheckState)
