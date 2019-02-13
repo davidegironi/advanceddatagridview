@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Zuby.ADGV;
 
 namespace AdvancedDataGridViewSample
 {
@@ -16,9 +17,35 @@ namespace AdvancedDataGridViewSample
         private SortedDictionary<int, string> _filtersaved = new SortedDictionary<int, string>();
         private SortedDictionary<int, string> _sortsaved = new SortedDictionary<int, string>();
 
+        private bool _testtranslations = true;
+        private bool _testtranslationsFromFile = true;
+
         public FormMain()
         {
             InitializeComponent();
+
+            //set localization strings
+            Dictionary<string, string> translations = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> translation in AdvancedDataGridView.Translations)
+            {
+                if (!translations.ContainsKey(translation.Key))
+                    translations.Add(translation.Key, "." + translation.Value);
+            }
+            foreach (KeyValuePair<string, string> translation in AdvancedDataGridViewSearchToolBar.Translations)
+            {
+                if (!translations.ContainsKey(translation.Key))
+                    translations.Add(translation.Key, "." + translation.Value);
+            }
+            if (_testtranslations)
+            {
+                AdvancedDataGridView.SetTranslations(translations);
+                AdvancedDataGridViewSearchToolBar.SetTranslations(translations);
+            }
+            if (_testtranslationsFromFile)
+            {
+                AdvancedDataGridView.SetTranslations(AdvancedDataGridView.LoadTranslationsFromFile("lang.json"));
+                AdvancedDataGridViewSearchToolBar.SetTranslations(AdvancedDataGridViewSearchToolBar.LoadTranslationsFromFile("lang.json"));
+            }
 
             //set filter and sort saved
             _filtersaved.Add(0, "");

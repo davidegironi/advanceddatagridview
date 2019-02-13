@@ -8,7 +8,6 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -40,8 +39,6 @@ namespace Zuby.ADGV
         private string _filterString = null;
         private string _filterStringDescription = null;
 
-        private Hashtable _textStrings = new Hashtable();
-
         #endregion
 
 
@@ -50,51 +47,20 @@ namespace Zuby.ADGV
         /// <summary>
         /// Main constructor
         /// </summary>
-        private FormCustomFilter()
-        {
-            InitializeComponent();
-        }
-
-        /// <summary>
-        /// Form constructor
-        /// </summary>
         /// <param name="dataType"></param>
         /// <param name="filterDateAndTimeEnabled"></param>
         public FormCustomFilter(Type dataType, bool filterDateAndTimeEnabled)
-            : this()
+            : base()
         {
-            //set localization strings
-            _textStrings.Add("EQUALS", "equals");
-            _textStrings.Add("DOES_NOT_EQUAL", "does not equal");
-            _textStrings.Add("EARLIER_THAN", "earlier than");
-            _textStrings.Add("EARLIER_THAN_OR_EQUAL_TO", "earlier than or equal to");
-            _textStrings.Add("LATER_THAN", "later than");
-            _textStrings.Add("LATER_THAN_OR_EQUAL_TO", "later than or equal to");
-            _textStrings.Add("BETWEEN", "between");
-            _textStrings.Add("GREATER_THAN", "greater than");
-            _textStrings.Add("GREATER_THAN_OR_EQUAL_TO", "greater than or equal to");
-            _textStrings.Add("LESS_THAN", "less than");
-            _textStrings.Add("LESS_THAN_OR_EQUAL_TO", "less than or equal to");
-            _textStrings.Add("BEGINS_WITH", "begins with");
-            _textStrings.Add("DOES_NOT_BEGIN_WITH", "does not begin with");
-            _textStrings.Add("ENDS_WITH", "ends with");
-            _textStrings.Add("DOES_NOT_END_WITH", "does not end with");
-            _textStrings.Add("CONTAINS", "contains");
-            _textStrings.Add("DOES_NOT_CONTAIN", "does not contain");
-            _textStrings.Add("INVALID_VALUE", "Invalid Value");
-            _textStrings.Add("FILTER_STRING_DESCRIPTION", "Show rows where value {0} \"{1}\"");
-            _textStrings.Add("FORM_TITLE", "Custom Filter");
-            _textStrings.Add("LABEL_COLUMNNAMETEXT", "Show rows where value");
-            _textStrings.Add("LABEL_AND", "And");
-            _textStrings.Add("BUTTON_OK", "OK");
-            _textStrings.Add("BUTTON_CANCEL", "Cancel");
+            //initialize components
+            InitializeComponent();
 
-
-            this.Text = _textStrings["FORM_TITLE"].ToString();
-            label_columnName.Text = _textStrings["LABEL_COLUMNNAMETEXT"].ToString();
-            label_and.Text = _textStrings["LABEL_AND"].ToString();
-            button_ok.Text = _textStrings["BUTTON_OK"].ToString();
-            button_cancel.Text = _textStrings["BUTTON_CANCEL"].ToString();
+            //set component translations
+            this.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFormTitle.ToString()];
+            this.label_columnName.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLabelColumnNameText.ToString()];
+            this.label_and.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLabelAnd.ToString()];
+            this.button_ok.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonOk.ToString()];
+            this.button_cancel.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonCancel.ToString()];
 
             if (dataType == typeof(DateTime))
                 _filterType = FilterType.DateTime;
@@ -134,13 +100,13 @@ namespace Zuby.ADGV
                     }
 
                     comboBox_filterType.Items.AddRange(new string[] {
-                        _textStrings["EQUALS"].ToString(),
-                        _textStrings["DOES_NOT_EQUAL"].ToString(),
-                        _textStrings["EARLIER_THAN"].ToString(),
-                        _textStrings["EARLIER_THAN_OR_EQUAL_TO"].ToString(),
-                        _textStrings["LATER_THAN"].ToString(),
-                        _textStrings["LATER_THAN_OR_EQUAL_TO"].ToString(),
-                        _textStrings["BETWEEN"].ToString()
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEarlierThan.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEarlierThanOrEqualTo.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLaterThan.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLaterThanOrEqualTo.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()]
                     });
                     break;
 
@@ -148,8 +114,8 @@ namespace Zuby.ADGV
                     _valControl1 = new TextBox();
                     _valControl2 = new TextBox();
                     comboBox_filterType.Items.AddRange(new string[] {
-                        _textStrings["CONTAINS"].ToString(),
-                        _textStrings["DOES_NOT_CONTAIN"].ToString()
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()]
                     });
                     break;
 
@@ -160,13 +126,13 @@ namespace Zuby.ADGV
                     _valControl1.TextChanged += valControl_TextChanged;
                     _valControl2.TextChanged += valControl_TextChanged;
                     comboBox_filterType.Items.AddRange(new string[] {
-                        _textStrings["EQUALS"].ToString(),
-                        _textStrings["DOES_NOT_EQUAL"].ToString(),
-                        _textStrings["GREATER_THAN"].ToString(),
-                        _textStrings["GREATER_THAN_OR_EQUAL_TO"].ToString(),
-                        _textStrings["LESS_THAN"].ToString(),
-                        _textStrings["LESS_THAN_OR_EQUAL_TO"].ToString(),
-                        _textStrings["BETWEEN"].ToString()
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVGreaterThan.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVGreaterThanOrEqualTo.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLessThan.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLessThanOrEqualTo.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()]
                     });
                     _valControl1.Tag = true;
                     _valControl2.Tag = true;
@@ -177,14 +143,14 @@ namespace Zuby.ADGV
                     _valControl1 = new TextBox();
                     _valControl2 = new TextBox();
                     comboBox_filterType.Items.AddRange(new string[] {
-                        _textStrings["EQUALS"].ToString(),
-                        _textStrings["DOES_NOT_EQUAL"].ToString(),
-                        _textStrings["BEGINS_WITH"].ToString(),
-                        _textStrings["DOES_NOT_BEGIN_WITH"].ToString(),
-                        _textStrings["ENDS_WITH"].ToString(),
-                        _textStrings["DOES_NOT_END_WITH"].ToString(),
-                        _textStrings["CONTAINS"].ToString(),
-                        _textStrings["DOES_NOT_CONTAIN"].ToString()
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBeginsWith.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEndsWith.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()],
+                        AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()]
                     });
                     break;
             }
@@ -280,24 +246,24 @@ namespace Zuby.ADGV
                     DateTime dt = ((DateTimePicker)control1).Value;
                     dt = new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0);
 
-                    if (filterTypeConditionText == _textStrings["EQUALS"].ToString())
+                    if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString = "Convert([{0}], 'System.String') LIKE '%" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%'";
-                    else if (filterTypeConditionText == _textStrings["EARLIER_THAN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEarlierThan.ToString()])
                         filterString += "< '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    else if (filterTypeConditionText == _textStrings["EARLIER_THAN_OR_EQUAL_TO"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEarlierThanOrEqualTo.ToString()])
                         filterString += "<= '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    else if (filterTypeConditionText == _textStrings["LATER_THAN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLaterThan.ToString()])
                         filterString += "> '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    else if (filterTypeConditionText == _textStrings["LATER_THAN_OR_EQUAL_TO"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLaterThanOrEqualTo.ToString()])
                         filterString += ">= '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
-                    else if (filterTypeConditionText == _textStrings["BETWEEN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()])
                     {
                         DateTime dt1 = ((DateTimePicker)control2).Value;
                         dt1 = new DateTime(dt1.Year, dt1.Month, dt1.Day, dt1.Hour, dt1.Minute, 0);
                         filterString += ">= '" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'";
                         filterString += " AND " + column + "<= '" + Convert.ToString((filterDateAndTimeEnabled ? dt1 : dt1.Date), CultureInfo.CurrentCulture) + "'";
                     }
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_EQUAL"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
                         filterString = "Convert([{0}], 'System.String') NOT LIKE '%" + Convert.ToString((filterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%'";
                     break;
 
@@ -306,11 +272,11 @@ namespace Zuby.ADGV
                     {
                         TimeSpan ts = TimeSpan.Parse(control1.Text);
 
-                        if (filterTypeConditionText == _textStrings["CONTAINS"].ToString())
+                        if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()])
                         {
                             filterString = "(Convert([{0}], 'System.String') LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')";
                         }
-                        else if (filterTypeConditionText == _textStrings["DOES_NOT_CONTAIN"].ToString())
+                        else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()])
                         {
                             filterString = "(Convert([{0}], 'System.String') NOT LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')";
                         }
@@ -329,39 +295,39 @@ namespace Zuby.ADGV
                     if (filterType == FilterType.Float)
                         num = num.Replace(",", ".");
 
-                    if (filterTypeConditionText == _textStrings["EQUALS"].ToString())
+                    if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString += "= " + num;
-                    else if (filterTypeConditionText == _textStrings["BETWEEN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()])
                         filterString += ">= " + num + " AND " + column + "<= " + (filterType == FilterType.Float ? control2.Text.Replace(",", ".") : control2.Text);
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_EQUAL"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
                         filterString += "<> " + num;
-                    else if (filterTypeConditionText == _textStrings["GREATER_THAN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVGreaterThan.ToString()])
                         filterString += "> " + num;
-                    else if (filterTypeConditionText == _textStrings["GREATER_THAN_OR_EQUAL_TO"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVGreaterThanOrEqualTo.ToString()])
                         filterString += ">= " + num;
-                    else if (filterTypeConditionText == _textStrings["LESS_THAN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLessThan.ToString()])
                         filterString += "< " + num;
-                    else if (filterTypeConditionText == _textStrings["LESS_THAN_OR_EQUAL_TO"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVLessThanOrEqualTo.ToString()])
                         filterString += "<= " + num;
                     break;
 
                 default:
                     string txt = FormatFilterString(control1.Text);
-                    if (filterTypeConditionText == _textStrings["EQUALS"].ToString())
+                    if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString += "LIKE '" + txt + "'";
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_EQUAL"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
                         filterString += "NOT LIKE '" + txt + "'";
-                    else if (filterTypeConditionText == _textStrings["BEGINS_WITH"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBeginsWith.ToString()])
                         filterString += "LIKE '" + txt + "%'";
-                    else if (filterTypeConditionText == _textStrings["ENDS_WITH"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEndsWith.ToString()])
                         filterString += "LIKE '%" + txt + "'";
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_BEGIN_WITH"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()])
                         filterString += "NOT LIKE '" + txt + "%'";
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_END_WITH"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()])
                         filterString += "NOT LIKE '%" + txt + "'";
-                    else if (filterTypeConditionText == _textStrings["CONTAINS"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()])
                         filterString += "LIKE '%" + txt + "%'";
-                    else if (filterTypeConditionText == _textStrings["DOES_NOT_CONTAIN"].ToString())
+                    else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()])
                         filterString += "NOT LIKE '%" + txt + "%'";
                     break;
             }
@@ -429,7 +395,7 @@ namespace Zuby.ADGV
             if (!String.IsNullOrEmpty(filterString))
             {
                 _filterString = filterString;
-                _filterStringDescription = String.Format(_textStrings["FILTER_STRING_DESCRIPTION"].ToString(), comboBox_filterType.Text, _valControl1.Text);
+                _filterStringDescription = String.Format(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFilterStringDescription.ToString()], comboBox_filterType.Text, _valControl1.Text);
                 if (_valControl2.Visible)
                     _filterStringDescription += " " + label_and.Text + " \"" + _valControl2.Text + "\"";
                 DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -456,7 +422,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void comboBox_filterType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _valControl2.Visible = comboBox_filterType.Text == _textStrings["BETWEEN"].ToString();
+            _valControl2.Visible = comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()];
             button_ok.Enabled = !(_valControl1.Visible && _valControl1.Tag != null && ((bool)_valControl1.Tag)) ||
                 (_valControl2.Visible && _valControl2.Tag != null && ((bool)_valControl2.Tag));
         }
@@ -495,7 +461,7 @@ namespace Zuby.ADGV
             (sender as Control).Tag = hasErrors || (sender as TextBox).Text.Length == 0;
 
             if (hasErrors && (sender as TextBox).Text.Length > 0)
-                errorProvider.SetError((sender as Control), _textStrings["INVALID_VALUE"].ToString());
+                errorProvider.SetError((sender as Control), AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVInvalidValue.ToString()]);
             else
                 errorProvider.SetError((sender as Control), "");
 

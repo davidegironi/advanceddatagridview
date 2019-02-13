@@ -45,8 +45,8 @@ namespace Zuby.ADGV
             this.customFilterLastFilter5MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3MenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.checkList = new System.Windows.Forms.TreeView();
-            this.button_ok = new System.Windows.Forms.Button();
-            this.button_cancel = new System.Windows.Forms.Button();
+            this.button_filter = new System.Windows.Forms.Button();
+            this.button_undofilter = new System.Windows.Forms.Button();
             this.checkFilterListPanel = new System.Windows.Forms.Panel();
             this.checkFilterListButtonsPanel = new System.Windows.Forms.Panel();
             this.checkFilterListButtonsControlHost = new System.Windows.Forms.ToolStripControlHost(checkFilterListButtonsPanel);
@@ -102,7 +102,7 @@ namespace Zuby.ADGV
             this.cancelSortMenuItem.Enabled = false;
             this.cancelSortMenuItem.AutoSize = false;
             this.cancelSortMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
-            this.cancelSortMenuItem.Text = _textStrings["CLEARSORT"].ToString();
+            this.cancelSortMenuItem.Text = "Clear Sort";
             this.cancelSortMenuItem.Click += new System.EventHandler(CancelSortMenuItem_Click);
             this.cancelSortMenuItem.MouseEnter += new System.EventHandler(CancelSortMenuItem_MouseEnter);
             //
@@ -117,7 +117,7 @@ namespace Zuby.ADGV
             this.cancelFilterMenuItem.Enabled = false;
             this.cancelFilterMenuItem.AutoSize = false;
             this.cancelFilterMenuItem.Size = new System.Drawing.Size(Width - 1, 22);
-            this.cancelFilterMenuItem.Text = _textStrings["CLEARFILTER"].ToString();
+            this.cancelFilterMenuItem.Text = "Clear Filter";
             this.cancelFilterMenuItem.Click += new System.EventHandler(CancelFilterMenuItem_Click);
             this.cancelFilterMenuItem.MouseEnter += new System.EventHandler(CancelFilterMenuItem_MouseEnter);
             //
@@ -131,7 +131,7 @@ namespace Zuby.ADGV
             //
             this.customFilterMenuItem.Name = "customFilterMenuItem";
             this.customFilterMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.customFilterMenuItem.Text = _textStrings["ADDCUSTOMFILTER"].ToString();
+            this.customFilterMenuItem.Text = "Add a Custom Filter";
             this.customFilterMenuItem.Click += new System.EventHandler(CustomFilterMenuItem_Click);
             //
             // customFilterLastFilter1MenuItem
@@ -208,27 +208,27 @@ namespace Zuby.ADGV
             this.toolStripSeparator3MenuItem.Name = "toolStripSeparator3MenuItem";
             this.toolStripSeparator3MenuItem.Size = new System.Drawing.Size(Width - 4, 6);
             //
-            // button_ok
+            // button_filter
             //
-            this.button_ok.Name = "button_ok";
-            this.button_ok.BackColor = System.Windows.Forms.Button.DefaultBackColor;
-            this.button_ok.UseVisualStyleBackColor = true;
-            this.button_ok.Margin = new System.Windows.Forms.Padding(0);
-            this.button_ok.Size = new System.Drawing.Size(75, 23);
-            this.button_ok.Text = _textStrings["BUTTONOK"].ToString();
-            this.button_ok.Click += new System.EventHandler(Button_ok_Click);
-            this.button_ok.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 164, 0);
+            this.button_filter.Name = "button_filter";
+            this.button_filter.BackColor = System.Windows.Forms.Button.DefaultBackColor;
+            this.button_filter.UseVisualStyleBackColor = true;
+            this.button_filter.Margin = new System.Windows.Forms.Padding(0);
+            this.button_filter.Size = new System.Drawing.Size(75, 23);
+            this.button_filter.Text = "Filter";
+            this.button_filter.Click += new System.EventHandler(Button_ok_Click);
+            this.button_filter.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 164, 0);
             //
-            // button_cancel
+            // button_undofilter
             //
-            this.button_cancel.Name = "button_cancel";
-            this.button_cancel.BackColor = System.Windows.Forms.Button.DefaultBackColor;
-            this.button_cancel.UseVisualStyleBackColor = true;
-            this.button_cancel.Margin = new System.Windows.Forms.Padding(0);
-            this.button_cancel.Size = new System.Drawing.Size(75, 23);
-            this.button_cancel.Text = _textStrings["BUTTONCANCEL"].ToString();
-            this.button_cancel.Click += new System.EventHandler(Button_cancel_Click);
-            this.button_cancel.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 79, 0);
+            this.button_undofilter.Name = "button_undofilter";
+            this.button_undofilter.BackColor = System.Windows.Forms.Button.DefaultBackColor;
+            this.button_undofilter.UseVisualStyleBackColor = true;
+            this.button_undofilter.Margin = new System.Windows.Forms.Padding(0);
+            this.button_undofilter.Size = new System.Drawing.Size(75, 23);
+            this.button_undofilter.Text = "Cancel";
+            this.button_undofilter.Click += new System.EventHandler(Button_cancel_Click);
+            this.button_undofilter.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 79, 0);
             //
             // resizeBoxControlHost
             //
@@ -312,8 +312,8 @@ namespace Zuby.ADGV
             this.checkFilterListButtonsPanel.BackColor = BackColor;
             this.checkFilterListButtonsPanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.checkFilterListButtonsPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
-            button_ok,
-            button_cancel
+            button_filter,
+            button_undofilter
             });
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -337,8 +337,8 @@ namespace Zuby.ADGV
         private System.Windows.Forms.ToolStripMenuItem customFilterLastFilter4MenuItem;
         private System.Windows.Forms.ToolStripMenuItem customFilterLastFilter5MenuItem;
         private System.Windows.Forms.TreeView checkList;
-        private System.Windows.Forms.Button button_ok;
-        private System.Windows.Forms.Button button_cancel;
+        private System.Windows.Forms.Button button_filter;
+        private System.Windows.Forms.Button button_undofilter;
         private System.Windows.Forms.ToolStripControlHost checkFilterListControlHost;
         private System.Windows.Forms.ToolStripControlHost checkFilterListButtonsControlHost;
         private System.Windows.Forms.ToolStripControlHost resizeBoxControlHost;

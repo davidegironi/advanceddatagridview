@@ -51,6 +51,7 @@ namespace Zuby.ADGV
         /// <param name="oldCell"></param>
         /// <param name="filterEnabled"></param>
         public ColumnHeaderCell(DataGridViewColumnHeaderCell oldCell, bool filterEnabled)
+            : base()
         {
             Tag = oldCell.Tag;
             ErrorText = oldCell.ErrorText;
