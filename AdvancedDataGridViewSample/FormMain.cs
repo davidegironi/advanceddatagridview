@@ -17,8 +17,8 @@ namespace AdvancedDataGridViewSample
         private SortedDictionary<int, string> _filtersaved = new SortedDictionary<int, string>();
         private SortedDictionary<int, string> _sortsaved = new SortedDictionary<int, string>();
 
-        private bool _testtranslations = true;
-        private bool _testtranslationsFromFile = true;
+        private bool _testtranslations = false;
+        private bool _testtranslationsFromFile = false;
 
         public FormMain()
         {
