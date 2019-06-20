@@ -643,7 +643,7 @@ namespace Zuby.ADGV
                             if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
                                 FilterString += filter;
                             else if (DataType == typeof(bool))
-                                FilterString += "{0}=" + filter;
+                                FilterString += "[{0}] =" + filter;
                             else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
                                         DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
                                         DataType == typeof(Decimal) ||
