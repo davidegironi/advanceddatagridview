@@ -937,13 +937,13 @@ namespace Zuby.ADGV
 
                         if (values.Count() != nonulls.Count())
                         {
-                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode("False", false, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectFalse.ToString()], false, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             checkList.Nodes.Add(node);
                         }
 
                         if (values.Count() > 0)
                         {
-                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode("True", true, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectTrue.ToString()], true, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             checkList.Nodes.Add(node);
                         }
                     }
