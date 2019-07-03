@@ -167,7 +167,15 @@ namespace Zuby.ADGV
         /// </summary>
         private void RefreshComponentTranslations()
         {
+            this.comboBox_columns.BeginUpdate();
+            this.comboBox_columns.Items.Clear();
             this.comboBox_columns.Items.AddRange(new object[] { Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()] });
+            if (_columnsList != null)
+                foreach (DataGridViewColumn c in _columnsList)
+                    if (c.Visible)
+                        this.comboBox_columns.Items.Add(c.HeaderText);
+            this.comboBox_columns.SelectedIndex = 0;
+            this.comboBox_columns.EndUpdate();
             this.button_close.ToolTipText = Translations[TranslationKey.ADGVSTBButtonCloseToolTip.ToString()];
             this.label_search.Text = Translations[TranslationKey.ADGVSTBLabelSearch.ToString()];
             this.textBox_search.ToolTipText = Translations[TranslationKey.ADGVSTBTextBoxSearchToolTip.ToString()];
@@ -300,7 +308,6 @@ namespace Zuby.ADGV
             _columnsList = columns;
             comboBox_columns.BeginUpdate();
             comboBox_columns.Items.Clear();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedDataGridViewSearchToolBar));
             comboBox_columns.Items.AddRange(new object[] { Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()] });
             if (_columnsList != null)
                 foreach (DataGridViewColumn c in _columnsList)
