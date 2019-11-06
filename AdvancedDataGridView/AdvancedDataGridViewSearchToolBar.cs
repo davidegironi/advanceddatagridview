@@ -31,7 +31,7 @@ namespace Zuby.ADGV
 
         #region class properties
 
-        private DataGridViewColumnCollection _columnsList = null;
+        private DataGridViewColumnCollection _columnsList;
 
         private const bool ButtonCloseEnabled = false;
 
@@ -60,20 +60,21 @@ namespace Zuby.ADGV
         /// </summary>
         public static Dictionary<string, string> Translations = new Dictionary<string, string>()
         {
-            { TranslationKey.ADGVSTBLabelSearch.ToString(), "Search:" },
-            { TranslationKey.ADGVSTBButtonFromBegin.ToString(), "From Begin" },
-            { TranslationKey.ADGVSTBButtonCaseSensitiveToolTip.ToString(), "Case Sensitivity" },
-            { TranslationKey.ADGVSTBButtonSearchToolTip.ToString(), "Find Next" },
-            { TranslationKey.ADGVSTBButtonCloseToolTip.ToString(), "Hide" },
-            { TranslationKey.ADGVSTBButtonWholeWordToolTip.ToString(), "Search only Whole Word" },
-            { TranslationKey.ADGVSTBComboBoxColumnsAll.ToString(), "(All Columns)" },
-            { TranslationKey.ADGVSTBTextBoxSearchToolTip.ToString(), "Value for Search" }
+            {TranslationKey.ADGVSTBLabelSearch.ToString(), "Search:"},
+            {TranslationKey.ADGVSTBButtonFromBegin.ToString(), "From Begin"},
+            {TranslationKey.ADGVSTBButtonCaseSensitiveToolTip.ToString(), "Case Sensitivity"},
+            {TranslationKey.ADGVSTBButtonSearchToolTip.ToString(), "Find Next"},
+            {TranslationKey.ADGVSTBButtonCloseToolTip.ToString(), "Hide"},
+            {TranslationKey.ADGVSTBButtonWholeWordToolTip.ToString(), "Search only Whole Word"},
+            {TranslationKey.ADGVSTBComboBoxColumnsAll.ToString(), "(All Columns)"},
+            {TranslationKey.ADGVSTBTextBoxSearchToolTip.ToString(), "Value for Search"}
         };
 
         /// <summary>
         /// Used to check if components translations has to be updated
         /// </summary>
-        private Dictionary<string, string> _translationsRefreshComponentTranslationsCheck = new Dictionary<string, string>() { };
+        private Dictionary<string, string> _translationsRefreshComponentTranslationsCheck =
+            new Dictionary<string, string>() { };
 
         #endregion
 
@@ -92,7 +93,7 @@ namespace Zuby.ADGV
 
             //set default values
             if (!ButtonCloseEnabled)
-                this.Items.RemoveAt(0);
+                Items.RemoveAt(0);
             comboBox_columns.SelectedIndex = 0;
         }
 
@@ -108,13 +109,13 @@ namespace Zuby.ADGV
         public static void SetTranslations(IDictionary<string, string> translations)
         {
             //set localization strings
-            if (translations != null)
+            if (translations == null)
+                return;
+
+            foreach (var translation in translations)
             {
-                foreach (KeyValuePair<string, string> translation in translations)
-                {
-                    if (Translations.ContainsKey(translation.Key))
-                        Translations[translation.Key] = translation.Value;
-                }
+                if (Translations.ContainsKey(translation.Key))
+                    Translations[translation.Key] = translation.Value;
             }
         }
 
@@ -136,24 +137,26 @@ namespace Zuby.ADGV
         {
             IDictionary<string, string> ret = new Dictionary<string, string>();
 
-            if (!String.IsNullOrEmpty(filename))
+            if (!string.IsNullOrEmpty(filename))
             {
                 //deserialize the file
                 try
                 {
-                    string jsontext = File.ReadAllText(filename);
-                    Dictionary<string, string> translations = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(jsontext);
-                    foreach (KeyValuePair<string, string> translation in translations)
+                    var jsontext = File.ReadAllText(filename);
+                    var translations = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(jsontext);
+                    foreach (var translation in translations)
                     {
                         if (!ret.ContainsKey(translation.Key) && Translations.ContainsKey(translation.Key))
                             ret.Add(translation.Key, translation.Value);
                     }
                 }
-                catch { }
+                catch
+                {
+                }
             }
 
             //add default translations if not in files
-            foreach (KeyValuePair<string, string> translation in GetTranslations())
+            foreach (var translation in GetTranslations())
             {
                 if (!ret.ContainsKey(translation.Key))
                     ret.Add(translation.Key, translation.Value);
@@ -167,23 +170,25 @@ namespace Zuby.ADGV
         /// </summary>
         private void RefreshComponentTranslations()
         {
-            this.comboBox_columns.BeginUpdate();
-            this.comboBox_columns.Items.Clear();
-            this.comboBox_columns.Items.AddRange(new object[] { Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()] });
+            comboBox_columns.BeginUpdate();
+            comboBox_columns.Items.Clear();
+            comboBox_columns.Items.AddRange(new object[]
+                {Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()]});
             if (_columnsList != null)
                 foreach (DataGridViewColumn c in _columnsList)
                     if (c.Visible)
-                        this.comboBox_columns.Items.Add(c.HeaderText);
-            this.comboBox_columns.SelectedIndex = 0;
-            this.comboBox_columns.EndUpdate();
-            this.button_close.ToolTipText = Translations[TranslationKey.ADGVSTBButtonCloseToolTip.ToString()];
-            this.label_search.Text = Translations[TranslationKey.ADGVSTBLabelSearch.ToString()];
-            this.textBox_search.ToolTipText = Translations[TranslationKey.ADGVSTBTextBoxSearchToolTip.ToString()];
-            this.button_frombegin.ToolTipText = Translations[TranslationKey.ADGVSTBButtonFromBegin.ToString()];
-            this.button_casesensitive.ToolTipText = Translations[TranslationKey.ADGVSTBButtonCaseSensitiveToolTip.ToString()];
-            this.button_search.ToolTipText = Translations[TranslationKey.ADGVSTBButtonSearchToolTip.ToString()];
-            this.button_wholeword.ToolTipText = Translations[TranslationKey.ADGVSTBButtonWholeWordToolTip.ToString()];
-            this.textBox_search.Text = textBox_search.ToolTipText;
+                        comboBox_columns.Items.Add(c.HeaderText);
+            comboBox_columns.SelectedIndex = 0;
+            comboBox_columns.EndUpdate();
+            button_close.ToolTipText = Translations[TranslationKey.ADGVSTBButtonCloseToolTip.ToString()];
+            label_search.Text = Translations[TranslationKey.ADGVSTBLabelSearch.ToString()];
+            textBox_search.ToolTipText = Translations[TranslationKey.ADGVSTBTextBoxSearchToolTip.ToString()];
+            button_frombegin.ToolTipText = Translations[TranslationKey.ADGVSTBButtonFromBegin.ToString()];
+            button_casesensitive.ToolTipText =
+                Translations[TranslationKey.ADGVSTBButtonCaseSensitiveToolTip.ToString()];
+            button_search.ToolTipText = Translations[TranslationKey.ADGVSTBButtonSearchToolTip.ToString()];
+            button_wholeword.ToolTipText = Translations[TranslationKey.ADGVSTBButtonWholeWordToolTip.ToString()];
+            textBox_search.Text = textBox_search.ToolTipText;
         }
 
         #endregion
@@ -201,18 +206,20 @@ namespace Zuby.ADGV
             if (textBox_search.TextLength > 0 && textBox_search.Text != textBox_search.ToolTipText && Search != null)
             {
                 DataGridViewColumn c = null;
-                if (comboBox_columns.SelectedIndex > 0 && _columnsList != null && _columnsList.GetColumnCount(DataGridViewElementStates.Visible) > 0)
+                if (comboBox_columns.SelectedIndex > 0 && _columnsList != null &&
+                    _columnsList.GetColumnCount(DataGridViewElementStates.Visible) > 0)
                 {
-                    DataGridViewColumn[] cols = _columnsList.Cast<DataGridViewColumn>().Where(col => col.Visible).ToArray<DataGridViewColumn>();
+                    var cols = _columnsList.Cast<DataGridViewColumn>().Where(col => col.Visible).ToArray();
 
                     if (cols.Length == comboBox_columns.Items.Count - 1)
                     {
-                        if (cols[comboBox_columns.SelectedIndex - 1].HeaderText == comboBox_columns.SelectedItem.ToString())
+                        if (cols[comboBox_columns.SelectedIndex - 1].HeaderText ==
+                            comboBox_columns.SelectedItem.ToString())
                             c = cols[comboBox_columns.SelectedIndex - 1];
                     }
                 }
 
-                AdvancedDataGridViewSearchToolBarSearchEventArgs args = new AdvancedDataGridViewSearchToolBarSearchEventArgs(
+                var args = new AdvancedDataGridViewSearchToolBarSearchEventArgs(
                     textBox_search.Text,
                     c,
                     button_casesensitive.Checked,
@@ -286,7 +293,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         void textBox_search_KeyDown(object sender, KeyEventArgs e)
         {
-            if (textBox_search.TextLength > 0 && textBox_search.Text != textBox_search.ToolTipText && e.KeyData == Keys.Enter)
+            if (textBox_search.TextLength > 0 && textBox_search.Text != textBox_search.ToolTipText &&
+                e.KeyData == Keys.Enter)
             {
                 button_search_Click(button_search, new EventArgs());
                 e.SuppressKeyPress = true;
@@ -308,7 +316,8 @@ namespace Zuby.ADGV
             _columnsList = columns;
             comboBox_columns.BeginUpdate();
             comboBox_columns.Items.Clear();
-            comboBox_columns.Items.AddRange(new object[] { Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()] });
+            comboBox_columns.Items.AddRange(new object[]
+                {Translations[TranslationKey.ADGVSTBComboBoxColumnsAll.ToString()]});
             if (_columnsList != null)
                 foreach (DataGridViewColumn c in _columnsList)
                     if (c.Visible)
@@ -330,16 +339,16 @@ namespace Zuby.ADGV
         private void ResizeMe(object sender, EventArgs e)
         {
             SuspendLayout();
-            int w1 = 150;
-            int w2 = 150;
-            int oldW = comboBox_columns.Width + textBox_search.Width;
+            var w1 = 150;
+            var w2 = 150;
+            var oldW = comboBox_columns.Width + textBox_search.Width;
             foreach (ToolStripItem c in Items)
             {
                 c.Overflow = ToolStripItemOverflow.Never;
                 c.Visible = true;
             }
 
-            int width = PreferredSize.Width - oldW + w1 + w2;
+            var width = PreferredSize.Width - oldW + w1 + w2;
             if (Width < width)
             {
                 label_search.Visible = false;
@@ -373,16 +382,19 @@ namespace Zuby.ADGV
                     comboBox_columns.Overflow = ToolStripItemOverflow.Always;
                     textBox_search.Overflow = ToolStripItemOverflow.Always;
                     w1 = 150;
-                    w2 = Math.Max(Width - PreferredSize.Width - textBox_search.Margin.Left - textBox_search.Margin.Right, 75);
+                    w2 = Math.Max(
+                        Width - PreferredSize.Width - textBox_search.Margin.Left - textBox_search.Margin.Right, 75);
                     textBox_search.Overflow = ToolStripItemOverflow.Never;
                     width = PreferredSize.Width - textBox_search.Width + w2;
                 }
+
                 if (Width < width)
                 {
                     button_search.Overflow = ToolStripItemOverflow.Always;
                     w2 = Math.Max(Width - PreferredSize.Width + textBox_search.Width, 75);
                     width = PreferredSize.Width - textBox_search.Width + w2;
                 }
+
                 if (Width < width)
                 {
                     button_close.Overflow = ToolStripItemOverflow.Always;
@@ -396,6 +408,7 @@ namespace Zuby.ADGV
                     w2 = Math.Max(Width - PreferredSize.Width + textBox_search.Width, 20);
                     width = PreferredSize.Width - textBox_search.Width + w2;
                 }
+
                 if (width > Width)
                 {
                     textBox_search.Overflow = ToolStripItemOverflow.Always;
@@ -424,10 +437,10 @@ namespace Zuby.ADGV
         /// <param name="w2"></param>
         private void GetResizeBoxSize(int width, ref int w1, ref int w2)
         {
-            int dif = (int)Math.Round((width - Width) / 2.0, 0, MidpointRounding.AwayFromZero);
+            var dif = (int) Math.Round((width - Width) / 2.0, 0, MidpointRounding.AwayFromZero);
 
-            int oldW1 = w1;
-            int oldW2 = w2;
+            var oldW1 = w1;
+            var oldW2 = w2;
             if (Width < width)
             {
                 w1 = Math.Max(w1 - dif, 75);
@@ -452,7 +465,9 @@ namespace Zuby.ADGV
         protected override void OnPaint(PaintEventArgs e)
         {
             //check if translations are changed and update components
-            if (!((_translationsRefreshComponentTranslationsCheck == Translations) || (_translationsRefreshComponentTranslationsCheck.Count == Translations.Count && !_translationsRefreshComponentTranslationsCheck.Except(Translations).Any())))
+            if (!((_translationsRefreshComponentTranslationsCheck == Translations) ||
+                  (_translationsRefreshComponentTranslationsCheck.Count == Translations.Count &&
+                   !_translationsRefreshComponentTranslationsCheck.Except(Translations).Any())))
             {
                 _translationsRefreshComponentTranslationsCheck = Translations;
                 RefreshComponentTranslations();
@@ -465,7 +480,9 @@ namespace Zuby.ADGV
 
     }
 
-    public delegate void AdvancedDataGridViewSearchToolBarSearchEventHandler(object sender, AdvancedDataGridViewSearchToolBarSearchEventArgs e);
+    public delegate void AdvancedDataGridViewSearchToolBarSearchEventHandler(object sender,
+        AdvancedDataGridViewSearchToolBarSearchEventArgs e);
+
     public class AdvancedDataGridViewSearchToolBarSearchEventArgs : EventArgs
     {
         public string ValueToSearch { get; private set; }
@@ -474,7 +491,8 @@ namespace Zuby.ADGV
         public bool WholeWord { get; private set; }
         public bool FromBegin { get; private set; }
 
-        public AdvancedDataGridViewSearchToolBarSearchEventArgs(string Value, DataGridViewColumn Column, bool Case, bool Whole, bool fromBegin)
+        public AdvancedDataGridViewSearchToolBarSearchEventArgs(string Value, DataGridViewColumn Column, bool Case,
+            bool Whole, bool fromBegin)
         {
             ValueToSearch = Value;
             ColumnToSearch = Column;

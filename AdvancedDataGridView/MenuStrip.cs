@@ -51,19 +51,16 @@ namespace Zuby.ADGV
 
         #region class properties
 
-        private FilterType _activeFilterType = FilterType.None;
-        private SortType _activeSortType = SortType.None;
-        private TreeNodeItemSelector[] _startingNodes = null;
-        private TreeNodeItemSelector[] _filterNodes = null;
-        private string _sortString = null;
-        private string _filterString = null;
-        private static Point _resizeStartPoint = new Point(1, 1);
+        private TreeNodeItemSelector[] _startingNodes;
+        private TreeNodeItemSelector[] _filterNodes;
+        private string _sortString;
+        private string _filterString;
+        private static readonly Point ResizeStartPoint = new Point(1, 1);
         private Point _resizeEndPoint = new Point(-1, -1);
         private bool _checkTextFilterChangedEnabled = true;
-        private TreeNodeItemSelector[] _initialNodes = new TreeNodeItemSelector[] { };
-        private TreeNodeItemSelector[] _restoreNodes = new TreeNodeItemSelector[] { };
-        private bool _checkTextFilterSetByText = false;
-        private bool _checkTextFilterRemoveNodesOnSearch = true;
+        private TreeNodeItemSelector[] _initialNodes = { };
+        private TreeNodeItemSelector[] _restoreNodes = { };
+        private bool _checkTextFilterSetByText;
 
         #endregion
 
@@ -80,11 +77,16 @@ namespace Zuby.ADGV
             InitializeComponent();
 
             //set component translations
-            this.cancelSortMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearSort.ToString()];
-            this.cancelFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearFilter.ToString()];
-            this.customFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVAddCustomFilter.ToString()];
-            this.button_filter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonFilter.ToString()];
-            this.button_undofilter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
+            cancelSortMenuItem.Text =
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearSort.ToString()];
+            cancelFilterMenuItem.Text =
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearFilter.ToString()];
+            customFilterMenuItem.Text =
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVAddCustomFilter.ToString()];
+            button_filter.Text =
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonFilter.ToString()];
+            button_undofilter.Text =
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
 
             //set type
             DataType = dataType;
@@ -92,36 +94,50 @@ namespace Zuby.ADGV
             //set components values
             if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
             {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeDESC.ToString()];
+                customFilterLastFiltersListMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text =
+                    AdvancedDataGridView.Translations[
+                        AdvancedDataGridView.TranslationKey.ADGVSortDateTimeASC.ToString()];
+                sortDESCMenuItem.Text =
+                    AdvancedDataGridView.Translations[
+                        AdvancedDataGridView.TranslationKey.ADGVSortDateTimeDESC.ToString()];
                 sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
             }
             else if (DataType == typeof(bool))
             {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolDESC.ToString()];
+                customFilterLastFiltersListMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolASC.ToString()];
+                sortDESCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolDESC.ToString()];
                 sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCbool;
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCbool;
             }
-            else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(Decimal) ||
-                DataType == typeof(Single) || DataType == typeof(Double))
+            else if (DataType == typeof(int) || DataType == typeof(long) || DataType == typeof(short) ||
+                     DataType == typeof(uint) || DataType == typeof(ulong) || DataType == typeof(ushort) ||
+                     DataType == typeof(byte) || DataType == typeof(sbyte) || DataType == typeof(decimal) ||
+                     DataType == typeof(float) || DataType == typeof(double))
             {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumDESC.ToString()];
+                customFilterLastFiltersListMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumASC.ToString()];
+                sortDESCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumDESC.ToString()];
                 sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
             }
             else
             {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextDESC.ToString()];
+                customFilterLastFiltersListMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextASC.ToString()];
+                sortDESCMenuItem.Text =
+                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextDESC.ToString()];
                 sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCtxt;
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
             }
@@ -152,7 +168,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MenuStrip_Closed(Object sender, EventArgs e)
+        private void MenuStrip_Closed(object sender, EventArgs e)
         {
             ResizeClean();
 
@@ -168,7 +184,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void MenuStrip_LostFocus(Object sender, EventArgs e)
+        private void MenuStrip_LostFocus(object sender, EventArgs e)
         {
             if (!ContainsFocus)
                 Close();
@@ -180,21 +196,24 @@ namespace Zuby.ADGV
         /// <returns></returns>
         private ImageList GetCheckListStateImages()
         {
-            ImageList images = new System.Windows.Forms.ImageList();
-            Bitmap unCheckImg = new Bitmap(16, 16);
-            Bitmap checkImg = new Bitmap(16, 16);
-            Bitmap mixedImg = new Bitmap(16, 16);
+            var images = new ImageList();
+            var unCheckImg = new Bitmap(16, 16);
+            var checkImg = new Bitmap(16, 16);
+            var mixedImg = new Bitmap(16, 16);
 
-            using (Bitmap img = new Bitmap(16, 16))
+            using (var img = new Bitmap(16, 16))
             {
-                using (Graphics g = Graphics.FromImage(img))
+                using (var g = Graphics.FromImage(img))
                 {
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1), System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
-                    unCheckImg = (Bitmap)img.Clone();
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1), System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal);
-                    checkImg = (Bitmap)img.Clone();
-                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1), System.Windows.Forms.VisualStyles.CheckBoxState.MixedNormal);
-                    mixedImg = (Bitmap)img.Clone();
+                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1),
+                        System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+                    unCheckImg = (Bitmap) img.Clone();
+                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1),
+                        System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal);
+                    checkImg = (Bitmap) img.Clone();
+                    CheckBoxRenderer.DrawCheckBox(g, new Point(0, 1),
+                        System.Windows.Forms.VisualStyles.CheckBoxState.MixedNormal);
+                    mixedImg = (Bitmap) img.Clone();
                 }
             }
 
@@ -228,24 +247,12 @@ namespace Zuby.ADGV
         /// <summary>
         /// Get the current MenuStripSortType type
         /// </summary>
-        public SortType ActiveSortType
-        {
-            get
-            {
-                return _activeSortType;
-            }
-        }
+        public SortType ActiveSortType { get; private set; } = SortType.None;
 
         /// <summary>
         /// Get the current MenuStripFilterType type
         /// </summary>
-        public FilterType ActiveFilterType
-        {
-            get
-            {
-                return _activeFilterType;
-            }
-        }
+        public FilterType ActiveFilterType { get; private set; } = FilterType.None;
 
         /// <summary>
         /// Get the DataType for the MenuStrip Filter
@@ -280,17 +287,7 @@ namespace Zuby.ADGV
         /// <summary>
         /// Set the text filter search nodes behaviour
         /// </summary>
-        public bool DoesTextFilterRemoveNodesOnSearch
-        {
-            get
-            {
-                return _checkTextFilterRemoveNodesOnSearch;
-            }
-            set
-            {
-                _checkTextFilterRemoveNodesOnSearch = value;
-            }
-        }
+        public bool DoesTextFilterRemoveNodesOnSearch { get; set; } = true;
 
         #endregion
 
@@ -306,10 +303,10 @@ namespace Zuby.ADGV
             if (!IsSortEnabled)
                 enabled = false;
 
-            this.cancelSortMenuItem.Enabled = enabled;
+            cancelSortMenuItem.Enabled = enabled;
 
-            this.sortASCMenuItem.Enabled = enabled;
-            this.sortDESCMenuItem.Enabled = enabled;
+            sortASCMenuItem.Enabled = enabled;
+            sortDESCMenuItem.Enabled = enabled;
         }
 
         /// <summary>
@@ -321,11 +318,11 @@ namespace Zuby.ADGV
             if (!IsFilterEnabled)
                 enabled = false;
 
-            this.cancelFilterMenuItem.Enabled = enabled;
-            this.button_filter.Enabled = enabled;
-            this.button_undofilter.Enabled = enabled;
-            this.checkList.Enabled = enabled;
-            this.checkTextFilter.Enabled = enabled;
+            cancelFilterMenuItem.Enabled = enabled;
+            button_filter.Enabled = enabled;
+            button_undofilter.Enabled = enabled;
+            checkList.Enabled = enabled;
+            checkTextFilter.Enabled = enabled;
             if (enabled)
                 customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             else
@@ -349,7 +346,10 @@ namespace Zuby.ADGV
             {
                 checkList.BeginUpdate();
                 checkList.Nodes.Clear();
-                TreeNodeItemSelector disablednode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFilterChecklistDisable.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+                var disablednode = TreeNodeItemSelector.CreateNode(
+                    AdvancedDataGridView.Translations[
+                        AdvancedDataGridView.TranslationKey.ADGVFilterChecklistDisable.ToString()] + "            ",
+                    null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
                 disablednode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                 checkList.Nodes.Add(disablednode);
             }
@@ -366,17 +366,19 @@ namespace Zuby.ADGV
             cancelFilterMenuItem.Enabled = enabled;
             if (enabled)
             {
-                _activeFilterType = FilterType.Loaded;
+                ActiveFilterType = FilterType.Loaded;
                 _sortString = null;
                 _filterString = null;
                 _filterNodes = null;
                 customFilterLastFiltersListMenuItem.Checked = false;
-                for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count - 1; i++)
+                for (var i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count - 1; i++)
                 {
                     (customFilterLastFiltersListMenuItem.DropDownItems[i] as ToolStripMenuItem).Checked = false;
                 }
+
                 checkList.Nodes.Clear();
-                TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode("(Select All)" + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+                var allnode = TreeNodeItemSelector.CreateNode("(Select All)" + "            ", null, CheckState.Checked,
+                    TreeNodeItemSelector.CustomNodeType.SelectAll);
                 allnode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                 allnode.CheckState = CheckState.Indeterminate;
                 checkList.Nodes.Add(allnode);
@@ -386,7 +388,7 @@ namespace Zuby.ADGV
             }
             else
             {
-                _activeFilterType = FilterType.None;
+                ActiveFilterType = FilterType.None;
 
                 SetSortEnabled(true);
                 SetFilterEnabled(true);
@@ -408,11 +410,11 @@ namespace Zuby.ADGV
         public void Show(Control control, int x, int y, IEnumerable<DataGridViewCell> vals)
         {
             BuildNodes(vals);
-            if (_checkTextFilterRemoveNodesOnSearch && checkList.Nodes.Count != _initialNodes.Count())
+            if (DoesTextFilterRemoveNodesOnSearch && checkList.Nodes.Count != _initialNodes.Count())
             {
                 _initialNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
                 _restoreNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
-                int i = 0;
+                var i = 0;
                 foreach (TreeNodeItemSelector n in checkList.Nodes)
                 {
                     _initialNodes[i] = n.Clone();
@@ -421,7 +423,7 @@ namespace Zuby.ADGV
                 }
             }
 
-            if (_activeFilterType == FilterType.Custom)
+            if (ActiveFilterType == FilterType.Custom)
                 SetNodesCheckState(checkList.Nodes, false);
             DuplicateNodes();
             base.Show(control, x, y);
@@ -448,21 +450,23 @@ namespace Zuby.ADGV
             DuplicateNodes();
             base.Show(control, x, y);
 
-            if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
+            if (DoesTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
             {
                 _restoreNodes = new TreeNodeItemSelector[_initialNodes.Count()];
-                int i = 0;
-                foreach (TreeNodeItemSelector n in _initialNodes)
+                var i = 0;
+                foreach (var n in _initialNodes)
                 {
                     _restoreNodes[i] = n.Clone();
                     i++;
                 }
+
                 checkList.BeginUpdate();
                 checkList.Nodes.Clear();
-                foreach (TreeNodeItemSelector node in _initialNodes)
+                foreach (var node in _initialNodes)
                 {
                     checkList.Nodes.Add(node);
                 }
+
                 checkList.EndUpdate();
             }
         }
@@ -508,13 +512,10 @@ namespace Zuby.ADGV
         /// </summary>
         public string SortString
         {
-            get
-            {
-                return (!String.IsNullOrEmpty(_sortString) ? _sortString : "");
-            }
+            get => (!string.IsNullOrEmpty(_sortString) ? _sortString : "");
             private set
             {
-                cancelSortMenuItem.Enabled = (value != null && value.Length > 0);
+                cancelSortMenuItem.Enabled = !string.IsNullOrEmpty(value);
                 _sortString = value;
             }
         }
@@ -524,10 +525,10 @@ namespace Zuby.ADGV
         /// </summary>
         public void CleanSort()
         {
-            string oldsort = SortString;
+            var oldsort = SortString;
             sortASCMenuItem.Checked = false;
             sortDESCMenuItem.Checked = false;
-            _activeSortType = SortType.None;
+            ActiveSortType = SortType.None;
             SortString = null;
         }
 
@@ -541,13 +542,10 @@ namespace Zuby.ADGV
         /// </summary>
         public string FilterString
         {
-            get
-            {
-                return (!String.IsNullOrEmpty(_filterString) ? _filterString : "");
-            }
+            get => (!string.IsNullOrEmpty(_filterString) ? _filterString : "");
             private set
             {
-                cancelFilterMenuItem.Enabled = (value != null && value.Length > 0);
+                cancelFilterMenuItem.Enabled = !string.IsNullOrEmpty(value);
                 _filterString = value;
             }
         }
@@ -557,20 +555,21 @@ namespace Zuby.ADGV
         /// </summary>
         public void CleanFilter()
         {
-            if (_checkTextFilterRemoveNodesOnSearch)
+            if (DoesTextFilterRemoveNodesOnSearch)
             {
                 _initialNodes = new TreeNodeItemSelector[] { };
                 _restoreNodes = new TreeNodeItemSelector[] { };
                 _checkTextFilterSetByText = false;
             }
 
-            for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count - 1; i++)
+            for (var i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count - 1; i++)
             {
                 (customFilterLastFiltersListMenuItem.DropDownItems[i] as ToolStripMenuItem).Checked = false;
             }
-            _activeFilterType = FilterType.None;
+
+            ActiveFilterType = FilterType.None;
             SetNodesCheckState(checkList.Nodes, true);
-            string oldsort = FilterString;
+            var oldsort = FilterString;
             FilterString = null;
             _filterNodes = null;
             customFilterLastFiltersListMenuItem.Checked = false;
@@ -583,9 +582,9 @@ namespace Zuby.ADGV
         /// <param name="enabled"></param>
         public void SetChecklistTextFilterRemoveNodesOnSearchMode(bool enabled)
         {
-            if (_checkTextFilterRemoveNodesOnSearch != enabled)
+            if (DoesTextFilterRemoveNodesOnSearch != enabled)
             {
-                _checkTextFilterRemoveNodesOnSearch = enabled;
+                DoesTextFilterRemoveNodesOnSearch = enabled;
                 CleanFilter();
             }
         }
@@ -602,16 +601,16 @@ namespace Zuby.ADGV
         {
             UnCheckCustomFilters();
 
-            TreeNodeItemSelector selectAllNode = GetSelectAllNode();
+            var selectAllNode = GetSelectAllNode();
             customFilterLastFiltersListMenuItem.Checked = false;
 
             if (selectAllNode != null && selectAllNode.Checked)
                 CancelFilterMenuItem_Click(null, new EventArgs());
             else
             {
-                string oldfilter = FilterString;
+                var oldfilter = FilterString;
                 FilterString = "";
-                _activeFilterType = FilterType.CheckList;
+                ActiveFilterType = FilterType.CheckList;
 
                 if (checkList.Nodes.Count > 1)
                 {
@@ -621,17 +620,18 @@ namespace Zuby.ADGV
 
                     if (checkList.Nodes.Count > 2 || selectAllNode == null)
                     {
-                        string filter = BuildNodesFilterString(
-                            (IsFilterNOTINLogicEnabled && (DataType != typeof(DateTime) && DataType != typeof(TimeSpan) && DataType != typeof(bool)) ?
-                                checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
+                        var filter = BuildNodesFilterString(
+                            (IsFilterNOTINLogicEnabled &&
+                             (DataType != typeof(DateTime) && DataType != typeof(TimeSpan) && DataType != typeof(bool))
+                                ? checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
                                     n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
-                                        && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
-                                        && n.CheckState == CheckState.Unchecked
-                                ) :
-                                checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
+                                         && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
+                                         && n.CheckState == CheckState.Unchecked
+                                )
+                                : checkList.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(
                                     n => n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectAll
-                                        && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
-                                        && n.CheckState != CheckState.Unchecked
+                                         && n.NodeType != TreeNodeItemSelector.CustomNodeType.SelectEmpty
+                                         && n.CheckState != CheckState.Unchecked
                                 ))
                         );
 
@@ -644,17 +644,19 @@ namespace Zuby.ADGV
                                 FilterString += filter;
                             else if (DataType == typeof(bool))
                                 FilterString += "[{0}] =" + filter;
-                            else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                                        DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                                        DataType == typeof(Decimal) ||
-                                        DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
+                            else if (DataType == typeof(int) || DataType == typeof(long) || DataType == typeof(short) ||
+                                     DataType == typeof(uint) || DataType == typeof(ulong) ||
+                                     DataType == typeof(ushort) ||
+                                     DataType == typeof(decimal) ||
+                                     DataType == typeof(byte) || DataType == typeof(sbyte) ||
+                                     DataType == typeof(string))
                             {
                                 if (IsFilterNOTINLogicEnabled)
                                     FilterString += "[{0}] NOT IN (" + filter + ")";
                                 else
                                     FilterString += "[{0}] IN (" + filter + ")";
                             }
-                            else if (DataType == typeof(Double))
+                            else if (DataType == typeof(double))
                             {
                                 if (IsFilterNOTINLogicEnabled)
                                     FilterString += "Convert([{0}],System.String) NOT IN (" + filter + ")";
@@ -662,7 +664,8 @@ namespace Zuby.ADGV
                                     FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
                             }
                             else if (DataType == typeof(Bitmap))
-                            { }
+                            {
+                            }
                             else
                             {
                                 if (IsFilterNOTINLogicEnabled)
@@ -676,8 +679,8 @@ namespace Zuby.ADGV
 
                 DuplicateFilterNodes();
 
-                if (oldfilter != FilterString && FilterChanged != null)
-                    FilterChanged(this, new EventArgs());
+                if (oldfilter != FilterString)
+                    FilterChanged?.Invoke(this, new EventArgs());
             }
         }
 
@@ -688,23 +691,27 @@ namespace Zuby.ADGV
         /// <returns></returns>
         private string BuildNodesFilterString(IEnumerable<TreeNodeItemSelector> nodes)
         {
-            StringBuilder sb = new StringBuilder("");
-            string appx = (DataType == typeof(DateTime) || DataType == typeof(TimeSpan)) ? " OR " : ", ";
+            var sb = new StringBuilder("");
+            var appx = (DataType == typeof(DateTime) || DataType == typeof(TimeSpan)) ? " OR " : ", ";
 
-            if (nodes != null && nodes.Count() > 0)
+            if (nodes != null && nodes.Any())
             {
                 if (DataType == typeof(DateTime))
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                     {
-                        if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
+                        if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>()
+                                              .Count(sn => sn.CheckState != CheckState.Unchecked) == 0))
                         {
-                            DateTime dt = (DateTime)n.Value;
-                            sb.Append("(Convert([{0}], 'System.String') LIKE '%" + Convert.ToString((IsFilterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%')" + appx);
+                            var dt = (DateTime) n.Value;
+                            sb.Append("(Convert([{0}], 'System.String') LIKE '%" +
+                                      Convert.ToString((IsFilterDateAndTimeEnabled ? dt : dt.Date),
+                                          CultureInfo.CurrentCulture) + "%')" + appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
                         {
-                            string subnode = BuildNodesFilterString(n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked));
+                            var subnode = BuildNodesFilterString(n.Nodes.AsParallel().Cast<TreeNodeItemSelector>()
+                                .Where(sn => sn.CheckState != CheckState.Unchecked));
                             if (subnode.Length > 0)
                                 sb.Append(subnode + appx);
                         }
@@ -712,16 +719,22 @@ namespace Zuby.ADGV
                 }
                 else if (DataType == typeof(TimeSpan))
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                     {
-                        if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
+                        if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>()
+                                              .Count(sn => sn.CheckState != CheckState.Unchecked) == 0))
                         {
-                            TimeSpan ts = (TimeSpan)n.Value;
-                            sb.Append("(Convert([{0}], 'System.String') LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')" + appx);
+                            var ts = (TimeSpan) n.Value;
+                            sb.Append("(Convert([{0}], 'System.String') LIKE '%P" +
+                                      ((int) ts.Days > 0 ? (int) ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") +
+                                      ((int) ts.Hours > 0 ? (int) ts.Hours + "H" : "") +
+                                      ((int) ts.Minutes > 0 ? (int) ts.Minutes + "M" : "") +
+                                      ((int) ts.Seconds > 0 ? (int) ts.Seconds + "S" : "") + "%')" + appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
                         {
-                            string subnode = BuildNodesFilterString(n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked));
+                            var subnode = BuildNodesFilterString(n.Nodes.AsParallel().Cast<TreeNodeItemSelector>()
+                                .Where(sn => sn.CheckState != CheckState.Unchecked));
                             if (subnode.Length > 0)
                                 sb.Append(subnode + appx);
                         }
@@ -729,29 +742,30 @@ namespace Zuby.ADGV
                 }
                 else if (DataType == typeof(bool))
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                     {
                         sb.Append(n.Value.ToString());
                         break;
                     }
                 }
-                else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                    DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                    DataType == typeof(Byte) || DataType == typeof(SByte))
+                else if (DataType == typeof(int) || DataType == typeof(long) || DataType == typeof(short) ||
+                         DataType == typeof(uint) || DataType == typeof(ulong) || DataType == typeof(ushort) ||
+                         DataType == typeof(byte) || DataType == typeof(sbyte))
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                         sb.Append(n.Value.ToString() + appx);
                 }
-                else if (DataType == typeof(Single) || DataType == typeof(Double) || DataType == typeof(Decimal))
+                else if (DataType == typeof(float) || DataType == typeof(double) || DataType == typeof(decimal))
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
                 else if (DataType == typeof(Bitmap))
-                { }
+                {
+                }
                 else
                 {
-                    foreach (TreeNodeItemSelector n in nodes)
+                    foreach (var n in nodes)
                         sb.Append("'" + FormatFilterString(n.Value.ToString()) + "'" + appx);
                 }
             }
@@ -787,18 +801,24 @@ namespace Zuby.ADGV
             if (vals != null)
             {
                 //add select all node
-                TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+                var allnode = TreeNodeItemSelector.CreateNode(
+                    AdvancedDataGridView.Translations
+                        [AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] + "            ", null,
+                    CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
                 allnode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                 checkList.Nodes.Add(allnode);
 
-                if (vals.Count() > 0)
+                if (vals.Any())
                 {
                     var nonulls = vals.Where<DataGridViewCell>(c => c.Value != null && c.Value != DBNull.Value);
 
                     //add select empty node
                     if (vals.Count() != nonulls.Count())
                     {
-                        TreeNodeItemSelector nullnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] + "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
+                        var nullnode = TreeNodeItemSelector.CreateNode(
+                            AdvancedDataGridView.Translations[
+                                AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] + "               ",
+                            null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
                         nullnode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                         checkList.Nodes.Add(nullnode);
                     }
@@ -808,28 +828,33 @@ namespace Zuby.ADGV
                     {
                         var years =
                             from year in nonulls
-                            group year by ((DateTime)year.Value).Year into cy
+                            group year by ((DateTime) year.Value).Year
+                            into cy
                             orderby cy.Key ascending
                             select cy;
 
                         foreach (var year in years)
                         {
-                            TreeNodeItemSelector yearnode = TreeNodeItemSelector.CreateNode(year.Key.ToString(), year.Key, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.DateTimeNode);
+                            var yearnode = TreeNodeItemSelector.CreateNode(year.Key.ToString(), year.Key,
+                                CheckState.Checked, TreeNodeItemSelector.CustomNodeType.DateTimeNode);
                             checkList.Nodes.Add(yearnode);
 
                             var months =
                                 from month in year
-                                group month by ((DateTime)month.Value).Month into cm
+                                group month by ((DateTime) month.Value).Month
+                                into cm
                                 orderby cm.Key ascending
                                 select cm;
 
                             foreach (var month in months)
                             {
-                                TreeNodeItemSelector monthnode = yearnode.CreateChildNode(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Key), month.Key);
+                                var monthnode = yearnode.CreateChildNode(
+                                    CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Key), month.Key);
 
                                 var days =
                                     from day in month
-                                    group day by ((DateTime)day.Value).Day into cd
+                                    group day by ((DateTime) day.Value).Day
+                                    into cd
                                     orderby cd.Key ascending
                                     select cd;
 
@@ -845,33 +870,40 @@ namespace Zuby.ADGV
 
                                         var hours =
                                             from hour in day
-                                            group hour by ((DateTime)hour.Value).Hour into ch
+                                            group hour by ((DateTime) hour.Value).Hour
+                                            into ch
                                             orderby ch.Key ascending
                                             select ch;
 
                                         foreach (var hour in hours)
                                         {
-                                            TreeNodeItemSelector hoursnode = daysnode.CreateChildNode(hour.Key.ToString("D2") + " " + "h", hour.Key);
+                                            var hoursnode =
+                                                daysnode.CreateChildNode(hour.Key.ToString("D2") + " " + "h", hour.Key);
 
                                             var mins =
                                                 from min in hour
-                                                group min by ((DateTime)min.Value).Minute into cmin
+                                                group min by ((DateTime) min.Value).Minute
+                                                into cmin
                                                 orderby cmin.Key ascending
                                                 select cmin;
 
                                             foreach (var min in mins)
                                             {
-                                                TreeNodeItemSelector minsnode = hoursnode.CreateChildNode(min.Key.ToString("D2") + " " + "m", min.Key);
+                                                var minsnode =
+                                                    hoursnode.CreateChildNode(min.Key.ToString("D2") + " " + "m",
+                                                        min.Key);
 
                                                 var secs =
                                                     from sec in min
-                                                    group sec by ((DateTime)sec.Value).Second into cs
+                                                    group sec by ((DateTime) sec.Value).Second
+                                                    into cs
                                                     orderby cs.Key ascending
                                                     select cs;
 
                                                 foreach (var sec in secs)
                                                 {
-                                                    TreeNodeItemSelector secsnode = minsnode.CreateChildNode(sec.Key.ToString("D2") + " " + "s", sec.First().Value);
+                                                    var secsnode = minsnode.CreateChildNode(
+                                                        sec.Key.ToString("D2") + " " + "s", sec.First().Value);
                                                 }
                                             }
                                         }
@@ -886,44 +918,51 @@ namespace Zuby.ADGV
                     {
                         var days =
                             from day in nonulls
-                            group day by ((TimeSpan)day.Value).Days into cd
+                            group day by ((TimeSpan) day.Value).Days
+                            into cd
                             orderby cd.Key ascending
                             select cd;
 
                         foreach (var day in days)
                         {
-                            TreeNodeItemSelector daysnode = TreeNodeItemSelector.CreateNode(day.Key.ToString("D2"), day.Key, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.DateTimeNode);
+                            var daysnode = TreeNodeItemSelector.CreateNode(day.Key.ToString("D2"), day.Key,
+                                CheckState.Checked, TreeNodeItemSelector.CustomNodeType.DateTimeNode);
                             checkList.Nodes.Add(daysnode);
 
                             var hours =
                                 from hour in day
-                                group hour by ((TimeSpan)hour.Value).Hours into ch
+                                group hour by ((TimeSpan) hour.Value).Hours
+                                into ch
                                 orderby ch.Key ascending
                                 select ch;
 
                             foreach (var hour in hours)
                             {
-                                TreeNodeItemSelector hoursnode = daysnode.CreateChildNode(hour.Key.ToString("D2") + " " + "h", hour.Key);
+                                var hoursnode = daysnode.CreateChildNode(hour.Key.ToString("D2") + " " + "h", hour.Key);
 
                                 var mins =
                                     from min in hour
-                                    group min by ((TimeSpan)min.Value).Minutes into cmin
+                                    group min by ((TimeSpan) min.Value).Minutes
+                                    into cmin
                                     orderby cmin.Key ascending
                                     select cmin;
 
                                 foreach (var min in mins)
                                 {
-                                    TreeNodeItemSelector minsnode = hoursnode.CreateChildNode(min.Key.ToString("D2") + " " + "m", min.Key);
+                                    var minsnode =
+                                        hoursnode.CreateChildNode(min.Key.ToString("D2") + " " + "m", min.Key);
 
                                     var secs =
                                         from sec in min
-                                        group sec by ((TimeSpan)sec.Value).Seconds into cs
+                                        group sec by ((TimeSpan) sec.Value).Seconds
+                                        into cs
                                         orderby cs.Key ascending
                                         select cs;
 
                                     foreach (var sec in secs)
                                     {
-                                        TreeNodeItemSelector secsnode = minsnode.CreateChildNode(sec.Key.ToString("D2") + " " + "s", sec.First().Value);
+                                        var secsnode = minsnode.CreateChildNode(sec.Key.ToString("D2") + " " + "s",
+                                            sec.First().Value);
                                     }
                                 }
                             }
@@ -933,31 +972,39 @@ namespace Zuby.ADGV
                     //add boolean nodes
                     else if (DataType == typeof(bool))
                     {
-                        var values = nonulls.Where<DataGridViewCell>(c => (bool)c.Value == true);
+                        var values = nonulls.Where<DataGridViewCell>(c => (bool) c.Value == true);
 
                         if (values.Count() != nonulls.Count())
                         {
-                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectFalse.ToString()], false, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            var node = TreeNodeItemSelector.CreateNode(
+                                AdvancedDataGridView.Translations[
+                                    AdvancedDataGridView.TranslationKey.ADGVNodeSelectFalse.ToString()], false,
+                                CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             checkList.Nodes.Add(node);
                         }
 
                         if (values.Count() > 0)
                         {
-                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectTrue.ToString()], true, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            var node = TreeNodeItemSelector.CreateNode(
+                                AdvancedDataGridView.Translations[
+                                    AdvancedDataGridView.TranslationKey.ADGVNodeSelectTrue.ToString()], true,
+                                CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             checkList.Nodes.Add(node);
                         }
                     }
 
                     //ignore image nodes
                     else if (DataType == typeof(Bitmap))
-                    { }
+                    {
+                    }
 
                     //add string nodes
                     else
                     {
                         foreach (var v in nonulls.GroupBy(c => c.Value).OrderBy(g => g.Key))
                         {
-                            TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(v.First().FormattedValue.ToString(), v.Key, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            var node = TreeNodeItemSelector.CreateNode(v.First().FormattedValue.ToString(), v.Key,
+                                CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             checkList.Nodes.Add(node);
                         }
                     }
@@ -991,10 +1038,10 @@ namespace Zuby.ADGV
                 }
 
                 //refresh nodes
-                CheckState state = UpdateNodesCheckState(checkList.Nodes);
+                var state = UpdateNodesCheckState(checkList.Nodes);
 
                 GetSelectAllNode().CheckState = state;
-                button_filter.Enabled = !(state == CheckState.Unchecked);
+                button_filter.Enabled = state != CheckState.Unchecked;
             }
         }
 
@@ -1008,7 +1055,7 @@ namespace Zuby.ADGV
             foreach (TreeNodeItemSelector node in nodes)
             {
                 node.Checked = isChecked;
-                if (node.Nodes != null && node.Nodes.Count > 0)
+                if (node.Nodes.Count > 0)
                     SetNodesCheckState(node.Nodes, isChecked);
             }
         }
@@ -1020,9 +1067,9 @@ namespace Zuby.ADGV
         /// <returns></returns>
         private CheckState UpdateNodesCheckState(TreeNodeCollection nodes)
         {
-            CheckState result = CheckState.Unchecked;
-            bool isFirstNode = true;
-            bool isAllNodesSomeCheckState = true;
+            var result = CheckState.Unchecked;
+            var isFirstNode = true;
+            var isAllNodesSomeCheckState = true;
 
             foreach (TreeNodeItemSelector n in nodes)
             {
@@ -1046,10 +1093,7 @@ namespace Zuby.ADGV
                 }
             }
 
-            if (isAllNodesSomeCheckState)
-                return result;
-            else
-                return CheckState.Indeterminate;
+            return isAllNodesSomeCheckState ? result : CheckState.Indeterminate;
         }
 
         /// <summary>
@@ -1059,7 +1103,7 @@ namespace Zuby.ADGV
         private TreeNodeItemSelector GetSelectAllNode()
         {
             TreeNodeItemSelector result = null;
-            int i = 0;
+            var i = 0;
             foreach (TreeNodeItemSelector n in checkList.Nodes)
             {
                 if (n.NodeType == TreeNodeItemSelector.CustomNodeType.SelectAll)
@@ -1083,7 +1127,7 @@ namespace Zuby.ADGV
         private TreeNodeItemSelector GetSelectEmptyNode()
         {
             TreeNodeItemSelector result = null;
-            int i = 0;
+            var i = 0;
             foreach (TreeNodeItemSelector n in checkList.Nodes)
             {
                 if (n.NodeType == TreeNodeItemSelector.CustomNodeType.SelectEmpty)
@@ -1106,7 +1150,7 @@ namespace Zuby.ADGV
         private void DuplicateNodes()
         {
             _startingNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
-            int i = 0;
+            var i = 0;
             foreach (TreeNodeItemSelector n in checkList.Nodes)
             {
                 _startingNodes[i] = n.Clone();
@@ -1120,7 +1164,7 @@ namespace Zuby.ADGV
         private void DuplicateFilterNodes()
         {
             _filterNodes = new TreeNodeItemSelector[checkList.Nodes.Count];
-            int i = 0;
+            var i = 0;
             foreach (TreeNodeItemSelector n in checkList.Nodes)
             {
                 _filterNodes[i] = n.Clone();
@@ -1160,8 +1204,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CheckList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeViewHitTestInfo HitTestInfo = checkList.HitTest(e.X, e.Y);
-            if (HitTestInfo != null && HitTestInfo.Location == TreeViewHitTestLocations.StateImage)
+            var HitTestInfo = checkList.HitTest(e.X, e.Y);
+            if (HitTestInfo.Location == TreeViewHitTestLocations.StateImage)
                 //check the node check status
                 NodeCheckChange(e.Node as TreeNodeItemSelector);
         }
@@ -1185,7 +1229,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CheckList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeNodeItemSelector n = e.Node as TreeNodeItemSelector;
+            var n = e.Node as TreeNodeItemSelector;
             //set the new node check status
             SetNodesCheckState(checkList.Nodes, false);
             n.CheckState = CheckState.Unchecked;
@@ -1232,12 +1276,12 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void Button_cancel_Click(object sender, EventArgs e)
         {
-            bool restoredByFilter = false;
-            if (_checkTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
+            var restoredByFilter = false;
+            if (DoesTextFilterRemoveNodesOnSearch && _checkTextFilterSetByText)
             {
                 _initialNodes = new TreeNodeItemSelector[_restoreNodes.Count()];
-                int i = 0;
-                foreach (TreeNodeItemSelector n in _restoreNodes)
+                var i = 0;
+                foreach (var n in _restoreNodes)
                 {
                     _initialNodes[i] = n.Clone();
                     i++;
@@ -1246,10 +1290,11 @@ namespace Zuby.ADGV
                 restoredByFilter = true;
                 checkList.BeginUpdate();
                 checkList.Nodes.Clear();
-                foreach (TreeNodeItemSelector node in _restoreNodes)
+                foreach (var node in _restoreNodes)
                 {
                     checkList.Nodes.Add(node);
                 }
+
                 checkList.EndUpdate();
             }
 
@@ -1268,7 +1313,7 @@ namespace Zuby.ADGV
         /// </summary>
         private void UnCheckCustomFilters()
         {
-            for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
+            for (var i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
             {
                 (customFilterLastFiltersListMenuItem.DropDownItems[i] as ToolStripMenuItem).Checked = false;
             }
@@ -1280,19 +1325,21 @@ namespace Zuby.ADGV
         /// <param name="filtersMenuItemIndex"></param>
         private void SetCustomFilter(int filtersMenuItemIndex)
         {
-            if (_activeFilterType == FilterType.CheckList)
+            if (ActiveFilterType == FilterType.CheckList)
                 SetNodesCheckState(checkList.Nodes, false);
 
-            string filterstring = customFilterLastFiltersListMenuItem.DropDownItems[filtersMenuItemIndex].Tag.ToString();
-            string viewfilterstring = customFilterLastFiltersListMenuItem.DropDownItems[filtersMenuItemIndex].Text;
+            var filterstring = customFilterLastFiltersListMenuItem.DropDownItems[filtersMenuItemIndex].Tag.ToString();
+            var viewfilterstring = customFilterLastFiltersListMenuItem.DropDownItems[filtersMenuItemIndex].Text;
 
             //do preset jobs
             if (filtersMenuItemIndex != 2)
             {
-                for (int i = filtersMenuItemIndex; i > 2; i--)
+                for (var i = filtersMenuItemIndex; i > 2; i--)
                 {
-                    customFilterLastFiltersListMenuItem.DropDownItems[i].Text = customFilterLastFiltersListMenuItem.DropDownItems[i - 1].Text;
-                    customFilterLastFiltersListMenuItem.DropDownItems[i].Tag = customFilterLastFiltersListMenuItem.DropDownItems[i - 1].Tag;
+                    customFilterLastFiltersListMenuItem.DropDownItems[i].Text =
+                        customFilterLastFiltersListMenuItem.DropDownItems[i - 1].Text;
+                    customFilterLastFiltersListMenuItem.DropDownItems[i].Tag =
+                        customFilterLastFiltersListMenuItem.DropDownItems[i - 1].Tag;
                 }
 
                 customFilterLastFiltersListMenuItem.DropDownItems[2].Text = viewfilterstring;
@@ -1300,16 +1347,16 @@ namespace Zuby.ADGV
             }
 
             //uncheck other preset
-            for (int i = 3; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
+            for (var i = 3; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
             {
                 (customFilterLastFiltersListMenuItem.DropDownItems[i] as ToolStripMenuItem).Checked = false;
             }
 
             (customFilterLastFiltersListMenuItem.DropDownItems[2] as ToolStripMenuItem).Checked = true;
-            _activeFilterType = FilterType.Custom;
+            ActiveFilterType = FilterType.Custom;
 
             //get Filter string
-            string oldfilter = FilterString;
+            var oldfilter = FilterString;
             FilterString = filterstring;
 
             //set CheckList nodes
@@ -1336,14 +1383,14 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CancelFilterMenuItem_Click(object sender, EventArgs e)
         {
-            string oldfilter = FilterString;
+            var oldfilter = FilterString;
 
             //clean Filter
             CleanFilter();
 
             //fire Filter changed
-            if (oldfilter != FilterString && FilterChanged != null)
-                FilterChanged(this, new EventArgs());
+            if (oldfilter != FilterString)
+                FilterChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1369,22 +1416,23 @@ namespace Zuby.ADGV
                 return;
 
             //open a new Custom filter window
-            FormCustomFilter flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled);
+            var flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled);
 
             if (flt.ShowDialog() == DialogResult.OK)
             {
                 //add the new Filter presets
 
-                string filterString = flt.FilterString;
-                string viewFilterString = flt.FilterStringDescription;
+                var filterString = flt.FilterString;
+                var viewFilterString = flt.FilterStringDescription;
 
-                int index = -1;
+                var index = -1;
 
-                for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
+                for (var i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
                 {
                     if (customFilterLastFiltersListMenuItem.DropDown.Items[i].Available)
                     {
-                        if (customFilterLastFiltersListMenuItem.DropDownItems[i].Text == viewFilterString && customFilterLastFiltersListMenuItem.DropDownItems[i].Tag.ToString() == filterString)
+                        if (customFilterLastFiltersListMenuItem.DropDownItems[i].Text == viewFilterString &&
+                            customFilterLastFiltersListMenuItem.DropDownItems[i].Tag.ToString() == filterString)
                         {
                             index = i;
                             break;
@@ -1396,14 +1444,17 @@ namespace Zuby.ADGV
 
                 if (index < 2)
                 {
-                    for (int i = customFilterLastFiltersListMenuItem.DropDownItems.Count - 2; i > 1; i--)
+                    for (var i = customFilterLastFiltersListMenuItem.DropDownItems.Count - 2; i > 1; i--)
                     {
                         if (customFilterLastFiltersListMenuItem.DropDownItems[i].Available)
                         {
-                            customFilterLastFiltersListMenuItem.DropDownItems[i + 1].Text = customFilterLastFiltersListMenuItem.DropDownItems[i].Text;
-                            customFilterLastFiltersListMenuItem.DropDownItems[i + 1].Tag = customFilterLastFiltersListMenuItem.DropDownItems[i].Tag;
+                            customFilterLastFiltersListMenuItem.DropDownItems[i + 1].Text =
+                                customFilterLastFiltersListMenuItem.DropDownItems[i].Text;
+                            customFilterLastFiltersListMenuItem.DropDownItems[i + 1].Tag =
+                                customFilterLastFiltersListMenuItem.DropDownItems[i].Tag;
                         }
                     }
+
                     index = 2;
 
                     customFilterLastFiltersListMenuItem.DropDownItems[2].Text = viewFilterString;
@@ -1431,9 +1482,9 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CustomFilterLastFiltersListMenuItem_Paint(Object sender, PaintEventArgs e)
+        private void CustomFilterLastFiltersListMenuItem_Paint(object sender, PaintEventArgs e)
         {
-            Rectangle rect = new Rectangle(customFilterLastFiltersListMenuItem.Width - 12, 7, 10, 10);
+            var rect = new Rectangle(customFilterLastFiltersListMenuItem.Width - 12, 7, 10, 10);
             ControlPaint.DrawMenuGlyph(e.Graphics, rect, MenuGlyph.Arrow, Color.Black, Color.Transparent);
         }
 
@@ -1455,11 +1506,12 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CustomFilterLastFilterMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem menuitem = sender as ToolStripMenuItem;
+            var menuitem = sender as ToolStripMenuItem;
 
-            for (int i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
+            for (var i = 2; i < customFilterLastFiltersListMenuItem.DropDownItems.Count; i++)
             {
-                if (customFilterLastFiltersListMenuItem.DropDownItems[i].Text == menuitem.Text && customFilterLastFiltersListMenuItem.DropDownItems[i].Tag.ToString() == menuitem.Tag.ToString())
+                if (customFilterLastFiltersListMenuItem.DropDownItems[i].Text == menuitem.Text &&
+                    customFilterLastFiltersListMenuItem.DropDownItems[i].Tag.ToString() == menuitem.Tag.ToString())
                 {
                     //set current filter preset as active
                     SetCustomFilter(i);
@@ -1488,23 +1540,28 @@ namespace Zuby.ADGV
         {
             if (!_checkTextFilterChangedEnabled)
                 return;
-            if (!String.IsNullOrEmpty(checkTextFilter.Text))
+            if (!string.IsNullOrEmpty(checkTextFilter.Text))
                 _checkTextFilterSetByText = true;
             else
                 _checkTextFilterSetByText = false;
-            if (_checkTextFilterRemoveNodesOnSearch)
+            if (DoesTextFilterRemoveNodesOnSearch)
             {
                 _startingNodes = _initialNodes;
 
                 checkList.BeginUpdate();
                 RestoreNodes();
             }
-            TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
-            TreeNodeItemSelector nullnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] + "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
+
+            var allnode = TreeNodeItemSelector.CreateNode(
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] +
+                "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
+            var nullnode = TreeNodeItemSelector.CreateNode(
+                AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] +
+                "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
             TreeNodeItemSelector allnodesel = null;
-            for (int i = checkList.Nodes.Count - 1; i >= 0; i--)
+            for (var i = checkList.Nodes.Count - 1; i >= 0; i--)
             {
-                TreeNodeItemSelector node = checkList.Nodes[i] as TreeNodeItemSelector;
+                var node = checkList.Nodes[i] as TreeNodeItemSelector;
                 if (node.Text == allnode.Text)
                 {
                     allnodesel = node;
@@ -1523,9 +1580,10 @@ namespace Zuby.ADGV
                     NodeCheckChange(node as TreeNodeItemSelector);
                 }
             }
-            if (_checkTextFilterRemoveNodesOnSearch)
+
+            if (DoesTextFilterRemoveNodesOnSearch)
             {
-                foreach (TreeNodeItemSelector node in _initialNodes)
+                foreach (var node in _initialNodes)
                 {
                     if (node.Text == allnode.Text)
                     {
@@ -1544,10 +1602,11 @@ namespace Zuby.ADGV
                             node.CheckState = CheckState.Unchecked;
                     }
                 }
+
                 checkList.EndUpdate();
-                for (int i = checkList.Nodes.Count - 1; i >= 0; i--)
+                for (var i = checkList.Nodes.Count - 1; i >= 0; i--)
                 {
-                    TreeNodeItemSelector node = checkList.Nodes[i] as TreeNodeItemSelector;
+                    var node = checkList.Nodes[i] as TreeNodeItemSelector;
                     if (!(node.Text == allnode.Text || node.Text == nullnode.Text))
                     {
                         if (!node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
@@ -1577,15 +1636,15 @@ namespace Zuby.ADGV
 
             sortASCMenuItem.Checked = true;
             sortDESCMenuItem.Checked = false;
-            _activeSortType = SortType.ASC;
+            ActiveSortType = SortType.ASC;
 
             //get Sort String
-            string oldsort = SortString;
+            var oldsort = SortString;
             SortString = "[{0}] ASC";
 
             //fire Sort Changed
-            if (oldsort != SortString && SortChanged != null)
-                SortChanged(this, new EventArgs());
+            if (oldsort != SortString)
+                SortChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1612,15 +1671,15 @@ namespace Zuby.ADGV
 
             sortASCMenuItem.Checked = false;
             sortDESCMenuItem.Checked = true;
-            _activeSortType = SortType.DESC;
+            ActiveSortType = SortType.DESC;
 
             //get Sort String
-            string oldsort = SortString;
+            var oldsort = SortString;
             SortString = "[{0}] DESC";
 
             //fire Sort Changed
-            if (oldsort != SortString && SortChanged != null)
-                SortChanged(this, new EventArgs());
+            if (oldsort != SortString)
+                SortChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1641,12 +1700,12 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CancelSortMenuItem_Click(object sender, EventArgs e)
         {
-            string oldsort = SortString;
+            var oldsort = SortString;
             //clean Sort
             CleanSort();
             //fire Sort changed
-            if (oldsort != SortString && SortChanged != null)
-                SortChanged(this, new EventArgs());
+            if (oldsort != SortString)
+                SortChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1697,9 +1756,9 @@ namespace Zuby.ADGV
         {
             if (_resizeEndPoint.X != -1)
             {
-                Point startPoint = PointToScreen(MenuStrip._resizeStartPoint);
+                var startPoint = PointToScreen(ResizeStartPoint);
 
-                Rectangle rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y)
+                var rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y)
                 {
                     X = Math.Min(startPoint.X, _resizeEndPoint.X),
                     Width = Math.Abs(startPoint.X - _resizeEndPoint.X),
@@ -1726,7 +1785,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void ResizeBoxControlHost_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 ResizeClean();
             }
@@ -1739,39 +1798,38 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void ResizeBoxControlHost_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Visible)
+            if (!Visible)
+                return;
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            var x = e.X;
+            var y = e.Y;
+
+            ResizeClean();
+
+            x += Width - resizeBoxControlHost.Width;
+            y += Height - resizeBoxControlHost.Height;
+
+            x = Math.Max(x, MinimumSize.Width - 1);
+            y = Math.Max(y, MinimumSize.Height - 1);
+
+            var startPoint = PointToScreen(ResizeStartPoint);
+            var endPoint = PointToScreen(new Point(x, y));
+
+            var rc = new Rectangle
             {
-                if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                {
-                    int x = e.X;
-                    int y = e.Y;
+                X = Math.Min(startPoint.X, endPoint.X),
+                Width = Math.Abs(startPoint.X - endPoint.X),
 
-                    ResizeClean();
+                Y = Math.Min(startPoint.Y, endPoint.Y),
+                Height = Math.Abs(startPoint.Y - endPoint.Y)
+            };
 
-                    x += Width - resizeBoxControlHost.Width;
-                    y += Height - resizeBoxControlHost.Height;
+            ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
 
-                    x = Math.Max(x, MinimumSize.Width - 1);
-                    y = Math.Max(y, MinimumSize.Height - 1);
-
-                    Point StartPoint = PointToScreen(MenuStrip._resizeStartPoint);
-                    Point EndPoint = PointToScreen(new Point(x, y));
-
-                    Rectangle rc = new Rectangle
-                    {
-                        X = Math.Min(StartPoint.X, EndPoint.X),
-                        Width = Math.Abs(StartPoint.X - EndPoint.X),
-
-                        Y = Math.Min(StartPoint.Y, EndPoint.Y),
-                        Height = Math.Abs(StartPoint.Y - EndPoint.Y)
-                    };
-
-                    ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
-
-                    _resizeEndPoint.X = EndPoint.X;
-                    _resizeEndPoint.Y = EndPoint.Y;
-                }
-            }
+            _resizeEndPoint.X = endPoint.X;
+            _resizeEndPoint.Y = endPoint.Y;
         }
 
         /// <summary>
@@ -1781,24 +1839,22 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void ResizeBoxControlHost_MouseUp(object sender, MouseEventArgs e)
         {
-            if (_resizeEndPoint.X != -1)
-            {
-                ResizeClean();
+            if (_resizeEndPoint.X == -1)
+                return;
 
-                if (Visible)
-                {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left)
-                    {
-                        int newWidth = e.X + Width - resizeBoxControlHost.Width;
-                        int newHeight = e.Y + Height - resizeBoxControlHost.Height;
+            ResizeClean();
 
-                        newWidth = Math.Max(newWidth, MinimumSize.Width);
-                        newHeight = Math.Max(newHeight, MinimumSize.Height);
+            if (!Visible)
+                return;
+            if (e.Button != MouseButtons.Left)
+                return;
+            var newWidth = e.X + Width - resizeBoxControlHost.Width;
+            var newHeight = e.Y + Height - resizeBoxControlHost.Height;
 
-                        ResizeBox(newWidth, newHeight);
-                    }
-                }
-            }
+            newWidth = Math.Max(newWidth, MinimumSize.Width);
+            newHeight = Math.Max(newHeight, MinimumSize.Height);
+
+            ResizeBox(newWidth, newHeight);
         }
 
         /// <summary>
@@ -1806,7 +1862,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ResizeBoxControlHost_Paint(Object sender, PaintEventArgs e)
+        private void ResizeBoxControlHost_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(Properties.Resources.MenuStrip_ResizeGrip, 0, 0);
         }

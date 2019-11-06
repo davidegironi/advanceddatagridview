@@ -46,7 +46,7 @@ namespace Zuby.ADGV
         /// <param name="value"></param>
         /// <param name="state"></param>
         /// <param name="nodeType"></param>
-        private TreeNodeItemSelector(String text, object value, CheckState state, CustomNodeType nodeType)
+        private TreeNodeItemSelector(string text, object value, CheckState state, CustomNodeType nodeType)
             : base(text)
         {
             CheckState = state;
@@ -65,7 +65,7 @@ namespace Zuby.ADGV
         /// <returns></returns>
         public new TreeNodeItemSelector Clone()
         {
-            TreeNodeItemSelector n = new TreeNodeItemSelector(Text, Value, _checkState, NodeType)
+            var n = new TreeNodeItemSelector(Text, Value, _checkState, NodeType)
             {
                 NodeFont = NodeFont
             };
@@ -97,34 +97,19 @@ namespace Zuby.ADGV
         /// <summary>
         /// Get Node parent
         /// </summary>
-        new public TreeNodeItemSelector Parent
+        public new TreeNodeItemSelector Parent
         {
-            get
-            {
-                if (_parent is TreeNodeItemSelector)
-                    return _parent;
-                else
-                    return null;
-            }
-            set
-            {
-                _parent = value;
-            }
+            get => _parent is TreeNodeItemSelector ? _parent : null;
+            set => _parent = value;
         }
 
         /// <summary>
         /// Node is Checked
         /// </summary>
-        new public bool Checked
+        public new bool Checked
         {
-            get
-            {
-                return _checkState == CheckState.Checked;
-            }
-            set
-            {
-                CheckState = (value == true ? CheckState.Checked : CheckState.Unchecked);
-            }
+            get => _checkState == CheckState.Checked;
+            set => CheckState = (value ? CheckState.Checked : CheckState.Unchecked);
         }
 
         /// <summary>
@@ -132,10 +117,7 @@ namespace Zuby.ADGV
         /// </summary>
         public CheckState CheckState
         {
-            get
-            {
-                return _checkState;
-            }
+            get => _checkState;
             set
             {
                 _checkState = value;
@@ -196,6 +178,7 @@ namespace Zuby.ADGV
 
             return n;
         }
+
         public TreeNodeItemSelector CreateChildNode(string text, object value)
         {
             return CreateChildNode(text, value, _checkState);
