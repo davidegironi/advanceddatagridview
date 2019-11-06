@@ -362,8 +362,8 @@ namespace Zuby.ADGV
         {
             RefreshImage();
             RepaintCell();
-            if (FilterAndSortEnabled && FilterChanged != null)
-                FilterChanged(this, new ColumnHeaderCellEventArgs(MenuStrip, OwningColumn));
+            if (FilterAndSortEnabled)
+                FilterChanged?.Invoke(this, new ColumnHeaderCellEventArgs(MenuStrip, OwningColumn));
         }
 
         /// <summary>

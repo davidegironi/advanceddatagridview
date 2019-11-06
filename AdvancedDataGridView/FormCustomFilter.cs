@@ -90,18 +90,18 @@ namespace Zuby.ADGV
                     {
                         var dt = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
 
-                        (_valControl1 as DateTimePicker).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
-                        (_valControl2 as DateTimePicker).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
-                        (_valControl1 as DateTimePicker).Format = DateTimePickerFormat.Custom;
-                        (_valControl2 as DateTimePicker).Format = DateTimePickerFormat.Custom;
+                        ((DateTimePicker) _valControl1).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
+                        ((DateTimePicker) _valControl2).CustomFormat = dt.ShortDatePattern + " " + "HH:mm";
+                        ((DateTimePicker) _valControl1).Format = DateTimePickerFormat.Custom;
+                        ((DateTimePicker) _valControl2).Format = DateTimePickerFormat.Custom;
                     }
                     else
                     {
-                        (_valControl1 as DateTimePicker).Format = DateTimePickerFormat.Short;
-                        (_valControl2 as DateTimePicker).Format = DateTimePickerFormat.Short;
+                        ((DateTimePicker) _valControl1).Format = DateTimePickerFormat.Short;
+                        ((DateTimePicker) _valControl2).Format = DateTimePickerFormat.Short;
                     }
 
-                    comboBox_filterType.Items.AddRange(new string[]
+                    comboBox_filterType.Items.AddRange(new object[]
                     {
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
                         AdvancedDataGridView.Translations[
@@ -120,7 +120,7 @@ namespace Zuby.ADGV
                 case FilterType.TimeSpan:
                     _valControl1 = new TextBox();
                     _valControl2 = new TextBox();
-                    comboBox_filterType.Items.AddRange(new string[]
+                    comboBox_filterType.Items.AddRange(new object[]
                     {
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()],
                         AdvancedDataGridView.Translations[
@@ -134,7 +134,7 @@ namespace Zuby.ADGV
                     _valControl2 = new TextBox();
                     _valControl1.TextChanged += valControl_TextChanged;
                     _valControl2.TextChanged += valControl_TextChanged;
-                    comboBox_filterType.Items.AddRange(new string[]
+                    comboBox_filterType.Items.AddRange(new object[]
                     {
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
                         AdvancedDataGridView.Translations[
@@ -156,7 +156,7 @@ namespace Zuby.ADGV
                 default:
                     _valControl1 = new TextBox();
                     _valControl2 = new TextBox();
-                    comboBox_filterType.Items.AddRange(new string[]
+                    comboBox_filterType.Items.AddRange(new object[]
                     {
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
                         AdvancedDataGridView.Translations[
@@ -441,7 +441,7 @@ namespace Zuby.ADGV
         #region buttons events
 
         /// <summary>
-        /// Button Cancel Clieck
+        /// Button Cancel Click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -531,21 +531,26 @@ namespace Zuby.ADGV
             switch (_filterType)
             {
                 case FilterType.Integer:
-                    hasErrors = !long.TryParse((sender as TextBox).Text, out _);
+                    hasErrors = !long.TryParse((sender as TextBox)?.Text, out _);
                     break;
 
                 case FilterType.Float:
-                    hasErrors = !double.TryParse((sender as TextBox).Text, out _);
+                    hasErrors = !double.TryParse((sender as TextBox)?.Text, out _);
                     break;
             }
 
-            (sender as Control).Tag = hasErrors || (sender as TextBox).Text.Length == 0;
+            if (!(sender is Control ctrl))
+                return;
 
-            if (hasErrors && (sender as TextBox).Text.Length > 0)
-                errorProvider.SetError((sender as Control),
-                    AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVInvalidValue.ToString()]);
+            if (!(sender is TextBox textBox))
+                return;
+
+            ctrl.Tag = hasErrors || textBox.Text.Length == 0;
+
+            if (hasErrors && textBox.Text.Length > 0)
+                errorProvider.SetError(ctrl, AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVInvalidValue.ToString()]);
             else
-                errorProvider.SetError((sender as Control), "");
+                errorProvider.SetError(ctrl, "");
 
             button_ok.Enabled = !(_valControl1.Visible && _valControl1.Tag != null && ((bool) _valControl1.Tag)) ||
                                 (_valControl2.Visible && _valControl2.Tag != null && ((bool) _valControl2.Tag));
