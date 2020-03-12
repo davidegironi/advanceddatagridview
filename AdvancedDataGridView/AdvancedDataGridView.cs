@@ -385,6 +385,51 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Disable a Filter custom on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void DisableFilterCustom(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetFilterCustomEnabled(false);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable a Filter custom on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void EnableFilterCustom(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetFilterCustomEnabled(true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enabled or disable Filter custom capabilities on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="enabled"></param>
+        public void SetFilterCustomEnabled(DataGridViewColumn column, bool enabled)
+        {
+            if (enabled)
+                EnableFilterCustom(column);
+            else
+                DisableFilterCustom(column);
+        }
+
+        /// <summary>
         /// Load a Filter and Sort preset
         /// </summary>
         /// <param name="filter"></param>

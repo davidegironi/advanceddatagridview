@@ -67,6 +67,7 @@ namespace Zuby.ADGV
 
         #endregion
 
+
         #region costructors
 
         /// <summary>
@@ -268,6 +269,11 @@ namespace Zuby.ADGV
         public bool IsFilterChecklistEnabled { get; set; }
 
         /// <summary>
+        /// Get or Set the Filter Custom enabled
+        /// </summary>
+        public bool IsFilterCustomEnabled { get; set; }
+
+        /// <summary>
         /// Get or Set the Filter DateAndTime enabled
         /// </summary>
         public bool IsFilterDateAndTimeEnabled { get; set; }
@@ -333,7 +339,7 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
-        /// Enable or disable Filter checklistcapabilities
+        /// Enable or disable Filter checklist capabilities
         /// </summary>
         /// <param name="enabled"></param>
         public void SetFilterChecklistEnabled(bool enabled)
@@ -352,6 +358,24 @@ namespace Zuby.ADGV
                 TreeNodeItemSelector disablednode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFilterChecklistDisable.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
                 disablednode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                 checkList.Nodes.Add(disablednode);
+            }
+        }
+
+        /// <summary>
+        /// Enable or disable Filter custom capabilities
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetFilterCustomEnabled(bool enabled)
+        {
+            if (!IsFilterEnabled)
+                enabled = false;
+
+            IsFilterCustomEnabled = enabled;
+            customFilterMenuItem.Enabled = enabled;
+
+            if (!IsFilterCustomEnabled)
+            {
+                UnCheckCustomFilters();
             }
         }
 

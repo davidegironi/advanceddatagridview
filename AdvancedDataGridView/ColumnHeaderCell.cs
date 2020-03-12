@@ -413,6 +413,19 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Enable or disable Filter custom capabilities
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetFilterCustomEnabled(bool enabled)
+        {
+            if (MenuStrip != null)
+            {
+                MenuStrip.IsFilterCustomEnabled = enabled;
+                MenuStrip.SetFilterCustomEnabled(enabled);
+            }
+        }
+
+        /// <summary>
         /// Enable or disable Text filter on checklist remove node mode
         /// </summary>
         /// <param name="enabled"></param>
