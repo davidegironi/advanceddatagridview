@@ -81,11 +81,11 @@ namespace Zuby.ADGV
             InitializeComponent();
 
             //set component translations
-            this.cancelSortMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearSort.ToString()];
-            this.cancelFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearFilter.ToString()];
-            this.customFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVAddCustomFilter.ToString()];
-            this.button_filter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonFilter.ToString()];
-            this.button_undofilter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
+            cancelSortMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearSort.ToString()];
+            cancelFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearFilter.ToString()];
+            customFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVAddCustomFilter.ToString()];
+            button_filter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonFilter.ToString()];
+            button_undofilter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
 
             //set type
             DataType = dataType;
@@ -309,13 +309,11 @@ namespace Zuby.ADGV
         /// <param name="enabled"></param>
         public void SetSortEnabled(bool enabled)
         {
-            if (!IsSortEnabled)
-                enabled = false;
+            IsSortEnabled = enabled;
 
-            this.cancelSortMenuItem.Enabled = enabled;
-
-            this.sortASCMenuItem.Enabled = enabled;
-            this.sortDESCMenuItem.Enabled = enabled;
+            sortASCMenuItem.Enabled = enabled;
+            sortDESCMenuItem.Enabled = enabled;
+            cancelSortMenuItem.Enabled = enabled;
         }
 
         /// <summary>
@@ -324,18 +322,14 @@ namespace Zuby.ADGV
         /// <param name="enabled"></param>
         public void SetFilterEnabled(bool enabled)
         {
-            if (!IsFilterEnabled)
-                enabled = false;
+            IsFilterEnabled = enabled;
 
-            this.cancelFilterMenuItem.Enabled = enabled;
-            this.button_filter.Enabled = enabled;
-            this.button_undofilter.Enabled = enabled;
-            this.checkList.Enabled = enabled;
-            this.checkTextFilter.Enabled = enabled;
-            if (enabled)
-                customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
-            else
-                customFilterLastFiltersListMenuItem.Enabled = false;
+            cancelFilterMenuItem.Enabled = enabled;
+            customFilterLastFiltersListMenuItem.Enabled = (enabled ? DataType != typeof(bool) : false);
+            button_filter.Enabled = enabled;
+            button_undofilter.Enabled = enabled;
+            checkList.Enabled = enabled;
+            checkTextFilter.Enabled = enabled;
         }
 
         /// <summary>
@@ -372,6 +366,7 @@ namespace Zuby.ADGV
 
             IsFilterCustomEnabled = enabled;
             customFilterMenuItem.Enabled = enabled;
+            customFilterLastFiltersListMenuItem.Enabled = enabled;
 
             if (!IsFilterCustomEnabled)
             {

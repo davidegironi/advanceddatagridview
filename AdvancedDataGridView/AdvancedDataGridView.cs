@@ -179,7 +179,9 @@ namespace Zuby.ADGV
         /// AdvancedDataGridView constructor
         /// </summary>
         public AdvancedDataGridView()
-        { }
+        {
+            RightToLeft = RightToLeft.No;
+        }
 
         #endregion
 

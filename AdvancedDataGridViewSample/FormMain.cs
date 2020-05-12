@@ -112,8 +112,8 @@ namespace AdvancedDataGridViewSample
             {
                 object[] newrow = new object[] {
                     i,
-                    (decimal)i*2/3,
-                    i % 2 == 0 ? (double)i*2/3 : (double)i/2,
+                    Math.Round((decimal)i*2/3, 6),
+                    Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6),
                     DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0).Date,
                     DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
                     i*2 % 3 == 0 ? null : i.ToString()+" str",
@@ -141,6 +141,7 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetTextFilterRemoveNodesOnSearch(advancedDataGridView_main.Columns["double"], false);
             advancedDataGridView_main.SetChecklistTextFilterRemoveNodesOnSearchMode(advancedDataGridView_main.Columns["decimal"], false);
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["double"], false);
+            advancedDataGridView_main.SetFilterCustomEnabled(advancedDataGridView_main.Columns["timespan"], false);
         }
 
         private void advancedDataGridView_main_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
