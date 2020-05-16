@@ -5,7 +5,8 @@ About
 
 ## Download
 
-**[Latest Release](../../releases/latest)**
++ **[NuGet](https://www.nuget.org/packages/DG.AdvancedDataGridView)**
++ **[Latest Release](../../releases/latest)**
 
 ## Requirements
 
