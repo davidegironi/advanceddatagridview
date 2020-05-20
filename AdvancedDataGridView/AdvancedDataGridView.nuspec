@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
-    <tags>DataGridView, WinForm, Advanced, Enhanced, Table, Grid, Filter, Sort</tags>
+    <tags>DataGridView, WinForms, Advanced, Enhanced, Table, Grid, Filter, Sort</tags>
   </metadata>
   <files>
     <file src="..\License\LICENSE" target="LICENSE" /> 
