@@ -6,15 +6,16 @@
     <title>Advanced DataGridView</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
-    <licenseUrl>https://opensource.org/licenses/MS-PL</licenseUrl>
+    <license type="file">LICENSE</license>
     <projectUrl>https://github.com/davidegironi/advanceddatagridview</projectUrl>
-    <iconUrl>https://github.com/davidegironi/advanceddatagridview/raw/master/AdvancedDataGridView/Resources/Images/AdvancedDataGridView_logo.png</iconUrl>
+    <icon>logo.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>$copyright$</copyright>
     <tags>DataGridView, WinForms, Advanced, Enhanced, Table, Grid, Filter, Sort</tags>
   </metadata>
   <files>
-    <file src="..\License\LICENSE" target="LICENSE" /> 
+    <file src="..\License\LICENSE" target="LICENSE" />
+    <file src="..\AdvancedDataGridView\Resources\Images\AdvancedDataGridView_logo.png" target="logo.png" />
   </files>
 </package>
