@@ -20,9 +20,28 @@ namespace AdvancedDataGridViewSample
         private bool _testtranslations = false;
         private bool _testtranslationsFromFile = false;
 
+        private static bool MemoryTestEnabled = true;
+        private const int MemoryTestFormsNum = 100;
+        private bool _memorytest = false;
+        private object[][] _inrows = new object[][] { };
+        private Timer _memorytestclosetimer = new Timer
+        {
+            Interval = 100
+        };
+
+        private Timer _timermemoryusage = new Timer
+        {
+            Interval = 2000
+        };
+
+        private static bool CollectGarbageOnTimerMemoryUsageUpdate = true;
+
         public FormMain()
         {
             InitializeComponent();
+
+            //trigger the memory usage show
+            _timermemoryusage_Tick(null, null);
 
             //set localization strings
             Dictionary<string, string> translations = new Dictionary<string, string>();
@@ -59,6 +78,9 @@ namespace AdvancedDataGridViewSample
             comboBox_sortsaved.ValueMember = "Value";
             comboBox_sortsaved.SelectedIndex = -1;
 
+            //set memory test button
+            button_memorytest.Enabled = MemoryTestEnabled;
+
             //initialize dataset
             _dataTable = new DataTable();
             _dataSet = new DataSet();
@@ -72,6 +94,13 @@ namespace AdvancedDataGridViewSample
 
             //set bindingsource
             SetTestData();
+        }
+
+        public FormMain(bool memorytest, object[][] inrows)
+            : this()
+        {
+            _memorytest = memorytest;
+            _inrows = inrows;
         }
 
         private void button_load_Click(object sender, EventArgs e)
@@ -108,23 +137,34 @@ namespace AdvancedDataGridViewSample
 
             int maxMinutes = (int)((TimeSpan.FromHours(20) - TimeSpan.FromHours(10)).TotalMinutes);
 
-            for (int i = 0; i <= 100; i++)
+            if (_inrows.Length == 0)
             {
-                object[] newrow = new object[] {
-                    i,
-                    Math.Round((decimal)i*2/3, 6),
-                    Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6),
-                    DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0).Date,
-                    DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
-                    i*2 % 3 == 0 ? null : i.ToString()+" str",
-                    i % 2 == 0 ? true:false,
-                    Guid.NewGuid(),
-                    sampleimages[r.Next(0, 2)],
-                    TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(r.Next(maxMinutes)))
-                };
+                for (int i = 0; i <= 100; i++)
+                {
+                    object[] newrow = new object[] {
+                        i,
+                        Math.Round((decimal)i*2/3, 6),
+                        Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6),
+                        DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0).Date,
+                        DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
+                        i*2 % 3 == 0 ? null : i.ToString()+" str",
+                        i % 2 == 0 ? true:false,
+                        Guid.NewGuid(),
+                        sampleimages[r.Next(0, 2)],
+                        TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(r.Next(maxMinutes)))
+                    };
 
-                _dataTable.Rows.Add(newrow);
+                    _dataTable.Rows.Add(newrow);
+                }
             }
+            else
+            {
+                for (int i = 0; i < _inrows.Length; i++)
+                {
+                    _dataTable.Rows.Add(_inrows[i]);
+                }
+            }
+
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -142,6 +182,24 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetChecklistTextFilterRemoveNodesOnSearchMode(advancedDataGridView_main.Columns["decimal"], false);
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["double"], false);
             advancedDataGridView_main.SetFilterCustomEnabled(advancedDataGridView_main.Columns["timespan"], false);
+
+            //memory test
+            if (!_memorytest)
+            {
+                //set timer memory usage
+                _timermemoryusage.Enabled = true;
+                _timermemoryusage.Tick += _timermemoryusage_Tick;
+            }
+            else
+            {
+                panel_top.Visible = false;
+
+                _memorytestclosetimer.Enabled = true;
+                _memorytestclosetimer.Tick += _memorytestclosetimer_Tick;
+
+                foreach (DataGridViewColumn column in advancedDataGridView_main.Columns)
+                    advancedDataGridView_main.ShowMenuStrip(column);
+            }
         }
 
         private void advancedDataGridView_main_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
@@ -241,6 +299,60 @@ namespace AdvancedDataGridViewSample
                     e.CaseSensitive);
             if (c != null)
                 advancedDataGridView_main.CurrentCell = c;
+        }
+
+
+        private void _timermemoryusage_Tick(object sender, EventArgs e)
+        {
+            if (CollectGarbageOnTimerMemoryUsageUpdate)
+                GC.Collect();
+            toolStripStatusLabel_memory.Text = String.Format("Memory Usage: {0}Mb", GC.GetTotalMemory(false) / (1024 * 1024));
+        }
+
+        private void button_memorytest_Click(object sender, EventArgs e)
+        {
+            //build random data
+            Random r = new Random();
+            Image[] sampleimages = new Image[2];
+            sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
+            sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
+            int maxMinutes = (int)((TimeSpan.FromHours(20) - TimeSpan.FromHours(10)).TotalMinutes);
+            object[][] testrows = new object[100][];
+            for (int i = 0; i < 100; i++)
+            {
+                object[] newrow = new object[] {
+                        i,
+                        Math.Round((decimal)i*2/3, 6),
+                        Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6),
+                        DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0).Date,
+                        DateTime.Today.AddHours(i*2).AddHours(i%2 == 0 ?i*10+1:0).AddMinutes(i%2 == 0 ?i*10+1:0).AddSeconds(i%2 == 0 ?i*10+1:0).AddMilliseconds(i%2 == 0 ?i*10+1:0),
+                        i*2 % 3 == 0 ? null : i.ToString()+" str",
+                        i % 2 == 0 ? true:false,
+                        Guid.NewGuid(),
+                        sampleimages[r.Next(0, 2)],
+                        TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(r.Next(maxMinutes)))
+                    };
+
+                testrows.SetValue(newrow, i);
+            }
+
+            //show the forms
+            for (int i = 0; i < MemoryTestFormsNum; i++)
+            {
+                FormMain formtest = new FormMain(true, testrows);
+                formtest.Show();
+                //wait for the form to be disposed
+                while (!formtest.IsDisposed)
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(100);
+                }
+            }
+        }
+
+        private void _memorytestclosetimer_Tick(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

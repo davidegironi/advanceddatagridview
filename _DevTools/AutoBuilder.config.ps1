@@ -6,7 +6,7 @@ $solutionName = "AdvancedDataGridView"
 $versionMajor = "1"
 $versionMinor = "1"
 $versionBuild = GetVersionBuild
-$versionRevision = "7"
+$versionRevision = "8"
 #build version number
 $assemblyVersion = GetVersion $versionMajor $versionMinor $versionBuild $versionRevision
 $fileVersion = $assemblyVersion
@@ -35,7 +35,7 @@ $builds = @(
 	@{
 		#solutions filename (.sln)
 		Name = "AdvancedDataGridView";
-		#msbuild optionals contants
+		#msbuild optionals constants
 		Constants = "";
 		#projects to exclude from the release binary package
 		ReleaseBinExcludeProjects = @();

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel_top = new System.Windows.Forms.Panel();
             this.label_strfilter = new System.Windows.Forms.Label();
             this.textBox_strfilter = new System.Windows.Forms.TextBox();
@@ -38,7 +38,7 @@
             this.textBox_filter = new System.Windows.Forms.TextBox();
             this.label_sort = new System.Windows.Forms.Label();
             this.label_filter = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel_search = new System.Windows.Forms.Panel();
             this.advancedDataGridViewSearchToolBar_main = new Zuby.ADGV.AdvancedDataGridViewSearchToolBar();
             this.button_unloadfilters = new System.Windows.Forms.Button();
             this.label_sortsaved = new System.Windows.Forms.Label();
@@ -51,18 +51,23 @@
             this.textBox_total = new System.Windows.Forms.TextBox();
             this.panel_grid = new System.Windows.Forms.Panel();
             this.advancedDataGridView_main = new Zuby.ADGV.AdvancedDataGridView();
-            this.bindingSource_main = new System.Windows.Forms.BindingSource(this.components);
             this.panel_bottom = new System.Windows.Forms.Panel();
+            this.bindingSource_main = new System.Windows.Forms.BindingSource(this.components);
+            this.statusStrip_main = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel_memory = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button_memorytest = new System.Windows.Forms.Button();
             this.panel_top.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panel_search.SuspendLayout();
             this.panel_grid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).BeginInit();
             this.panel_bottom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).BeginInit();
+            this.statusStrip_main.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_top
             // 
+            this.panel_top.Controls.Add(this.button_memorytest);
             this.panel_top.Controls.Add(this.label_strfilter);
             this.panel_top.Controls.Add(this.textBox_strfilter);
             this.panel_top.Controls.Add(this.button_load);
@@ -70,7 +75,7 @@
             this.panel_top.Controls.Add(this.textBox_filter);
             this.panel_top.Controls.Add(this.label_sort);
             this.panel_top.Controls.Add(this.label_filter);
-            this.panel_top.Controls.Add(this.panel3);
+            this.panel_top.Controls.Add(this.panel_search);
             this.panel_top.Controls.Add(this.button_unloadfilters);
             this.panel_top.Controls.Add(this.label_sortsaved);
             this.panel_top.Controls.Add(this.label_filtersaved);
@@ -149,14 +154,14 @@
             this.label_filter.TabIndex = 11;
             this.label_filter.Text = "Filter string:";
             // 
-            // panel3
+            // panel_search
             // 
-            this.panel3.Controls.Add(this.advancedDataGridViewSearchToolBar_main);
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel3.Location = new System.Drawing.Point(0, 164);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(784, 28);
-            this.panel3.TabIndex = 10;
+            this.panel_search.Controls.Add(this.advancedDataGridViewSearchToolBar_main);
+            this.panel_search.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel_search.Location = new System.Drawing.Point(0, 164);
+            this.panel_search.Name = "panel_search";
+            this.panel_search.Size = new System.Drawing.Size(784, 28);
+            this.panel_search.TabIndex = 10;
             // 
             // advancedDataGridViewSearchToolBar_main
             // 
@@ -263,18 +268,19 @@
             // panel_grid
             // 
             this.panel_grid.Controls.Add(this.advancedDataGridView_main);
+            this.panel_grid.Controls.Add(this.panel_bottom);
             this.panel_grid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_grid.Location = new System.Drawing.Point(0, 192);
             this.panel_grid.Name = "panel_grid";
-            this.panel_grid.Size = new System.Drawing.Size(784, 269);
+            this.panel_grid.Size = new System.Drawing.Size(784, 247);
             this.panel_grid.TabIndex = 1;
             // 
             // advancedDataGridView_main
             // 
             this.advancedDataGridView_main.AllowUserToAddRows = false;
             this.advancedDataGridView_main.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.advancedDataGridView_main.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.advancedDataGridView_main.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.advancedDataGridView_main.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -282,33 +288,61 @@
             this.advancedDataGridView_main.Location = new System.Drawing.Point(0, 0);
             this.advancedDataGridView_main.Name = "advancedDataGridView_main";
             this.advancedDataGridView_main.ReadOnly = true;
+            this.advancedDataGridView_main.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.advancedDataGridView_main.RowHeadersVisible = false;
-            this.advancedDataGridView_main.Size = new System.Drawing.Size(784, 269);
+            this.advancedDataGridView_main.Size = new System.Drawing.Size(784, 213);
             this.advancedDataGridView_main.TabIndex = 0;
             this.advancedDataGridView_main.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.advancedDataGridView_main_SortStringChanged);
             this.advancedDataGridView_main.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.advancedDataGridView_main_FilterStringChanged);
-            // 
-            // bindingSource_main
-            // 
-            this.bindingSource_main.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_main_ListChanged);
             // 
             // panel_bottom
             // 
             this.panel_bottom.Controls.Add(this.textBox_total);
             this.panel_bottom.Controls.Add(this.label_total);
             this.panel_bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_bottom.Location = new System.Drawing.Point(0, 427);
+            this.panel_bottom.Location = new System.Drawing.Point(0, 213);
             this.panel_bottom.Name = "panel_bottom";
             this.panel_bottom.Size = new System.Drawing.Size(784, 34);
             this.panel_bottom.TabIndex = 2;
+            // 
+            // bindingSource_main
+            // 
+            this.bindingSource_main.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bindingSource_main_ListChanged);
+            // 
+            // statusStrip_main
+            // 
+            this.statusStrip_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel_memory});
+            this.statusStrip_main.Location = new System.Drawing.Point(0, 439);
+            this.statusStrip_main.Name = "statusStrip_main";
+            this.statusStrip_main.Size = new System.Drawing.Size(784, 22);
+            this.statusStrip_main.TabIndex = 2;
+            this.statusStrip_main.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel_memory
+            // 
+            this.toolStripStatusLabel_memory.Name = "toolStripStatusLabel_memory";
+            this.toolStripStatusLabel_memory.Size = new System.Drawing.Size(116, 17);
+            this.toolStripStatusLabel_memory.Text = "Memory Usage: /Mb";
+            // 
+            // button_memorytest
+            // 
+            this.button_memorytest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_memorytest.Location = new System.Drawing.Point(141, 10);
+            this.button_memorytest.Name = "button_memorytest";
+            this.button_memorytest.Size = new System.Drawing.Size(100, 23);
+            this.button_memorytest.TabIndex = 20;
+            this.button_memorytest.Text = "Memory Test";
+            this.button_memorytest.UseVisualStyleBackColor = true;
+            this.button_memorytest.Click += new System.EventHandler(this.button_memorytest_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
-            this.Controls.Add(this.panel_bottom);
             this.Controls.Add(this.panel_grid);
+            this.Controls.Add(this.statusStrip_main);
             this.Controls.Add(this.panel_top);
             this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "FormMain";
@@ -316,14 +350,17 @@
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.panel_top.ResumeLayout(false);
             this.panel_top.PerformLayout();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
+            this.panel_search.ResumeLayout(false);
+            this.panel_search.PerformLayout();
             this.panel_grid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.advancedDataGridView_main)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).EndInit();
             this.panel_bottom.ResumeLayout(false);
             this.panel_bottom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource_main)).EndInit();
+            this.statusStrip_main.ResumeLayout(false);
+            this.statusStrip_main.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -340,7 +377,7 @@
         private System.Windows.Forms.ComboBox comboBox_sortsaved;
         private System.Windows.Forms.Button button_unloadfilters;
         private Zuby.ADGV.AdvancedDataGridView advancedDataGridView_main;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel_search;
         private Zuby.ADGV.AdvancedDataGridViewSearchToolBar advancedDataGridViewSearchToolBar_main;
         private System.Windows.Forms.Label label_total;
         private System.Windows.Forms.TextBox textBox_total;
@@ -352,6 +389,9 @@
         private System.Windows.Forms.Label label_strfilter;
         private System.Windows.Forms.TextBox textBox_strfilter;
         private System.Windows.Forms.Panel panel_bottom;
+        private System.Windows.Forms.StatusStrip statusStrip_main;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_memory;
+        private System.Windows.Forms.Button button_memorytest;
     }
 }
 

@@ -183,6 +183,28 @@ namespace Zuby.ADGV
             RightToLeft = RightToLeft.No;
         }
 
+        /// <summary>
+        /// Handle the dispose methods
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            foreach (DataGridViewColumn column in Columns)
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SortChanged -= Cell_SortChanged;
+                    cell.FilterChanged -= Cell_FilterChanged;
+                    cell.FilterPopup -= Cell_FilterPopup;
+                    MenuStrip menustrip = cell.MenuStrip;
+                    menustrip.Dispose();
+                }
+            }
+
+            base.OnHandleDestroyed(e);
+        }
+
         #endregion
 
 
@@ -826,6 +848,27 @@ namespace Zuby.ADGV
             }
 
             return null;
+        }
+
+        #endregion
+
+
+        #region public Cell methods
+
+        /// <summary>
+        /// Show a menu strip
+        /// </summary>
+        /// <param name="column"></param>
+        public void ShowMenuStrip(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    Cell_FilterPopup(cell, new ColumnHeaderCellEventArgs(cell.MenuStrip, column));
+                }
+            }
         }
 
         #endregion
