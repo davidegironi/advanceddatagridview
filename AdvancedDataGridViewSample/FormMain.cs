@@ -354,5 +354,20 @@ namespace AdvancedDataGridViewSample
         {
             this.Close();
         }
+
+        private void advancedDataGridView_main_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex == -1 && e.Button == MouseButtons.Right)
+            {
+                adgvColPanel.InitColumns(e.ColumnIndex);
+                adgvColPanel.Location = PointToClient(Cursor.Position);
+                adgvColPanel.Visible = true;
+            }
+            else
+            {
+                adgvColPanel.Visible = false;
+                adgvColPanel.ClearColumns();
+            }
+        }
     }
 }

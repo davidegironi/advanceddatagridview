@@ -39,6 +39,7 @@
             this.flp1.Name = "flp1";
             this.flp1.Size = new System.Drawing.Size(148, 148);
             this.flp1.TabIndex = 0;
+            this.flp1.Visible = false;
             // 
             // ColumnVisiblePanel
             // 
