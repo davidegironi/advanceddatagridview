@@ -360,7 +360,7 @@ namespace AdvancedDataGridViewSample
             if (e.RowIndex == -1 && e.Button == MouseButtons.Right)
             {
                 adgvColPanel.InitColumns(e.ColumnIndex);
-                adgvColPanel.Location = PointToClient(Cursor.Position);
+                adgvColPanel.Location = ((DataGridView)sender).PointToClient(Cursor.Position);
                 adgvColPanel.Visible = true;
             }
             else

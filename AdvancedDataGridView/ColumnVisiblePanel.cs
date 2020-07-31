@@ -16,7 +16,7 @@ namespace Zuby
     ///     if (e.RowIndex == -1 && e.Button == MouseButtons.Right)
     ///     {
     ///         dgv1ColPanel.InitColumns(e.ColumnIndex);
-    ///         dgv1ColPanel.Location = PointToClient(Cursor.Position);
+    ///         dgv1ColPanel.Location = ((DataGridView)sender).PointToClient(Cursor.Position);
     ///         dgv1ColPanel.Visible = true;
     ///     }
     ///     else
