@@ -7,6 +7,7 @@
 # Please refer to LICENSE file for licensing information.
 #-------------------------------------
 
+Framework "4.5.1"
 
 #-------------------------------------
 #Main Properties
