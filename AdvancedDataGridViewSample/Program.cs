@@ -9,7 +9,7 @@ namespace AdvancedDataGridViewSample
         /// <summary>
         /// Enable high DPI
         /// </summary>
-        static readonly bool HighDPIEnabled = false;
+        static readonly bool HighDPIEnabled = true;
 
         /// <summary>
         /// Load for high DPI

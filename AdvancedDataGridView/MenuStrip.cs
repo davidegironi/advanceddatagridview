@@ -143,7 +143,27 @@ namespace Zuby.ADGV
             //set default compoents
             customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             customFilterLastFiltersListMenuItem.Checked = ActiveFilterType == FilterType.Custom;
-            MinimumSize = new Size(PreferredSize.Width, PreferredSize.Height);
+
+            //resize before hitting ResizeBox so the grip works correctly
+            float scalingfactor = GetScalingFactor();
+            MinimumSize = new Size(Scale(PreferredSize.Width, scalingfactor), Scale(PreferredSize.Height, scalingfactor));
+            //once the size is set resize the ones that wont change      
+            resizeBoxControlHost.Height = Scale(resizeBoxControlHost.Height, scalingfactor);
+            resizeBoxControlHost.Width = Scale(resizeBoxControlHost.Width, scalingfactor);
+            toolStripSeparator1MenuItem.Height = Scale(toolStripSeparator1MenuItem.Height, scalingfactor);
+            toolStripSeparator2MenuItem.Height = Scale(toolStripSeparator2MenuItem.Height, scalingfactor);
+            toolStripSeparator3MenuItem.Height = Scale(toolStripSeparator3MenuItem.Height, scalingfactor);
+            sortASCMenuItem.Height = Scale(sortASCMenuItem.Height, scalingfactor);
+            sortDESCMenuItem.Height = Scale(sortDESCMenuItem.Height, scalingfactor);
+            cancelSortMenuItem.Height = Scale(cancelSortMenuItem.Height, scalingfactor);
+            cancelFilterMenuItem.Height = Scale(cancelFilterMenuItem.Height, scalingfactor);
+            customFilterMenuItem.Height = Scale(customFilterMenuItem.Height, scalingfactor);
+            customFilterLastFiltersListMenuItem.Height = Scale(customFilterLastFiltersListMenuItem.Height, scalingfactor);
+            checkTextFilterControlHost.Height = Scale(checkTextFilterControlHost.Height, scalingfactor);
+            button_filter.Width = Scale(button_filter.Width, scalingfactor);
+            button_filter.Height = Scale(button_filter.Height, scalingfactor);
+            button_undofilter.Width = Scale(button_undofilter.Width, scalingfactor);
+            button_undofilter.Height = Scale(button_undofilter.Height, scalingfactor);
             //resize
             ResizeBox(MinimumSize.Width, MinimumSize.Height);
         }
@@ -1679,34 +1699,89 @@ namespace Zuby.ADGV
                 (sender as ToolStripMenuItem).Select();
         }
 
-
         #endregion
 
 
         #region resize methods
 
         /// <summary>
+        /// Get the scaling factor
+        /// </summary>
+        /// <returns></returns>
+        private float GetScalingFactor()
+        {
+            float ret = 1;
+            using (Graphics Gscale = this.CreateGraphics())
+            {
+                try
+                {
+                    ret = Gscale.DpiX / 96.0F;
+                }
+                catch { };
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Scale an item
+        /// </summary>
+        /// <param name="dimesion"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        private int Scale(int dimesion, float factor)
+        {
+            return (int)Math.Floor(dimesion * factor);
+        }
+
+        /// <summary>
         /// Resize the box
         /// </summary>
         /// <param name="w"></param>
         /// <param name="h"></param>
+        /// 
         private void ResizeBox(int w, int h)
         {
             sortASCMenuItem.Width = w - 1;
             sortDESCMenuItem.Width = w - 1;
-            cancelSortMenuItem.Width = w - 1;
+            cancelSortMenuItem.Width = w - 1; ;
             cancelFilterMenuItem.Width = w - 1;
             customFilterMenuItem.Width = w - 1;
             customFilterLastFiltersListMenuItem.Width = w - 1;
-            checkFilterListControlHost.Size = new Size(w - 35, h - 160 - 25);
-            checkFilterListPanel.Size = new Size(w - 35, h - 160 - 25);
             checkTextFilterControlHost.Width = w - 35;
-            checkList.Bounds = new Rectangle(4, 4, w - 35 - 8, h - 160 - 25 - 8);
-            checkFilterListButtonsControlHost.Size = new Size(w - 35, 24);
-            button_filter.Location = new Point(w - 35 - 164, 0);
-            button_undofilter.Location = new Point(w - 35 - 79, 0);
-            resizeBoxControlHost.Margin = new Padding(w - 46, 0, 0, 0);
-            Size = new Size(w, h);
+
+            //scale objects using original width and height
+            float scalingfactor = GetScalingFactor();
+            int w2 = (int)Math.Round(w / scalingfactor, 0);
+            int h2 = (int)Math.Round(h / scalingfactor, 0);
+            checkFilterListControlHost.Size = new Size(Scale(w2 - 35, scalingfactor), Scale(h2 - 160 - 25, scalingfactor));
+            checkFilterListPanel.Size = checkFilterListControlHost.Size;
+            checkList.Bounds = new Rectangle(Scale(4, scalingfactor), Scale(4, scalingfactor), Scale(w2 - 35 - 8, scalingfactor), Scale(h2 - 160 - 25 - 8, scalingfactor));
+            checkFilterListButtonsControlHost.Size = new Size(Scale(w2 - 35, scalingfactor), Scale(24, scalingfactor));
+            button_filter.Location = new Point(Scale(w2 - 35 - 164, scalingfactor), 0);
+            button_undofilter.Location = new Point(Scale(w2 - 35 - 79, scalingfactor), 0);
+            resizeBoxControlHost.Margin = new Padding(Scale(w2 - 46, scalingfactor), 0, 0, 0);
+
+            //get all objects height to make sure we have room for the grip
+            int finalHeight =
+                sortASCMenuItem.Height +
+                sortDESCMenuItem.Height +
+                cancelSortMenuItem.Height +
+                cancelFilterMenuItem.Height +
+                toolStripSeparator1MenuItem.Height +
+                toolStripSeparator2MenuItem.Height +
+                customFilterLastFiltersListMenuItem.Height +
+                toolStripSeparator3MenuItem.Height +
+                checkFilterListControlHost.Height +
+                checkTextFilterControlHost.Height +
+                checkFilterListButtonsControlHost.Height +
+                resizeBoxControlHost.Height;
+
+            // apply the needed height only when scaled
+            if (scalingfactor == 1)
+                Size = new Size(w, h);
+            else
+                Size = new Size(w, h + (finalHeight - h < 0 ? 0 : finalHeight - h));
+
         }
 
         /// <summary>

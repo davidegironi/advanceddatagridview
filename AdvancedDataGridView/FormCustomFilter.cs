@@ -159,6 +159,8 @@ namespace Zuby.ADGV
             _valControl1.Name = "valControl1";
             _valControl1.Location = new System.Drawing.Point(30, 66);
             _valControl1.Size = new System.Drawing.Size(166, 20);
+            _valControl1.Location = new System.Drawing.Point(comboBox_filterType.Location.X, comboBox_filterType.Location.Y + comboBox_filterType.Height + 10);
+            _valControl1.Width = comboBox_filterType.Width - 20;
             _valControl1.TabIndex = 4;
             _valControl1.Visible = true;
             _valControl1.KeyDown += valControl_KeyDown;
