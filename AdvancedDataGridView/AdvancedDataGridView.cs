@@ -616,6 +616,21 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Clean Sort on specific column
+        /// </summary>
+        public void CleanSort(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.CleanSort();
+                }
+            }
+        }
+
+        /// <summary>
         /// Clean all Sort on all columns
         /// </summary>
         /// <param name="fireEvent"></param>
@@ -730,6 +745,21 @@ namespace Zuby.ADGV
                 if (cell != null)
                 {
                     cell.SetChecklistTextFilterRemoveNodesOnSearchMode(enabled);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clean Filter on specific column
+        /// </summary>
+        public void CleanFilter(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.CleanFilter();
                 }
             }
         }
