@@ -177,11 +177,13 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["guid"], false);
+            advancedDataGridView_main.SortASC(advancedDataGridView_main.Columns["datetime"]);
             advancedDataGridView_main.SortDESC(advancedDataGridView_main.Columns["double"]);
             advancedDataGridView_main.SetTextFilterRemoveNodesOnSearch(advancedDataGridView_main.Columns["double"], false);
             advancedDataGridView_main.SetChecklistTextFilterRemoveNodesOnSearchMode(advancedDataGridView_main.Columns["decimal"], false);
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["double"], false);
             advancedDataGridView_main.SetFilterCustomEnabled(advancedDataGridView_main.Columns["timespan"], false);
+            advancedDataGridView_main.CleanSort(advancedDataGridView_main.Columns["datetime"]);
 
             //memory test
             if (!_memorytest)

@@ -616,18 +616,36 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
-        /// Clean Sort on specific column
+        /// Clean all Sort on specific column
         /// </summary>
-        public void CleanSort(DataGridViewColumn column)
+        /// <param name="column"></param>
+        /// <param name="fireEvent"></param>
+        public void CleanSort(DataGridViewColumn column, bool fireEvent)
         {
             if (Columns.Contains(column))
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
-                if (cell != null)
+                if (cell != null && FilterableCells.Contains(cell))
                 {
                     cell.CleanSort();
+                    //remove column from sorted list
+                    _sortOrderList.Remove(column.Name);
                 }
             }
+
+            if (fireEvent)
+                SortString = BuildSortString();
+            else
+                _sortString = BuildSortString();
+        }
+
+        /// <summary>
+        /// Clean all Sort on specific column
+        /// </summary>
+        /// <param name="column"></param>
+        public void CleanSort(DataGridViewColumn column)
+        {
+            CleanSort(column, true);
         }
 
         /// <summary>
@@ -645,6 +663,10 @@ namespace Zuby.ADGV
             else
                 _sortString = null;
         }
+
+        /// <summary>
+        /// Clean all Sort on all columns
+        /// </summary>
         public void CleanSort()
         {
             CleanSort(true);
@@ -752,7 +774,9 @@ namespace Zuby.ADGV
         /// <summary>
         /// Clean Filter on specific column
         /// </summary>
-        public void CleanFilter(DataGridViewColumn column)
+        /// <param name="column"></param>
+        /// <param name="fireEvent"></param>
+        public void CleanFilter(DataGridViewColumn column, bool fireEvent)
         {
             if (Columns.Contains(column))
             {
@@ -760,8 +784,24 @@ namespace Zuby.ADGV
                 if (cell != null)
                 {
                     cell.CleanFilter();
+                    //remove column from filtered list
+                    _filterOrderList.Remove(column.Name);
                 }
             }
+
+            if (fireEvent)
+                FilterString = BuildFilterString();
+            else
+                _filterString = BuildFilterString();
+        }
+
+        /// <summary>
+        /// Clean Filter on specific column
+        /// </summary>
+        /// <param name="column"></param>
+        public void CleanFilter(DataGridViewColumn column)
+        {
+            CleanFilter(column, true);
         }
 
         /// <summary>
@@ -781,6 +821,10 @@ namespace Zuby.ADGV
             else
                 _filterString = null;
         }
+
+        /// <summary>
+        /// Clean all Sort on all columns
+        /// </summary>
         public void CleanFilter()
         {
             CleanFilter(true);
