@@ -1556,9 +1556,9 @@ namespace Zuby.ADGV
                 else
                 {
                     if (node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
-                        node.Checked = false;
+                        node.CheckState = CheckState.Unchecked;
                     else
-                        node.Checked = true;
+                        node.CheckState = CheckState.Checked;
                     NodeCheckChange(node as TreeNodeItemSelector);
                 }
             }

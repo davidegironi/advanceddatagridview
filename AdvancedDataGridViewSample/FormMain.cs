@@ -20,6 +20,8 @@ namespace AdvancedDataGridViewSample
         private bool _testtranslations = false;
         private bool _testtranslationsFromFile = false;
 
+        private static int DisplayItemsCounter = 100;
+
         private static bool MemoryTestEnabled = true;
         private const int MemoryTestFormsNum = 100;
         private bool _memorytest = false;
@@ -139,7 +141,7 @@ namespace AdvancedDataGridViewSample
 
             if (_inrows.Length == 0)
             {
-                for (int i = 0; i <= 100; i++)
+                for (int i = 0; i < DisplayItemsCounter; i++)
                 {
                     object[] newrow = new object[] {
                         i,
