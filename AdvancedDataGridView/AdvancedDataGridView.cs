@@ -711,7 +711,7 @@ namespace Zuby.ADGV
             };
             if (FilterStringChanged != null)
                 FilterStringChanged.Invoke(this, filterEventArgs);
-            //sort datasource
+            //filter datasource
             if (filterEventArgs.Cancel == false)
             {
                 BindingSource datasource = this.DataSource as BindingSource;
