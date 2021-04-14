@@ -1,8 +1,8 @@
 ﻿#-------------------------------------
-# AutoBuild 1.0.1.9
+# AutoBuild 1.0.2.0
 # Copyright (c) 2012 Davide Gironi
 #
-# a Build automation script which runs on psake (https://github.com/psake/psake)
+# a Build automation script that runs on psake (https://github.com/psake/psake)
 # 
 # Please refer to LICENSE file for licensing information.
 #-------------------------------------
@@ -31,9 +31,9 @@ properties {
 	$zipFileNameSrcPrefix = "$solutionName-src";
 	$zipFileNameBinPrefix = "$solutionName-bin";
 	$zipFileNameDbgPrefix = "$solutionName-dbg";
-	$zipFileNameSrc = $zipFileNameSrcPrefix + "_" + $fileVersion + ".zip";
-	$zipFileNameBin = $zipFileNameBinPrefix + "_" + $fileVersion + ".zip";
-	$zipFileNameDbg = $zipFileNameDbgPrefix + "_" + $fileVersion + ".zip";
+	$zipFileNameSrc = $zipFileNameSrcPrefix + "_" + $version + ".zip";
+	$zipFileNameBin = $zipFileNameBinPrefix + "_" + $version + ".zip";
+	$zipFileNameDbg = $zipFileNameDbgPrefix + "_" + $version + ".zip";
 		
 	#global variable for Test
 	$testconsole = 1
@@ -72,17 +72,17 @@ task Clean {
 	Set-Location $sourceDir
 
 	#build solutions
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$name = $build.Name
 		
 		Write-Host -ForegroundColor Green "Clean Debug " $name
 		Write-Host
-		exec { msbuild "/t:Clean" "/p:Configuration=Debug" "/p:OutputPath=bin\Debug\" ".\$name.sln" | Out-Default } "Error building $name"
+		exec { msbuild "/t:clean" "/p:Configuration=Debug" ".\$name.sln" | Out-Default } "Error building $name"
 		
 		Write-Host -ForegroundColor Green "Clean Release " $name
 		Write-Host
-		exec { msbuild "/t:Clean" "/p:Configuration=Release" "/p:OutputPath=bin\Release\" ".\$name.sln" | Out-Default } "Error building $name"
+		exec { msbuild "/t:clean" "/p:Configuration=Release" ".\$name.sln" | Out-Default } "Error building $name"
 	}
 	
 	#pop running location
@@ -103,7 +103,7 @@ task CleanFolders -depends Clean {
 	Set-Location $sourceDir
 
 	#build solutions
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$name = $build.Name
 		
@@ -138,7 +138,7 @@ task CleanFolders -depends Clean {
 
 
 #-------------------------------------
-#Task: update Assembly Version
+#Task: update Versions
 #-------------------------------------
 task UpdateVersion {
 	#record running location
@@ -147,11 +147,17 @@ task UpdateVersion {
 	#set working location
 	Set-Location $sourceDir
 
-	#update assembly version
-	Write-Host -ForegroundColor Green "Updating assembly version"
+	#update version
+	Write-Host -ForegroundColor Green "Updating version"
 	Write-Host
-	Update-AssemblyInfoFiles $sourceDir $assemblyVersion $fileVersion
-		
+	Update-VersionAssemblyInfoFiles $sourceDir $version
+	#build solutions
+	ForEach ($build in $builds)
+	{
+		$name = $build.Name
+		Update-VersionProjectFiles "$sourceDir\$name.sln" $version
+	}	
+	
 	#pop running location
 	Pop-Location
 	
@@ -161,7 +167,7 @@ task UpdateVersion {
 #-------------------------------------
 #Task: Build solutions
 #-------------------------------------
-task Build {
+task Build -depends Clean {
 	#check internal task request variable
 	if ($builddebugandreleaseint -eq $true)
 	{
@@ -175,23 +181,29 @@ task Build {
 	Set-Location $sourceDir
 	
 	#build solutions
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$name = $build.Name
 		
 		$buildConstants = $build.Constants
-		$defineConstants = "/p:DefineConstants=`"CODE_ANALYSIS;TRACE;$buildConstants`""
-		
+		$defineConstants = ""
+		if ($buildConstants -ne "")
+		{
+			$defineConstants = "/p:DefineConstants=`"$buildConstants`""
+		}
+				
 		if ($buildDebugAndRelease -eq $true)
 		{
 			Write-Host -ForegroundColor Green "Building Debug " $name
 			Write-Host
-			exec { msbuild "/t:Clean;Rebuild" "/p:Configuration=Debug" "/p:Platform=Any CPU" "/p:OutputPath=bin\Debug\" "/p:TreatWarningsAsErrors=$treatWarningsAsErrors" "$defineConstants" ".\$name.sln" | Out-Default } "Error building $name"
+			exec { msbuild "/t:restore" "/p:Configuration=Debug" ".\$name.sln" | Out-Default } "Error restoring $name"
+			exec { msbuild "/t:build" "/p:Configuration=Debug" "/p:TreatWarningsAsErrors=$treatWarningsAsErrors" "$defineConstants" "/m" ".\$name.sln" | Out-Default } "Error building $name"
 		}
 		
 		Write-Host -ForegroundColor Green "Building Release " $name
 		Write-Host
-		exec { msbuild "/t:Clean;Rebuild" "/p:Configuration=Release" "/p:Platform=Any CPU" "/p:OutputPath=bin\Release\" "/p:TreatWarningsAsErrors=$treatWarningsAsErrors" "$defineConstants" ".\$name.sln" | Out-Default } "Error building $name"
+		exec { msbuild "/t:restore" "/p:Configuration=Release" ".\$name.sln" | Out-Default } "Error restoring $name"
+		exec { msbuild "/t:build" "/p:Configuration=Release" "/p:TreatWarningsAsErrors=$treatWarningsAsErrors" "$defineConstants" "/m" ".\$name.sln" | Out-Default } "Error building $name"
 	}
 	
 	#pop running location
@@ -222,7 +234,7 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 	}
 	
 	#copy bin files
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$name = $build.Name
 		$releasebinincludefiles = $build.ReleaseBinIncludeFiles
@@ -235,6 +247,8 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 			$projectName = $project.Name
 			$projectDirectoryFileInfo = Get-ChildItem "$sourceDir\$projectFile"
 			$projectDirectory = $projectDirectoryFileInfo.DirectoryName
+			
+			Write-Host -ForegroundColor Green "$projectFile"
 			
 			#check project inclusion
 			$excludefromrelease = $false
@@ -251,6 +265,9 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 				continue
 			}
 			
+			#check if is SDK project
+			$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern '<Project Sdk="Microsoft.NET.Sdk">' -SimpleMatch -Quiet
+			
 			#copy project release files
 			robocopy @("$projectDirectory\bin\Release", "$workingDir\Bin\$projectName", '*.*', '/S', '/NP', '/XO', '/XF', '*.pdb', '*.xml') | Out-Default
 			
@@ -261,34 +278,61 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 			}
 			
 			#copy optionals files for the release
-			foreach ($releasebinincludefile in $releasebinincludefiles)
+			ForEach ($releasebinincludefile in $releasebinincludefiles)
 			{
 				$filesitems = $releasebinincludefile.Files
 				if ($projectName -eq $releasebinincludefile.Name)
 				{
-					foreach ($fileitem in $filesitems)
+					ForEach ($fileitem in $filesitems)
 					{
 						$filenamefromitem = $fileitem.FileNameFrom
 						if ($fileitem.FileNameTo -ne "")
 						{
-							#copy optional release files
 							$filenametoitem = $fileitem.FileNameTo
-							Write-Host "Copying $projectDirectory\$filenamefromitem to $workingDir\Bin\$projectName\$filenametoitem"
-							try {
-								New-Item -ItemType File -Path "$workingDir\Bin\$projectName\$filenametoitem " -Force
-							}
-							catch { }
-							Copy-Item "$projectDirectory\$filenamefromitem" "$workingDir\Bin\$projectName\$filenametoitem" -Force -Recurse
 							
+							#set the list of file to be copied
+							$filenametoitemsBin = @()
+							$filenametoitemsDbg = @()
+							if ($isSdk)
+							{
+								Get-ChildItem -Path "$projectDirectory\bin\Release" -Directory |
+									ForEach-Object {
+										$sdkframework = $_.Name
+										$filenametoitemsBin += "$workingDir\Bin\$projectName\$sdkframework\$filenametoitem"
+										$filenametoitemsDbg += "$workingDir\Dbg\$projectName\$sdkframework\$filenametoitem"
+									}
+							}
+							else
+							{
+								$filenametoitemsBin += "$workingDir\Bin\$projectName\$filenametoitem"
+								$filenametoitemsDbg += "$workingDir\Dbg\$projectName\$filenametoitem"
+							}
+							
+							ForEach ($filetoname in $filenametoitemsBin)
+							{
+								#copy optional release files
+								Write-Host "Copying $projectDirectory\$filenamefromitem to $filetoname"
+								try {
+									New-Item -ItemType File -Path "$filetoname " -Force
+								}
+								catch { }
+								Copy-Item "$projectDirectory\$filenamefromitem" "$filetoname" -Force -Recurse
+							}
+							
+								
 							#copy optional debug files
 							if ($releaseDebug -eq $true)
 							{
-								Write-Host "Copying $projectDirectory\$filenamefromitem to $workingDir\Dbg\$projectName\$filenametoitem"
-								try {
-									New-Item -ItemType File -Path "$workingDir\Dbg\$projectName\$filenametoitem " -Force
+								ForEach ($filetoname in $filenametoitemsDbg)
+								{
+									#copy optional release files
+									Write-Host "Copying $projectDirectory\$filenamefromitem to $filetoname"
+									try {
+										New-Item -ItemType File -Path "$filetoname " -Force
+									}
+									catch { }
+									Copy-Item "$projectDirectory\$filenamefromitem" "$filetoname" -Force -Recurse
 								}
-								catch { }
-								Copy-Item "$projectDirectory\$filenamefromitem" "$workingDir\Dbg\$projectName\$filenametoitem" -Force -Recurse
 							}
 						}						
 					}
@@ -298,10 +342,10 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 	}
 
 	#ReleaseBinCmd commands
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$cmds = $build.ReleaseBinCmd
-		foreach ($cmd in $cmds)
+		ForEach ($cmd in $cmds)
 		{
 			$cmdexec = $cmd.Cmd
 			Write-Host -ForegroundColor Green "Executing command " $cmdexec
@@ -369,10 +413,10 @@ task ReleaseSrc -depends CleanWorking, UpdateVersion {
 	robocopy @("$sourceDir", "$workingDir\Src", '/MIR', '/NP', '/XD', '".vs"', '".svn"', '"bin"', '"obj"', '"TestResults"', '"AppPackages"') + $releaseSrcExcludeFolders + @('/XF', '"*.suo"', '"*.user"') + $releaseSrcExcludeFiles | Out-Default
 
 	#ReleaseSrcCmd commands
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$cmds = $build.ReleaseSrcCmd
-		foreach ($cmd in $cmds)
+		ForEach ($cmd in $cmds)
 		{
 			$cmdexec = $cmd.Cmd
 			Write-Host -ForegroundColor Green "Executing command " $cmdexec
@@ -414,26 +458,14 @@ task ReleaseSrc -depends CleanWorking, UpdateVersion {
 
 
 #-------------------------------------
-#Task: Run TestUI
-#-------------------------------------
-task TestUi -depends TestUiSet,Test
-task TestUiSet {
-	$script:testconsole = 0
-	'$testconsole = ' + $script:testconsole
-}
-#-------------------------------------
 #Task: Run TestConsole
 #-------------------------------------
-task TestConsole -depends TestConsoleSet,Test
-task TestConsoleSet {
-	$script:testconsole = 1
-	'$testconsole = ' + $script:testconsole
-}
+task TestConsole -depends Test
 #-------------------------------------
 #Task: Run Test
 #-------------------------------------
 task Test -depends Build {
-	foreach ($build in $builds)
+	ForEach ($build in $builds)
 	{
 		$name = $build.Name
 		$tests = $build.Tests
@@ -447,20 +479,26 @@ task Test -depends Build {
 			$projectDirectoryFileInfo = Get-ChildItem "$sourceDir\$projectFile"
 			$projectDirectory = $projectDirectoryFileInfo.DirectoryName
 			
-			foreach ($test in $tests)
+			ForEach ($test in $tests)
 			{
-				$testdll = $test.TestDll
 				if ($projectName -eq $test.Name)
 				{
 					Write-Host -ForegroundColor Green "Running tests " $test.Name
-					if ($script:testconsole -eq 1)
+					
+					#check if is SDK project
+					$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern '<Project Sdk="Microsoft.NET.Sdk">' -SimpleMatch -Quiet
+					
+					if ($isSdk)
 					{
-						exec { .\Tools\NUnit\nunit-console.exe "$projectDirectory\bin\Release\$testdll" | Out-Default } "Error running $testname tests"
-					}
+						$sdkframework = (Get-ChildItem -Path "$projectDirectory\bin\Release" -Directory | Select-Object -first 1).Name
+						exec { dotnet publish "$sourceDir\$projectFile" -f $sdkframework | Out-Default }
+					}	
 					else
 					{
-						exec { .\Tools\NUnit\nunit.exe "$projectDirectory\bin\Release\$testdll" /run | Out-Default } "Error running $testname tests"
+						exec { dotnet publish "$sourceDir\$projectFile" | Out-Default }
 					}
+					
+					exec { dotnet test "$sourceDir\$projectFile" | Out-Default }
 				}
 			}
 		}
@@ -513,17 +551,16 @@ function GetVersion([string] $versionMajor, [string] $versionMinor, [string] $ve
 }
 
 #update project assembly files with the given version numbers
-function Update-AssemblyInfoFiles ([string] $sourceDir, [string] $assemblyVersionNumber, [string] $fileVersionNumber) {
+function Update-VersionAssemblyInfoFiles ([string] $sourceDir, [string] $versionNumber) {
 	$assemblyVersionPattern = 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
-	$fileVersionPattern = 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
-	$assemblyVersion = 'AssemblyVersion("' + $assemblyVersionNumber + '")'
-	$fileVersion = 'AssemblyFileVersion("' + $fileVersionNumber + '")'
+	$assemblyFileVersionPattern = 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)'
+	$assemblyVersion = 'AssemblyVersion("' + $versionNumber + '")'
+	$assemblyFileVersion = 'AssemblyFileVersion("' + $versionNumber + '")'
 	
 	Get-ChildItem -Path $sourceDir -r -filter AssemblyInfo.cs | ForEach-Object {
 		$filename = $_.Directory.ToString() + '\' + $_.Name
 		
-		Write-Host $filename
-		$filename + ' -> ' + $assemblyVersionNumber
+		Write-Host $filename ' -> ' $versionNumber
 		
 		$filenameContent = Get-Content $filename
 		if ($filenameContent)
@@ -532,7 +569,7 @@ function Update-AssemblyInfoFiles ([string] $sourceDir, [string] $assemblyVersio
 			{
 				$filenameContent | ForEach-Object {
 				% {$_ -replace $assemblyVersionPattern, $assemblyVersion } |
-				% {$_ -replace $fileVersionPattern, $fileVersion }
+				% {$_ -replace $assemblyFileVersionPattern, $assemblyFileVersion }
 				} | Out-File $filename -Force
 			}
 			catch { }
@@ -540,6 +577,41 @@ function Update-AssemblyInfoFiles ([string] $sourceDir, [string] $assemblyVersio
 		else
 		{
 			throw "AssemblyInfo.cs empty for file $filename"
+		}
+	}
+}
+
+#update project files with the given version numbers
+function Update-VersionProjectFiles ([string] $solutionFile, [string] $versionNumber) {
+	$versionPattern = '\<Version\>[0-9]+(\.([0-9]+|\*)){1,3}'
+	$assemblyVersionPattern = '\<AssemblyVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
+	$fileVersionPattern = '\<FileVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
+	$packageVersionPattern = '\<PackageVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
+	$version = '<Version>' + $versionNumber
+	$assemblyVersion = '<AssemblyVersion>' + $versionNumber
+	$fileVersion = '<FileVersion>' + $versionNumber
+	$packageVersion = '<PackageVersion>' + $versionNumber
+	
+	$projects = GetProjects $solutionFile
+	ForEach ($project in $projects)
+	{
+		$projectFile = $project.File
+		
+		Write-Host $projectFile ' -> ' $versionNumber
+		
+		$filenameContent = Get-Content $projectFile
+		if ($filenameContent)
+		{
+			try
+			{
+				$filenameContent | ForEach-Object {
+				% {$_ -replace $versionPattern, $version } |
+				% {$_ -replace $assemblyVersionPattern, $assemblyVersion } |
+				% {$_ -replace $fileVersionPattern, $fileVersion } |
+				% {$_ -replace $packageVersionPattern, $packageVersion }
+				} | Out-File $projectFile -Force
+			}
+			catch { }
 		}
 	}
 }

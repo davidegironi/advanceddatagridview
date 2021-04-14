@@ -557,7 +557,7 @@ namespace Zuby.ADGV
                 _filterButtonOffsetBounds = GetFilterBounds(true);
                 _filterButtonImageBounds = GetFilterBounds(false);
                 Rectangle buttonBounds = _filterButtonOffsetBounds;
-                if (buttonBounds != null && clipBounds.IntersectsWith(buttonBounds))
+                if (clipBounds.IntersectsWith(buttonBounds))
                 {
                     ControlPaint.DrawBorder(graphics, buttonBounds, Color.Gray, ButtonBorderStyle.Solid);
                     buttonBounds.Inflate(-1, -1);

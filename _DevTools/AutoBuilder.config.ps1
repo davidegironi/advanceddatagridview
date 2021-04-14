@@ -4,12 +4,11 @@ $solutionName = "AdvancedDataGridView"
 
 #set version
 $versionMajor = "1"
-$versionMinor = "1"
+$versionMinor = "2"
 $versionBuild = GetVersionBuild
-$versionRevision = "10"
+$versionRevision = "1"
 #build version number
-$assemblyVersion = GetVersion $versionMajor $versionMinor $versionBuild $versionRevision
-$fileVersion = $assemblyVersion
+$version = GetVersion $versionMajor $versionMinor $versionBuild $versionRevision
 
 #base folder for of the solution
 $baseDir  = Resolve-Path .\..\
@@ -45,20 +44,12 @@ $builds = @(
 				Name = "AdvancedDataGridView";
 				Files = @(
 					@{
-						FileNameFrom = "..\License\";
-						FileNameTo = "..\"
-					},
-					@{
-						FileNameFrom = "..\License\LICENSE";
-						FileNameTo = "..\AdvancedDataGridView\LICENSE"
+						FileNameFrom = "..\License";
+						FileNameTo = "."
 					},
 					@{
 						FileNameFrom = "..\README.md";
-						FileNameTo = "..\AdvancedDataGridView\README.md"
-					},
-					@{
-						FileNameFrom = "..\README.md";
-						FileNameTo = "..\README.md"
+						FileNameTo = "README.md"
 					}
 				)
 			}

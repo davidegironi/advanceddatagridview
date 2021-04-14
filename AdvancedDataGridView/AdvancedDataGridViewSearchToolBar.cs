@@ -12,7 +12,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+#if NETFRAMEWORK
 using System.Web.Script.Serialization;
+#else
+using System.Text.Json;
+#endif
 using System.Windows.Forms;
 
 namespace Zuby.ADGV
@@ -142,7 +146,11 @@ namespace Zuby.ADGV
                 try
                 {
                     string jsontext = File.ReadAllText(filename);
+#if NETFRAMEWORK
                     Dictionary<string, string> translations = new JavaScriptSerializer().Deserialize<Dictionary<string, string>>(jsontext);
+#else
+                    Dictionary<string, string> translations = JsonSerializer.Deserialize<Dictionary<string, string>>(jsontext);
+#endif
                     foreach (KeyValuePair<string, string> translation in translations)
                     {
                         if (!ret.ContainsKey(translation.Key) && Translations.ContainsKey(translation.Key))
