@@ -175,7 +175,6 @@ namespace AdvancedDataGridViewSample
             AddTestData();
 
             //setup datagridview
-            advancedDataGridView_main.DisableFilterAndSort(advancedDataGridView_main.Columns["int"]);
             advancedDataGridView_main.SetFilterDateAndTimeEnabled(advancedDataGridView_main.Columns["datetime"], true);
             advancedDataGridView_main.SetSortEnabled(advancedDataGridView_main.Columns["guid"], false);
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["guid"], false);
@@ -356,6 +355,7 @@ namespace AdvancedDataGridViewSample
 
         private void _memorytestclosetimer_Tick(object sender, EventArgs e)
         {
+            _dataTable.Rows.Clear();
             this.Close();
         }
     }

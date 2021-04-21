@@ -1011,6 +1011,7 @@ namespace Zuby.ADGV
                 cell.SortChanged -= Cell_SortChanged;
                 cell.FilterChanged -= Cell_FilterChanged;
                 cell.FilterPopup -= Cell_FilterPopup;
+                cell.MenuStrip.Dispose();
             }
             base.OnColumnRemoved(e);
         }
@@ -1103,15 +1104,18 @@ namespace Zuby.ADGV
 
                 System.Drawing.Rectangle rect = GetCellDisplayRectangle(column.Index, -1, true);
 
-                if (_filteredColumns.Contains(column.Name))
-                    filterMenu.Show(this, rect.Left, rect.Bottom, false);
-                else
+                if (!filterMenu.IsDisposed)
                 {
-                    _filteredColumns.Add(column.Name);
-                    if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
-                        filterMenu.Show(this, rect.Left, rect.Bottom, true);
+                    if (_filteredColumns.Contains(column.Name))
+                        filterMenu.Show(this, rect.Left, rect.Bottom, false);
                     else
-                        filterMenu.Show(this, rect.Left, rect.Bottom, MenuStrip.GetValuesForFilter(this, column.Name));
+                    {
+                        _filteredColumns.Add(column.Name);
+                        if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
+                            filterMenu.Show(this, rect.Left, rect.Bottom, true);
+                        else
+                            filterMenu.Show(this, rect.Left, rect.Bottom, MenuStrip.GetValuesForFilter(this, column.Name));
+                    }
                 }
             }
         }
