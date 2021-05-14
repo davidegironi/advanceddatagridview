@@ -26,21 +26,25 @@ namespace AdvancedDataGridViewSample
         private const int MemoryTestFormsNum = 100;
         private bool _memorytest = false;
         private object[][] _inrows = new object[][] { };
-        private Timer _memorytestclosetimer = new Timer
-        {
-            Interval = 100
-        };
 
-        private Timer _timermemoryusage = new Timer
-        {
-            Interval = 2000
-        };
+        private Timer _memorytestclosetimer = null;
+        private Timer _timermemoryusage = null;
 
         private static bool CollectGarbageOnTimerMemoryUsageUpdate = true;
 
         public FormMain()
         {
             InitializeComponent();
+
+            //set timers
+            _memorytestclosetimer = new Timer(components)
+            {
+                Interval = 10
+            };
+            _timermemoryusage = new Timer(components)
+            {
+                Interval = 2000
+            };
 
             //trigger the memory usage show
             _timermemoryusage_Tick(null, null);

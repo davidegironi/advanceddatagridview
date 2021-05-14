@@ -400,13 +400,13 @@ namespace Zuby.ADGV
                 _filterStringDescription = String.Format(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFilterStringDescription.ToString()], comboBox_filterType.Text, _valControl1.Text);
                 if (_valControl2.Visible)
                     _filterStringDescription += " " + label_and.Text + " \"" + _valControl2.Text + "\"";
-                DialogResult = System.Windows.Forms.DialogResult.OK;
+                DialogResult = DialogResult.OK;
             }
             else
             {
                 _filterString = null;
                 _filterStringDescription = null;
-                DialogResult = System.Windows.Forms.DialogResult.Cancel;
+                DialogResult = DialogResult.Cancel;
             }
 
             Close();

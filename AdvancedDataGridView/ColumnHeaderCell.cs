@@ -27,7 +27,17 @@ namespace Zuby.ADGV
         #endregion
 
 
-        #region class properties
+        #region constants
+
+        /// <summary>
+        /// Default behaviour for Date and Time filter
+        /// </summary>
+        private const bool FilterDateAndTimeDefaultEnabled = false;
+
+        #endregion
+
+
+        #region class properties and fields
 
         private Image _filterImage = Properties.Resources.ColumnHeader_UnFiltered;
         private Size _filterButtonImageSize = new Size(16, 16);
@@ -38,7 +48,10 @@ namespace Zuby.ADGV
         private Padding _filterButtonMargin = new Padding(3, 4, 3, 4);
         private bool _filterEnabled = false;
 
-        private const bool FilterDateAndTimeDefaultEnabled = false;
+        /// <summary>
+        /// Get the MenuStrip for this ColumnHeaderCell
+        /// </summary>
+        public MenuStrip MenuStrip { get; private set; }
 
         #endregion
 
@@ -93,20 +106,6 @@ namespace Zuby.ADGV
                 MenuStrip.FilterChanged -= MenuStrip_FilterChanged;
                 MenuStrip.SortChanged -= MenuStrip_SortChanged;
             }
-        }
-
-        #endregion
-
-
-        #region public clone
-
-        /// <summary>
-        /// Clone the ColumnHeaderCell
-        /// </summary>
-        /// <returns></returns>
-        public override object Clone()
-        {
-            return new ColumnHeaderCell(this, FilterAndSortEnabled);
         }
 
         #endregion
@@ -211,9 +210,13 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
-        /// Get the MenuStrip for this ColumnHeaderCell
+        /// Clone the ColumnHeaderCell
         /// </summary>
-        public MenuStrip MenuStrip { get; private set; }
+        /// <returns></returns>
+        public override object Clone()
+        {
+            return new ColumnHeaderCell(this, FilterAndSortEnabled);
+        }
 
         /// <summary>
         /// Get the MenuStrip SortType
@@ -413,6 +416,30 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Set Filter checklist nodes max
+        /// </summary>
+        /// <param name="maxnodes"></param>
+        public void SetFilterChecklistNodesMax(int maxnodes)
+        {
+            if (maxnodes >= 0)
+            {
+                MenuStrip.MaxChecklistNodes = maxnodes;
+            }
+        }
+
+        /// <summary>
+        /// Enable or disable Filter checklist nodes max
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void EnabledFilterChecklistNodesMax(bool enabled)
+        {
+            if (MenuStrip.MaxChecklistNodes == 0 && enabled)
+                MenuStrip.MaxChecklistNodes = MenuStrip.DefaultMaxChecklistNodes;
+            else if (MenuStrip.MaxChecklistNodes != 0 && !enabled)
+                MenuStrip.MaxChecklistNodes = 0;
+        }
+
+        /// <summary>
         /// Enable or disable Filter custom capabilities
         /// </summary>
         /// <param name="enabled"></param>
@@ -467,6 +494,16 @@ namespace Zuby.ADGV
             if (FilterAndSortEnabled && SortChanged != null)
                 SortChanged(this, new ColumnHeaderCellEventArgs(MenuStrip, OwningColumn));
         }
+
+        /// <summary>
+        /// Clean attached events
+        /// </summary>
+        public void CleanEvents()
+        {
+            MenuStrip.FilterChanged -= MenuStrip_FilterChanged;
+            MenuStrip.SortChanged -= MenuStrip_SortChanged;
+        }
+
 
         #endregion
 
@@ -549,7 +586,7 @@ namespace Zuby.ADGV
                 errorText, cellStyle, advancedBorderStyle, paintParts);
 
             // Don't display a dropdown for Image columns
-            if (this.OwningColumn.ValueType == typeof(System.Drawing.Bitmap))
+            if (this.OwningColumn.ValueType == typeof(Bitmap))
                 return;
 
             if (FilterAndSortEnabled && paintParts.HasFlag(DataGridViewPaintParts.ContentBackground))

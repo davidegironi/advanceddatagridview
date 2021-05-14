@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -169,6 +170,8 @@ namespace Zuby.ADGV
         private List<string> _sortOrderList = new List<string>();
         private List<string> _filterOrderList = new List<string>();
         private List<string> _filteredColumns = new List<string>();
+        private List<MenuStrip> _menuStripToDispose = new List<MenuStrip>();
+        private List<ColumnHeaderCell> _columnHeaderCellsToCleanEvents = new List<ColumnHeaderCell>();
 
         private bool _loadedFilter = false;
         private string _sortString = null;
@@ -201,9 +204,15 @@ namespace Zuby.ADGV
                     cell.SortChanged -= Cell_SortChanged;
                     cell.FilterChanged -= Cell_FilterChanged;
                     cell.FilterPopup -= Cell_FilterPopup;
-                    MenuStrip menustrip = cell.MenuStrip;
-                    menustrip.Dispose();
                 }
+            }
+            foreach (ColumnHeaderCell cell in _columnHeaderCellsToCleanEvents)
+            {
+                cell.CleanEvents();
+            }
+            foreach (MenuStrip menustrip in _menuStripToDispose)
+            {
+                menustrip.Dispose();
             }
 
             base.OnHandleDestroyed(e);
@@ -282,7 +291,7 @@ namespace Zuby.ADGV
         #endregion
 
 
-        #region Helper methods
+        #region public Helper methods
 
         /// <summary>
         /// Set AdvancedDataGridView the Double Buffered
@@ -414,6 +423,60 @@ namespace Zuby.ADGV
                 EnableFilterChecklist(column);
             else
                 DisableFilterChecklist(column);
+        }
+
+        /// <summary>
+        /// Set Filter checklist nodes max on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="maxnodes"></param>
+        public void SetFilterChecklistNodesMax(DataGridViewColumn column, int maxnodes)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetFilterChecklistNodesMax(maxnodes);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set Filter checklist nodes max
+        /// </summary>
+        /// <param name="maxnodes"></param>
+        public void SetFilterChecklistNodesMax(int maxnodes)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.SetFilterChecklistNodesMax(maxnodes);
+        }
+
+        /// <summary>
+        /// Enable or disable Filter checklist nodes max on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="enabled"></param>
+        public void EnabledFilterChecklistNodesMax(DataGridViewColumn column, bool enabled)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.EnabledFilterChecklistNodesMax(enabled);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Enable or disable Filter checklist nodes max
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void EnabledFilterChecklistNodesMax(bool enabled)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.EnabledFilterChecklistNodesMax(enabled);
         }
 
         /// <summary>
@@ -1011,7 +1074,9 @@ namespace Zuby.ADGV
                 cell.SortChanged -= Cell_SortChanged;
                 cell.FilterChanged -= Cell_FilterChanged;
                 cell.FilterPopup -= Cell_FilterPopup;
-                cell.MenuStrip.Dispose();
+
+                _columnHeaderCellsToCleanEvents.Add(cell);
+                _menuStripToDispose.Add(cell.MenuStrip);
             }
             base.OnColumnRemoved(e);
         }
@@ -1102,20 +1167,17 @@ namespace Zuby.ADGV
                 MenuStrip filterMenu = e.FilterMenu;
                 DataGridViewColumn column = e.Column;
 
-                System.Drawing.Rectangle rect = GetCellDisplayRectangle(column.Index, -1, true);
+                Rectangle rect = GetCellDisplayRectangle(column.Index, -1, true);
 
-                if (!filterMenu.IsDisposed)
+                if (_filteredColumns.Contains(column.Name))
+                    filterMenu.Show(this, rect.Left, rect.Bottom, false);
+                else
                 {
-                    if (_filteredColumns.Contains(column.Name))
-                        filterMenu.Show(this, rect.Left, rect.Bottom, false);
+                    _filteredColumns.Add(column.Name);
+                    if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
+                        filterMenu.Show(this, rect.Left, rect.Bottom, true);
                     else
-                    {
-                        _filteredColumns.Add(column.Name);
-                        if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
-                            filterMenu.Show(this, rect.Left, rect.Bottom, true);
-                        else
-                            filterMenu.Show(this, rect.Left, rect.Bottom, MenuStrip.GetValuesForFilter(this, column.Name));
-                    }
+                        filterMenu.Show(this, rect.Left, rect.Bottom, MenuStrip.GetValuesForFilter(this, column.Name));
                 }
             }
         }
