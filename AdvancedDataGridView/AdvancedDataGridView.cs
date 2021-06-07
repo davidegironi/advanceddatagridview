@@ -1092,7 +1092,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         protected override void OnRowsAdded(DataGridViewRowsAddedEventArgs e)
         {
-            _filteredColumns.Clear();
+            if (e.RowIndex >= 0)
+                _filteredColumns.Clear();
             base.OnRowsAdded(e);
         }
 
@@ -1102,7 +1103,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         protected override void OnRowsRemoved(DataGridViewRowsRemovedEventArgs e)
         {
-            _filteredColumns.Clear();
+            if (e.RowIndex >= 0)
+                _filteredColumns.Clear();
             base.OnRowsRemoved(e);
         }
 
@@ -1117,7 +1119,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         protected override void OnCellValueChanged(DataGridViewCellEventArgs e)
         {
-            _filteredColumns.Remove(Columns[e.ColumnIndex].Name);
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                _filteredColumns.Remove(Columns[e.ColumnIndex].Name);
             base.OnCellValueChanged(e);
         }
 
