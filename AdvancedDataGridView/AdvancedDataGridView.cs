@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -785,9 +786,19 @@ namespace Zuby.ADGV
             //filter datasource
             if (filterEventArgs.Cancel == false)
             {
-                BindingSource datasource = this.DataSource as BindingSource;
-                if (datasource != null)
-                    datasource.Filter = filterEventArgs.FilterString;
+                if (this.DataSource is BindingSource bindingsource)
+                {
+                    bindingsource.Filter = filterEventArgs.FilterString;
+                }
+                else if (this.DataSource is DataView dataview)
+                {
+                    dataview.RowFilter = filterEventArgs.FilterString;
+                }
+                else if (this.DataSource is DataTable datatable)
+                {
+                    if (datatable.DefaultView != null)
+                        datatable.DefaultView.RowFilter = filterEventArgs.FilterString;
+                }
             }
         }
 

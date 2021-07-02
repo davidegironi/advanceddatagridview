@@ -1111,14 +1111,42 @@ namespace Zuby.ADGV
         /// </summary>
         private void CheckFilterButtonEnabled()
         {
+            button_filter.Enabled = HasNodesChecked(_loadedNodes);
+        }
+
+        /// <summary>
+        /// Check if selected nodes exists
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
+        private bool HasNodesChecked(TreeNodeItemSelector[] nodes)
+        {
+            bool state = false;
             if (!String.IsNullOrEmpty(checkTextFilter.Text))
             {
-                button_filter.Enabled = _loadedNodes.Any(n => n.CheckState == CheckState.Checked && n.Text.ToLower().Contains(checkTextFilter.Text.ToLower()));
+                state = nodes.Any(n => n.CheckState == CheckState.Checked && n.Text.ToLower().Contains(checkTextFilter.Text.ToLower()));
             }
             else
             {
-                button_filter.Enabled = _loadedNodes.Any(n => n.CheckState == CheckState.Checked);
+                state = nodes.Any(n => n.CheckState == CheckState.Checked);
             }
+
+            if (state)
+                return state;
+
+            foreach (TreeNodeItemSelector node in nodes)
+            {
+                foreach (TreeNodeItemSelector nodesel in node.Nodes)
+                {
+                    state = HasNodesChecked(new TreeNodeItemSelector[] { nodesel });
+                    if (state)
+                        break;
+                }
+                if (state)
+                    break;
+            }
+
+            return state;
         }
 
         /// <summary>
@@ -1140,12 +1168,14 @@ namespace Zuby.ADGV
             {
                 if (node.Nodes.Count > 0)
                 {
-                    SetNodesCheckState(_loadedNodes, node.Checked);
+                    foreach (TreeNodeItemSelector subnode in node.Nodes)
+                    {
+                        SetNodesCheckState(new TreeNodeItemSelector[] { subnode }, node.Checked);
+                    }
                 }
 
                 //refresh nodes
                 CheckState state = UpdateNodesCheckState(ChecklistNodes());
-
                 GetSelectAllNode().CheckState = state;
             }
         }
@@ -1161,7 +1191,13 @@ namespace Zuby.ADGV
             {
                 node.Checked = isChecked;
                 if (node.Nodes != null && node.Nodes.Count > 0)
-                    SetNodesCheckState(_loadedNodes, isChecked);
+                {
+                    foreach (TreeNodeItemSelector subnode in node.Nodes)
+                    {
+                        SetNodesCheckState(new TreeNodeItemSelector[] { subnode }, isChecked);
+                    }
+                }
+
             }
         }
 
