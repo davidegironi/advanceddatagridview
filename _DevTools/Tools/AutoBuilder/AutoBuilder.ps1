@@ -1,5 +1,5 @@
 ﻿#-------------------------------------
-# AutoBuild 1.0.2.0
+# AutoBuild 1.0.2.1
 # Copyright (c) 2012 Davide Gironi
 #
 # a Build automation script that runs on psake (https://github.com/psake/psake)
@@ -582,16 +582,7 @@ function Update-VersionAssemblyInfoFiles ([string] $sourceDir, [string] $version
 }
 
 #update project files with the given version numbers
-function Update-VersionProjectFiles ([string] $solutionFile, [string] $versionNumber) {
-	$versionPattern = '\<Version\>[0-9]+(\.([0-9]+|\*)){1,3}'
-	$assemblyVersionPattern = '\<AssemblyVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
-	$fileVersionPattern = '\<FileVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
-	$packageVersionPattern = '\<PackageVersion\>[0-9]+(\.([0-9]+|\*)){1,3}'
-	$version = '<Version>' + $versionNumber
-	$assemblyVersion = '<AssemblyVersion>' + $versionNumber
-	$fileVersion = '<FileVersion>' + $versionNumber
-	$packageVersion = '<PackageVersion>' + $versionNumber
-	
+function Update-VersionProjectFiles ([string] $solutionFile, [string] $versionNumber) {	
 	$projects = GetProjects $solutionFile
 	ForEach ($project in $projects)
 	{
@@ -599,19 +590,33 @@ function Update-VersionProjectFiles ([string] $solutionFile, [string] $versionNu
 		
 		Write-Host $projectFile ' -> ' $versionNumber
 		
-		$filenameContent = Get-Content $projectFile
-		if ($filenameContent)
+		# Read the existing file
+		[xml]$xmlDoc = Get-Content $projectFile
+
+		# If it was one specific element you can just do like so:
+		if ($xmlDoc.Project)
 		{
-			try
+			if ($xmlDoc.Project.PropertyGroup)
 			{
-				$filenameContent | ForEach-Object {
-				% {$_ -replace $versionPattern, $version } |
-				% {$_ -replace $assemblyVersionPattern, $assemblyVersion } |
-				% {$_ -replace $fileVersionPattern, $fileVersion } |
-				% {$_ -replace $packageVersionPattern, $packageVersion }
-				} | Out-File $projectFile -Force
-			}
-			catch { }
+				if ($xmlDoc.Project.PropertyGroup.Version -ne $null)
+				{
+					$xmlDoc.Project.PropertyGroup.Version = $versionNumber
+				}
+				if ($xmlDoc.Project.PropertyGroup.AssemblyVersion -ne $null)
+				{
+					$xmlDoc.Project.PropertyGroup.AssemblyVersion = $versionNumber
+				}
+				if ($xmlDoc.Project.PropertyGroup.FileVersion -ne $null)
+				{
+					$xmlDoc.Project.PropertyGroup.FileVersion = $versionNumber
+				}
+				if ($xmlDoc.Project.PropertyGroup.PackageVersion -ne $null)
+				{
+					$xmlDoc.Project.PropertyGroup.PackageVersion = $versionNumber
+				}
+			}	
 		}
+		
+		$xmlDoc.Save("$sourceDir\$projectFile")
 	}
 }
