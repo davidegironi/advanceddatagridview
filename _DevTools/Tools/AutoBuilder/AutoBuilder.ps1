@@ -1,5 +1,5 @@
 ﻿#-------------------------------------
-# AutoBuild 1.0.2.1
+# AutoBuild 1.0.2.2
 # Copyright (c) 2012 Davide Gironi
 #
 # a Build automation script that runs on psake (https://github.com/psake/psake)
@@ -484,21 +484,8 @@ task Test -depends Build {
 				if ($projectName -eq $test.Name)
 				{
 					Write-Host -ForegroundColor Green "Running tests " $test.Name
-					
-					#check if is SDK project
-					$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern '<Project Sdk="Microsoft.NET.Sdk">' -SimpleMatch -Quiet
-					
-					if ($isSdk)
-					{
-						$sdkframework = (Get-ChildItem -Path "$projectDirectory\bin\Release" -Directory | Select-Object -first 1).Name
-						exec { dotnet publish "$sourceDir\$projectFile" -f $sdkframework | Out-Default }
-					}	
-					else
-					{
-						exec { dotnet publish "$sourceDir\$projectFile" | Out-Default }
-					}
-					
-					exec { dotnet test "$sourceDir\$projectFile" | Out-Default }
+										
+					exec { dotnet test "$sourceDir\$projectFile" -c "Release" | Out-Default }
 				}
 			}
 		}
