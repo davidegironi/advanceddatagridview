@@ -98,6 +98,7 @@ namespace Zuby.ADGV
             IsSortEnabled = true;
             IsFilterEnabled = true;
             IsFilterChecklistEnabled = true;
+            FilterChecklistDelay = 600;
         }
         ~ColumnHeaderCell()
         {
@@ -374,6 +375,15 @@ namespace Zuby.ADGV
             {
                 MenuStrip.DoesTextFilterRemoveNodesOnSearch = value;
             }
+        }
+
+        /// <summary>
+        /// Set the checklist filter delay
+        /// </summary>
+        public int FilterChecklistDelay
+        {
+            get { return MenuStrip.FilterChecklistDelay; }
+            set { MenuStrip.FilterChecklistDelay = value; }
         }
 
         /// <summary>

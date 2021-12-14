@@ -78,7 +78,7 @@ namespace Zuby.ADGV
         private string _filterString = null;
         private static Point _resizeStartPoint = new Point(1, 1);
         private Point _resizeEndPoint = new Point(-1, -1);
-        private bool _checkTextFilterChangedEnabled = true;
+        private TextBoxTypeAssistant _checkTextFilterTypeAssistant;
         private bool _checkTextFilterRemoveNodesOnSearch = DefaultCheckTextFilterRemoveNodesOnSearch;
         private int _maxChecklistNodes = DefaultMaxChecklistNodes;
         private bool _filterclick = false;
@@ -145,6 +145,10 @@ namespace Zuby.ADGV
                 sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
             }
 
+            // create assistant to delay text box text changed event
+            _checkTextFilterTypeAssistant = new TextBoxTypeAssistant(checkTextFilter);
+            _checkTextFilterTypeAssistant.TextChanged += CheckTextFilter_TextChanged;
+
             //set check filter textbox
             if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan) || DataType == typeof(bool))
                 checkTextFilter.Enabled = false;
@@ -202,9 +206,9 @@ namespace Zuby.ADGV
 
             _startingNodes = new TreeNodeItemSelector[] { };
 
-            _checkTextFilterChangedEnabled = false;
+            _checkTextFilterTypeAssistant.Enabled = false;
             checkTextFilter.Text = "";
-            _checkTextFilterChangedEnabled = true;
+            _checkTextFilterTypeAssistant.Enabled = true;
         }
 
         /// <summary>
@@ -370,6 +374,15 @@ namespace Zuby.ADGV
             }
         }
 
+        /// <summary>
+        /// Set the checklist filter delay
+        /// </summary>
+        public int FilterChecklistDelay
+        {
+            get { return _checkTextFilterTypeAssistant.DelayMilliSeconds; }
+            set { _checkTextFilterTypeAssistant.DelayMilliSeconds = value; }
+        }
+
         #endregion
 
 
@@ -512,9 +525,9 @@ namespace Zuby.ADGV
 
             _filterclick = false;
 
-            _checkTextFilterChangedEnabled = false;
+            _checkTextFilterTypeAssistant.Enabled = false;
             checkTextFilter.Text = "";
-            _checkTextFilterChangedEnabled = true;
+            _checkTextFilterTypeAssistant.Enabled = true;
         }
 
         /// <summary>
@@ -526,9 +539,9 @@ namespace Zuby.ADGV
         /// <param name="_restoreFilter"></param>
         public void Show(Control control, int x, int y, bool _restoreFilter)
         {
-            _checkTextFilterChangedEnabled = false;
+            _checkTextFilterTypeAssistant.Enabled = false;
             checkTextFilter.Text = "";
-            _checkTextFilterChangedEnabled = true;
+            _checkTextFilterTypeAssistant.Enabled = true;
             if (_restoreFilter || _checkTextFilterRemoveNodesOnSearch)
             {
                 //reset the starting nodes
@@ -1630,8 +1643,6 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CheckTextFilter_TextChanged(object sender, EventArgs e)
         {
-            if (!_checkTextFilterChangedEnabled)
-                return;
             TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
             TreeNodeItemSelector nullnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] + "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
             string[] removednodesText = new string[] { };

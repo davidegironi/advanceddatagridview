@@ -300,7 +300,6 @@ namespace Zuby.ADGV
             this.checkTextFilter.Margin = new System.Windows.Forms.Padding(0);
             this.checkTextFilter.Size = checkTextFilterControlHost.Size;
             this.checkTextFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkTextFilter.TextChanged += new System.EventHandler(CheckTextFilter_TextChanged);
             //
             // checkFilterListButtonsPanel
             //
