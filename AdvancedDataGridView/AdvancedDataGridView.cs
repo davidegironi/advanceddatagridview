@@ -526,6 +526,83 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Set nodes to enable TextChanged delay on filter checklist on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="numnodes"></param>
+        public void SetFilterChecklistTextFilterTextChangedDelayNodes(DataGridViewColumn column, int numnodes)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.TextFilterTextChangedDelayNodes = numnodes;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set nodes to enable TextChanged delay on filter checklist
+        /// </summary>
+        /// <param name="numnodes"></param>
+        public void SetFilterChecklistTextFilterTextChangedDelayNodes(int numnodes)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.TextFilterTextChangedDelayNodes = numnodes;
+        }
+
+        /// <summary>
+        /// Disable TextChanged delay on filter checklist on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void SetFilterChecklistTextFilterTextChangedDelayDisabled(DataGridViewColumn column)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetTextFilterTextChangedDelayNodesDisabled();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Disable TextChanged delay on filter checklist
+        /// </summary>
+        public void SetFilterChecklistTextFilterTextChangedDelayDisabled()
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.SetTextFilterTextChangedDelayNodesDisabled();
+        }
+
+        /// <summary>
+        /// Set TextChanged delay milliseconds on filter checklist on a DataGridViewColumn
+        /// </summary>
+        /// <param name="column"></param>
+        public void SetFilterChecklistTextFilterTextChangedDelayMs(DataGridViewColumn column, int milliseconds)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.SetTextFilterTextChangedDelayMs(milliseconds);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Set TextChanged delay milliseconds on filter checklist
+        /// </summary>
+        public void SetFilterChecklistTextFilterTextChangedDelayMs(int milliseconds)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.SetTextFilterTextChangedDelayMs(milliseconds);
+        }
+
+        /// <summary>
         /// Load a Filter and Sort preset
         /// </summary>
         /// <param name="filter"></param>

@@ -377,6 +377,21 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Number of nodes to enable the TextChanged delay on text filter
+        /// </summary>
+        public int TextFilterTextChangedDelayNodes
+        {
+            get
+            {
+                return MenuStrip.TextFilterTextChangedDelayNodes;
+            }
+            set
+            {
+                MenuStrip.TextFilterTextChangedDelayNodes = value;
+            }
+        }
+
+        /// <summary>
         /// Enabled or disable Sort capabilities
         /// </summary>
         /// <param name="enabled"></param>
@@ -461,6 +476,28 @@ namespace Zuby.ADGV
             if (MenuStrip != null)
             {
                 MenuStrip.SetChecklistTextFilterRemoveNodesOnSearchMode(enabled);
+            }
+        }
+
+        /// <summary>
+        /// Disable text filter TextChanged delay
+        /// </summary>
+        public void SetTextFilterTextChangedDelayNodesDisabled()
+        {
+            if (MenuStrip != null)
+            {
+                MenuStrip.SetTextFilterTextChangedDelayNodesDisabled();
+            }
+        }
+
+        /// <summary>
+        /// Set text filter TextChanged delay milliseconds
+        /// </summary>
+        public void SetTextFilterTextChangedDelayMs(int milliseconds)
+        {
+            if (MenuStrip != null)
+            {
+                MenuStrip.TextFilterTextChangedDelayMs = milliseconds;
             }
         }
 

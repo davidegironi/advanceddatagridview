@@ -189,6 +189,7 @@ namespace AdvancedDataGridViewSample
             advancedDataGridView_main.SetFilterChecklistEnabled(advancedDataGridView_main.Columns["double"], false);
             advancedDataGridView_main.SetFilterCustomEnabled(advancedDataGridView_main.Columns["timespan"], false);
             advancedDataGridView_main.CleanSort(advancedDataGridView_main.Columns["datetime"]);
+            advancedDataGridView_main.SetFilterChecklistTextFilterTextChangedDelayNodes(advancedDataGridView_main.Columns["string"], 10);
 
             //memory test
             if (!_memorytest)

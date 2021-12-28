@@ -62,6 +62,20 @@ namespace Zuby.ADGV
         /// </summary>
         public const int DefaultMaxChecklistNodes = 10000;
 
+        /// <summary>
+        /// Default number of nodes to enable the TextChanged delay on text filter
+        /// </summary>
+        public const int DefaultTextFilterTextChangedDelayNodes = 1000;
+
+        /// <summary>
+        /// Number of nodes to disable the text filter TextChanged delay
+        /// </summary>
+        public const int TextFilterTextChangedDelayNodesDisabled = -1;
+
+        /// <summary>
+        /// Default delay milliseconds for TextChanged delay on text filter
+        /// </summary>
+        public const int DefaultTextFilterTextChangedDelayMs = 300;
 
         #endregion
 
@@ -82,6 +96,9 @@ namespace Zuby.ADGV
         private bool _checkTextFilterRemoveNodesOnSearch = DefaultCheckTextFilterRemoveNodesOnSearch;
         private int _maxChecklistNodes = DefaultMaxChecklistNodes;
         private bool _filterclick = false;
+        private Timer _textFilterTextChangedTimer;
+        private int _textFilterTextChangedDelayNodes = DefaultTextFilterTextChangedDelayNodes;
+        private int _textFilterTextChangedDelayMs = DefaultTextFilterTextChangedDelayMs;
 
         #endregion
 
@@ -184,6 +201,10 @@ namespace Zuby.ADGV
             button_undofilter.Height = Scale(button_undofilter.Height, scalingfactor);
             //resize
             ResizeBox(MinimumSize.Width, MinimumSize.Height);
+
+            _textFilterTextChangedTimer = new Timer();
+            _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
+            _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
         }
 
         /// <summary>
@@ -228,6 +249,8 @@ namespace Zuby.ADGV
             _startingNodes = new TreeNodeItemSelector[] { };
             _removedNodes = new TreeNodeItemSelector[] { };
             _removedsessionNodes = new TreeNodeItemSelector[] { };
+            if (_textFilterTextChangedTimer != null)
+                _textFilterTextChangedTimer.Stop();
 
             base.OnControlRemoved(e);
         }
@@ -370,6 +393,36 @@ namespace Zuby.ADGV
             }
         }
 
+        /// <summary>
+        /// Number of nodes to enable the TextChanged delay on text filter
+        /// </summary>
+        public int TextFilterTextChangedDelayNodes
+        {
+            get
+            {
+                return _textFilterTextChangedDelayNodes;
+            }
+            set
+            {
+                _textFilterTextChangedDelayNodes = value;
+            }
+        }
+
+        /// <summary>
+        /// Delay milliseconds for TextChanged delay on text filter
+        /// </summary>
+        public int TextFilterTextChangedDelayMs
+        {
+            get
+            {
+                return _textFilterTextChangedDelayMs;
+            }
+            set
+            {
+                _textFilterTextChangedDelayMs = value;
+            }
+        }
+
         #endregion
 
 
@@ -444,6 +497,14 @@ namespace Zuby.ADGV
             {
                 UnCheckCustomFilters();
             }
+        }
+
+        /// <summary>
+        /// Disable text filter TextChanged delay
+        /// </summary>
+        public void SetTextFilterTextChangedDelayNodesDisabled()
+        {
+            _textFilterTextChangedDelayNodes = TextFilterTextChangedDelayNodesDisabled;
         }
 
         #endregion
@@ -1624,6 +1685,22 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Text changed timer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CheckTextFilterTextChangedTimer_Tick(object sender, EventArgs e)
+        {
+            Timer timer = sender as Timer;
+            if (timer == null)
+                return;
+
+            CheckTextFilterHandleTextChanged(timer.Tag.ToString());
+
+            timer.Stop();
+        }
+
+        /// <summary>
         /// Check list filter changer
         /// </summary>
         /// <param name="sender"></param>
@@ -1632,6 +1709,31 @@ namespace Zuby.ADGV
         {
             if (!_checkTextFilterChangedEnabled)
                 return;
+
+            if (_textFilterTextChangedDelayNodes != TextFilterTextChangedDelayNodesDisabled && _loadedNodes.Length > _textFilterTextChangedDelayNodes)
+            {
+                if (_textFilterTextChangedTimer == null)
+                {
+                    _textFilterTextChangedTimer = new Timer();
+                    _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
+                    _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
+                }
+                _textFilterTextChangedTimer.Stop();
+                _textFilterTextChangedTimer.Tag = checkTextFilter.Text.ToLower();
+                _textFilterTextChangedTimer.Start();
+            }
+            else
+            {
+                CheckTextFilterHandleTextChanged(checkTextFilter.Text.ToLower());
+            }
+        }
+
+        /// <summary>
+        /// Handle check filter text changed
+        /// </summary>
+        /// <param name="text"></param>
+        private void CheckTextFilterHandleTextChanged(string text)
+        {
             TreeNodeItemSelector allnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectAll.ToString()] + "            ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectAll);
             TreeNodeItemSelector nullnode = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectEmpty.ToString()] + "               ", null, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.SelectEmpty);
             string[] removednodesText = new string[] { };
@@ -1652,7 +1754,7 @@ namespace Zuby.ADGV
                 }
                 else
                 {
-                    if (node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                    if (node.Text.ToLower().Contains(text))
                         node.CheckState = CheckState.Unchecked;
                     else
                         node.CheckState = CheckState.Checked;
@@ -1671,7 +1773,7 @@ namespace Zuby.ADGV
                     TreeNodeItemSelector node = _loadedNodes[i];
                     if (!(node.Text == allnode.Text || node.Text == nullnode.Text))
                     {
-                        if (!node.Text.ToLower().Contains(checkTextFilter.Text.ToLower()))
+                        if (!node.Text.ToLower().Contains(text))
                         {
                             _removedNodes = _removedNodes.Concat(new TreeNodeItemSelector[] { node }).ToArray();
                         }
