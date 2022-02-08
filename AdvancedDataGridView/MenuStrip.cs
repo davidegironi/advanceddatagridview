@@ -1715,10 +1715,10 @@ namespace Zuby.ADGV
                 if (_textFilterTextChangedTimer == null)
                 {
                     _textFilterTextChangedTimer = new Timer();
-                    _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
                     _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
                 }
                 _textFilterTextChangedTimer.Stop();
+                _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
                 _textFilterTextChangedTimer.Tag = checkTextFilter.Text.ToLower();
                 _textFilterTextChangedTimer.Start();
             }
