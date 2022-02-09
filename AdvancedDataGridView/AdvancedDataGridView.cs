@@ -166,7 +166,7 @@ namespace Zuby.ADGV
         #endregion
 
 
-        #region class properties
+        #region class properties and fields
 
         private List<string> _sortOrderList = new List<string>();
         private List<string> _filterOrderList = new List<string>();
@@ -177,6 +177,9 @@ namespace Zuby.ADGV
         private bool _loadedFilter = false;
         private string _sortString = null;
         private string _filterString = null;
+
+        private bool _sortStringChangedInvokeBeforeDatasourceUpdate = true;
+        private bool _filterStringChangedInvokeBeforeDatasourceUpdate = true;
 
         #endregion
 
@@ -306,6 +309,36 @@ namespace Zuby.ADGV
 
 
         #region public Filter and Sort methods
+
+        /// <summary>
+        /// SortStringChanged event called before DataSource update after sort changed is triggered
+        /// </summary>
+        public bool SortStringChangedInvokeBeforeDatasourceUpdate
+        {
+            get
+            {
+                return _sortStringChangedInvokeBeforeDatasourceUpdate;
+            }
+            set
+            {
+                _sortStringChangedInvokeBeforeDatasourceUpdate = value;
+            }
+        }
+
+        /// <summary>
+        /// FilterStringChanged event called before DataSource update after sort changed is triggered
+        /// </summary>
+        public bool FilterStringChangedInvokeBeforeDatasourceUpdate
+        {
+            get
+            {
+                return _filterStringChangedInvokeBeforeDatasourceUpdate;
+            }
+            set
+            {
+                _filterStringChangedInvokeBeforeDatasourceUpdate = value;
+            }
+        }
 
         /// <summary>
         /// Disable a Filter and Sort on a DataGridViewColumn
@@ -706,14 +739,24 @@ namespace Zuby.ADGV
                 SortString = _sortString,
                 Cancel = false
             };
-            if (SortStringChanged != null)
-                SortStringChanged.Invoke(this, sortEventArgs);
+            //invoke SortStringChanged
+            if (_sortStringChangedInvokeBeforeDatasourceUpdate)
+            {
+                if (SortStringChanged != null)
+                    SortStringChanged.Invoke(this, sortEventArgs);
+            }
             //sort datasource
             if (sortEventArgs.Cancel == false)
             {
                 BindingSource datasource = this.DataSource as BindingSource;
                 if (datasource != null)
                     datasource.Sort = sortEventArgs.SortString;
+            }
+            //invoke SortStringChanged
+            if (!_sortStringChangedInvokeBeforeDatasourceUpdate)
+            {
+                if (SortStringChanged != null)
+                    SortStringChanged.Invoke(this, sortEventArgs);
             }
         }
 
@@ -858,8 +901,12 @@ namespace Zuby.ADGV
                 FilterString = _filterString,
                 Cancel = false
             };
-            if (FilterStringChanged != null)
-                FilterStringChanged.Invoke(this, filterEventArgs);
+            //invoke FilterStringChanged
+            if (_filterStringChangedInvokeBeforeDatasourceUpdate)
+            {
+                if (FilterStringChanged != null)
+                    FilterStringChanged.Invoke(this, filterEventArgs);
+            }
             //filter datasource
             if (filterEventArgs.Cancel == false)
             {
@@ -876,6 +923,12 @@ namespace Zuby.ADGV
                     if (datatable.DefaultView != null)
                         datatable.DefaultView.RowFilter = filterEventArgs.FilterString;
                 }
+            }
+            //invoke FilterStringChanged
+            if (!_filterStringChangedInvokeBeforeDatasourceUpdate)
+            {
+                if (FilterStringChanged != null)
+                    FilterStringChanged.Invoke(this, filterEventArgs);
             }
         }
 
