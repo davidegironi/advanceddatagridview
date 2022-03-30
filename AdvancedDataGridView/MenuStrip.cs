@@ -843,7 +843,9 @@ namespace Zuby.ADGV
                             if (FilterString.Length > 0)
                                 FilterString += " OR ";
 
-                            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
+                            if (DataType == typeof(DateTime))
+                                FilterString += "(Convert([{0}], 'System.String') IN (" + filter + "))";
+                            else if (DataType == typeof(TimeSpan))
                                 FilterString += filter;
                             else if (DataType == typeof(bool))
                                 FilterString += "[{0}] =" + filter;
@@ -890,7 +892,8 @@ namespace Zuby.ADGV
         private string BuildNodesFilterString(IEnumerable<TreeNodeItemSelector> nodes)
         {
             StringBuilder sb = new StringBuilder("");
-            string appx = (DataType == typeof(DateTime) || DataType == typeof(TimeSpan)) ? " OR " : ", ";
+
+            string appx = DataType == typeof(TimeSpan) ? " OR " : ", ";
 
             if (nodes != null && nodes.Count() > 0)
             {
@@ -901,7 +904,7 @@ namespace Zuby.ADGV
                         if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
                         {
                             DateTime dt = (DateTime)n.Value;
-                            sb.Append("(Convert([{0}], 'System.String') LIKE '%" + Convert.ToString((IsFilterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "%')" + appx);
+                            sb.Append("'" + Convert.ToString((IsFilterDateAndTimeEnabled ? dt : dt.Date), CultureInfo.CurrentCulture) + "'" + appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
                         {
