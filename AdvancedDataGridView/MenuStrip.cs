@@ -259,7 +259,7 @@ namespace Zuby.ADGV
         /// Get all images for checkList
         /// </summary>
         /// <returns></returns>
-        private ImageList GetCheckListStateImages()
+        private static ImageList GetCheckListStateImages()
         {
             ImageList images = new ImageList();
             Bitmap unCheckImg = new Bitmap(16, 16);
@@ -450,7 +450,7 @@ namespace Zuby.ADGV
             IsFilterEnabled = enabled;
 
             cancelFilterMenuItem.Enabled = enabled;
-            customFilterLastFiltersListMenuItem.Enabled = (enabled ? DataType != typeof(bool) : false);
+            customFilterLastFiltersListMenuItem.Enabled = (enabled && DataType != typeof(bool));
             button_filter.Enabled = enabled;
             button_undofilter.Enabled = enabled;
             checkList.Enabled = enabled;
@@ -666,7 +666,6 @@ namespace Zuby.ADGV
         /// </summary>
         public void CleanSort()
         {
-            string oldsort = SortString;
             sortASCMenuItem.Checked = false;
             sortDESCMenuItem.Checked = false;
             _activeSortType = SortType.None;
@@ -711,7 +710,6 @@ namespace Zuby.ADGV
             }
             _activeFilterType = FilterType.None;
             SetNodesCheckState(_loadedNodes, true);
-            string oldsort = FilterString;
             FilterString = null;
             customFilterLastFiltersListMenuItem.Checked = false;
             button_filter.Enabled = true;
@@ -843,31 +841,20 @@ namespace Zuby.ADGV
                             if (FilterString.Length > 0)
                                 FilterString += " OR ";
 
-                            if (DataType == typeof(DateTime))
-                                FilterString += "(Convert([{0}], 'System.String') IN (" + filter + "))";
-                            else if (DataType == typeof(TimeSpan))
-                                FilterString += filter;
-                            else if (DataType == typeof(bool))
+                            if (DataType == typeof(bool))
                                 FilterString += "[{0}] =" + filter;
-                            else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                                        DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                                        DataType == typeof(Decimal) ||
-                                        DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(String))
+                            else if (DataType == typeof(int) || DataType == typeof(long) || DataType == typeof(short) ||
+                                     DataType == typeof(uint) || DataType == typeof(ulong) || DataType == typeof(ushort) ||
+                                     DataType == typeof(decimal) ||
+                                     DataType == typeof(byte) || DataType == typeof(sbyte) || DataType == typeof(string))
                             {
                                 if (IsFilterNOTINLogicEnabled)
                                     FilterString += "[{0}] NOT IN (" + filter + ")";
                                 else
                                     FilterString += "[{0}] IN (" + filter + ")";
                             }
-                            else if (DataType == typeof(Double))
-                            {
-                                if (IsFilterNOTINLogicEnabled)
-                                    FilterString += "Convert([{0}],System.String) NOT IN (" + filter + ")";
-                                else
-                                    FilterString += "Convert([{0}],System.String) IN (" + filter + ")";
-                            }
                             else if (DataType == typeof(Bitmap))
-                            { }
+                            { /* no filtering */}
                             else
                             {
                                 if (IsFilterNOTINLogicEnabled)
@@ -893,9 +880,9 @@ namespace Zuby.ADGV
         {
             StringBuilder sb = new StringBuilder("");
 
-            string appx = DataType == typeof(TimeSpan) ? " OR " : ", ";
+            string appx = ", ";
 
-            if (nodes != null && nodes.Count() > 0)
+            if (nodes != null && nodes.Any())
             {
                 if (DataType == typeof(DateTime))
                 {
@@ -921,7 +908,12 @@ namespace Zuby.ADGV
                         if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
                         {
                             TimeSpan ts = (TimeSpan)n.Value;
-                            sb.Append("(Convert([{0}], 'System.String') LIKE '%P" + ((int)ts.Days > 0 ? (int)ts.Days + "D" : "") + (ts.TotalHours > 0 ? "T" : "") + ((int)ts.Hours > 0 ? (int)ts.Hours + "H" : "") + ((int)ts.Minutes > 0 ? (int)ts.Minutes + "M" : "") + ((int)ts.Seconds > 0 ? (int)ts.Seconds + "S" : "") + "%')" + appx);
+                            sb.Append("'P" + 
+                                (ts.Days > 0 ? ts.Days + "D" : "") + 
+                                (ts.TotalHours > 0 ? "T" : "") + (ts.Hours > 0 ? ts.Hours + "H" : "") + 
+                                (ts.Minutes > 0 ? ts.Minutes + "M" : "") + 
+                                (ts.Seconds > 0 ? ts.Seconds + "S" : "") + "'" + 
+                                appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
                         {
@@ -939,20 +931,20 @@ namespace Zuby.ADGV
                         break;
                     }
                 }
-                else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                    DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                    DataType == typeof(Byte) || DataType == typeof(SByte))
+                else if (DataType == typeof(int) || DataType == typeof(long) || DataType == typeof(short) ||
+                         DataType == typeof(uint) || DataType == typeof(ulong) || DataType == typeof(ushort) ||
+                         DataType == typeof(byte) || DataType == typeof(sbyte))
                 {
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append(n.Value.ToString() + appx);
                 }
-                else if (DataType == typeof(Single) || DataType == typeof(Double) || DataType == typeof(Decimal))
+                else if (DataType == typeof(float) || DataType == typeof(double) || DataType == typeof(decimal))
                 {
                     foreach (TreeNodeItemSelector n in nodes)
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
                 else if (DataType == typeof(Bitmap))
-                { }
+                { /* no filter */ }
                 else
                 {
                     foreach (TreeNodeItemSelector n in nodes)
@@ -971,7 +963,7 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
-        private string FormatFilterString(string text)
+        private static string FormatFilterString(string text)
         {
             return text.Replace("'", "''");
         }
@@ -994,7 +986,7 @@ namespace Zuby.ADGV
                 allnode.NodeFont = new Font(checkList.Font, FontStyle.Bold);
                 ChecklistAddNode(allnode);
 
-                if (vals.Count() > 0)
+                if (vals.Any())
                 {
                     var nonulls = vals.Where<DataGridViewCell>(c => c.Value != null && c.Value != DBNull.Value);
 
@@ -1144,7 +1136,7 @@ namespace Zuby.ADGV
                             ChecklistAddNode(node);
                         }
 
-                        if (values.Count() > 0)
+                        if (values.Any())
                         {
                             TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVNodeSelectTrue.ToString()], true, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
                             ChecklistAddNode(node);
@@ -1186,7 +1178,7 @@ namespace Zuby.ADGV
         private bool HasNodesChecked(TreeNodeItemSelector[] nodes)
         {
             bool state = false;
-            if (!String.IsNullOrEmpty(checkTextFilter.Text))
+            if (!string.IsNullOrEmpty(checkTextFilter.Text))
             {
                 state = nodes.Any(n => n.CheckState == CheckState.Checked && n.Text.ToLower().Contains(checkTextFilter.Text.ToLower()));
             }
@@ -1355,7 +1347,7 @@ namespace Zuby.ADGV
         /// <summary>
         /// Duplicate Nodes
         /// </summary>
-        private TreeNodeItemSelector[] DuplicateNodes(TreeNodeItemSelector[] nodes)
+        private static TreeNodeItemSelector[] DuplicateNodes(TreeNodeItemSelector[] nodes)
         {
             TreeNodeItemSelector[] ret = new TreeNodeItemSelector[nodes.Length];
             int i = 0;
@@ -1694,8 +1686,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CheckTextFilterTextChangedTimer_Tick(object sender, EventArgs e)
         {
-            Timer timer = sender as Timer;
-            if (timer == null)
+            if (!(sender is Timer timer))
                 return;
 
             CheckTextFilterHandleTextChanged(timer.Tag.ToString());
@@ -1916,7 +1907,7 @@ namespace Zuby.ADGV
         /// <param name="dimesion"></param>
         /// <param name="factor"></param>
         /// <returns></returns>
-        private int Scale(int dimesion, float factor)
+        private static int Scale(int dimesion, float factor)
         {
             return (int)Math.Floor(dimesion * factor);
         }
