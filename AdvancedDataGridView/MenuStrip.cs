@@ -854,7 +854,7 @@ namespace Zuby.ADGV
                                     FilterString += "[{0}] IN (" + filter + ")";
                             }
                             else if (DataType == typeof(Bitmap))
-                            { /* no filtering */}
+                            { }
                             else
                             {
                                 if (IsFilterNOTINLogicEnabled)
@@ -908,11 +908,11 @@ namespace Zuby.ADGV
                         if (n.Checked && (n.Nodes.AsParallel().Cast<TreeNodeItemSelector>().Where(sn => sn.CheckState != CheckState.Unchecked).Count() == 0))
                         {
                             TimeSpan ts = (TimeSpan)n.Value;
-                            sb.Append("'P" + 
-                                (ts.Days > 0 ? ts.Days + "D" : "") + 
-                                (ts.TotalHours > 0 ? "T" : "") + (ts.Hours > 0 ? ts.Hours + "H" : "") + 
-                                (ts.Minutes > 0 ? ts.Minutes + "M" : "") + 
-                                (ts.Seconds > 0 ? ts.Seconds + "S" : "") + "'" + 
+                            sb.Append("'P" +
+                                (ts.Days > 0 ? ts.Days + "D" : "") +
+                                (ts.TotalHours > 0 ? "T" : "") + (ts.Hours > 0 ? ts.Hours + "H" : "") +
+                                (ts.Minutes > 0 ? ts.Minutes + "M" : "") +
+                                (ts.Seconds > 0 ? ts.Seconds + "S" : "") + "'" +
                                 appx);
                         }
                         else if (n.CheckState != CheckState.Unchecked && n.Nodes.Count > 0)
@@ -944,7 +944,7 @@ namespace Zuby.ADGV
                         sb.Append(n.Value.ToString().Replace(",", ".") + appx);
                 }
                 else if (DataType == typeof(Bitmap))
-                { /* no filter */ }
+                { }
                 else
                 {
                     foreach (TreeNodeItemSelector n in nodes)
@@ -1178,7 +1178,7 @@ namespace Zuby.ADGV
         private bool HasNodesChecked(TreeNodeItemSelector[] nodes)
         {
             bool state = false;
-            if (!string.IsNullOrEmpty(checkTextFilter.Text))
+            if (!String.IsNullOrEmpty(checkTextFilter.Text))
             {
                 state = nodes.Any(n => n.CheckState == CheckState.Checked && n.Text.ToLower().Contains(checkTextFilter.Text.ToLower()));
             }
@@ -1686,7 +1686,8 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void CheckTextFilterTextChangedTimer_Tick(object sender, EventArgs e)
         {
-            if (!(sender is Timer timer))
+            Timer timer = sender as Timer;
+            if (timer == null)
                 return;
 
             CheckTextFilterHandleTextChanged(timer.Tag.ToString());
