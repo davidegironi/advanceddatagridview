@@ -23,7 +23,7 @@ namespace AdvancedDataGridViewSample
         private static int DisplayItemsCounter = 100;
 
         private static bool MemoryTestEnabled = true;
-        private const int MemoryTestFormsNum = 100;
+        private const int MemoryTestNum = 100;
         private bool _memorytest = false;
         private object[][] _inrows = new object[][] { };
 
@@ -320,16 +320,18 @@ namespace AdvancedDataGridViewSample
 
         private void button_memorytest_Click(object sender, EventArgs e)
         {
-            //build random data
-            Random r = new Random();
-            Image[] sampleimages = new Image[2];
-            sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
-            sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
-            int maxMinutes = (int)((TimeSpan.FromHours(20) - TimeSpan.FromHours(10)).TotalMinutes);
-            object[][] testrows = new object[100][];
-            for (int i = 0; i < 100; i++)
+            if (comboBox_memorytest.SelectedItem != null && comboBox_memorytest.SelectedItem.ToString() == "FullForm")
             {
-                object[] newrow = new object[] {
+                //build random data
+                Random r = new Random();
+                Image[] sampleimages = new Image[2];
+                sampleimages[0] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-green_24.png"));
+                sampleimages[1] = Image.FromFile(Path.Combine(Application.StartupPath, "flag-red_24.png"));
+                int maxMinutes = (int)((TimeSpan.FromHours(20) - TimeSpan.FromHours(10)).TotalMinutes);
+                object[][] testrows = new object[100][];
+                for (int i = 0; i < 100; i++)
+                {
+                    object[] newrow = new object[] {
                         i,
                         Math.Round((decimal)i*2/3, 6),
                         Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6),
@@ -342,20 +344,66 @@ namespace AdvancedDataGridViewSample
                         TimeSpan.FromHours(10).Add(TimeSpan.FromMinutes(r.Next(maxMinutes)))
                     };
 
-                testrows.SetValue(newrow, i);
-            }
-
-            //show the forms
-            for (int i = 0; i < MemoryTestFormsNum; i++)
-            {
-                FormMain formtest = new FormMain(true, testrows);
-                formtest.Show();
-                //wait for the form to be disposed
-                while (!formtest.IsDisposed)
-                {
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(100);
+                    testrows.SetValue(newrow, i);
                 }
+
+                //show the forms
+                for (int i = 0; i < MemoryTestNum; i++)
+                {
+                    FormMain formtest = new FormMain(true, testrows);
+                    formtest.Show();
+                    //wait for the form to be disposed
+                    while (!formtest.IsDisposed)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(100);
+                    }
+                }
+            }
+            else if (comboBox_memorytest.SelectedItem != null && comboBox_memorytest.SelectedItem.ToString() == "DataSource")
+            {
+                object datasourcePrev = advancedDataGridView_main.DataSource;
+
+                //initialize dataset
+                DataTable dataTableTest = new DataTable();
+                DataSet dataSetTest = new DataSet();
+                dataTableTest = dataSetTest.Tables.Add("TableTest");
+                dataTableTest.Columns.Add("int", typeof(int));
+                dataTableTest.Columns.Add("decimal", typeof(decimal));
+                dataTableTest.Columns.Add("double", typeof(double));
+                //add data
+                for (int i = 0; i < 100; i++)
+                {
+                    object[] newrow = new object[] {
+                            i,
+                            Math.Round((decimal)i*2/3, 6),
+                            Math.Round(i % 2 == 0 ? (double)i*2/3 : (double)i/2, 6)
+                        };
+                    dataTableTest.Rows.Add(newrow);
+                }
+
+                //update the DataSource
+                for (int i = 0; i < MemoryTestNum; i++)
+                {
+                    using (BindingSource bindingSourceTest = new BindingSource())
+                    {
+                        bindingSourceTest.DataSource = dataSetTest;
+                        bindingSourceTest.DataMember = dataTableTest.TableName;
+                        advancedDataGridView_main.DataSource = null;
+                        advancedDataGridView_main.ColumnHeadersVisible = false;
+                        advancedDataGridView_main.DataSource = bindingSourceTest;
+                        advancedDataGridView_main.Refresh();
+                        advancedDataGridView_main.ColumnHeadersVisible = true;
+                        Application.DoEvents();
+                    }
+                }
+
+                //restore original datasource
+                advancedDataGridView_main.DataSource = datasourcePrev;
+            }
+            else
+            {
+                MessageBox.Show("Select a Memory Test", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

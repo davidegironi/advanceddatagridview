@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel_top = new System.Windows.Forms.Panel();
+            this.comboBox_memorytest = new System.Windows.Forms.ComboBox();
+            this.button_memorytest = new System.Windows.Forms.Button();
             this.label_strfilter = new System.Windows.Forms.Label();
             this.textBox_strfilter = new System.Windows.Forms.TextBox();
             this.button_load = new System.Windows.Forms.Button();
@@ -55,7 +57,6 @@
             this.bindingSource_main = new System.Windows.Forms.BindingSource(this.components);
             this.statusStrip_main = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_memory = new System.Windows.Forms.ToolStripStatusLabel();
-            this.button_memorytest = new System.Windows.Forms.Button();
             this.panel_top.SuspendLayout();
             this.panel_search.SuspendLayout();
             this.panel_grid.SuspendLayout();
@@ -67,6 +68,7 @@
             // 
             // panel_top
             // 
+            this.panel_top.Controls.Add(this.comboBox_memorytest);
             this.panel_top.Controls.Add(this.button_memorytest);
             this.panel_top.Controls.Add(this.label_strfilter);
             this.panel_top.Controls.Add(this.textBox_strfilter);
@@ -88,6 +90,30 @@
             this.panel_top.Name = "panel_top";
             this.panel_top.Size = new System.Drawing.Size(784, 192);
             this.panel_top.TabIndex = 0;
+            // 
+            // comboBox_memorytest
+            // 
+            this.comboBox_memorytest.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_memorytest.FormattingEnabled = true;
+            this.comboBox_memorytest.Items.AddRange(new object[] {
+            " ",
+            "FullForm",
+            "DataSource"});
+            this.comboBox_memorytest.Location = new System.Drawing.Point(243, 11);
+            this.comboBox_memorytest.Name = "comboBox_memorytest";
+            this.comboBox_memorytest.Size = new System.Drawing.Size(80, 21);
+            this.comboBox_memorytest.TabIndex = 21;
+            // 
+            // button_memorytest
+            // 
+            this.button_memorytest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_memorytest.Location = new System.Drawing.Point(141, 10);
+            this.button_memorytest.Name = "button_memorytest";
+            this.button_memorytest.Size = new System.Drawing.Size(100, 23);
+            this.button_memorytest.TabIndex = 20;
+            this.button_memorytest.Text = "Memory Test";
+            this.button_memorytest.UseVisualStyleBackColor = true;
+            this.button_memorytest.Click += new System.EventHandler(this.button_memorytest_Click);
             // 
             // label_strfilter
             // 
@@ -279,18 +305,20 @@
             // 
             this.advancedDataGridView_main.AllowUserToAddRows = false;
             this.advancedDataGridView_main.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.advancedDataGridView_main.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.advancedDataGridView_main.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.advancedDataGridView_main.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.advancedDataGridView_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.advancedDataGridView_main.FilterAndSortEnabled = true;
+            this.advancedDataGridView_main.FilterStringChangedInvokeBeforeDatasourceUpdate = true;
             this.advancedDataGridView_main.Location = new System.Drawing.Point(0, 0);
             this.advancedDataGridView_main.Name = "advancedDataGridView_main";
             this.advancedDataGridView_main.ReadOnly = true;
             this.advancedDataGridView_main.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.advancedDataGridView_main.RowHeadersVisible = false;
             this.advancedDataGridView_main.Size = new System.Drawing.Size(784, 213);
+            this.advancedDataGridView_main.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             this.advancedDataGridView_main.TabIndex = 0;
             this.advancedDataGridView_main.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.advancedDataGridView_main_SortStringChanged);
             this.advancedDataGridView_main.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.advancedDataGridView_main_FilterStringChanged);
@@ -324,17 +352,6 @@
             this.toolStripStatusLabel_memory.Name = "toolStripStatusLabel_memory";
             this.toolStripStatusLabel_memory.Size = new System.Drawing.Size(116, 17);
             this.toolStripStatusLabel_memory.Text = "Memory Usage: /Mb";
-            // 
-            // button_memorytest
-            // 
-            this.button_memorytest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_memorytest.Location = new System.Drawing.Point(141, 10);
-            this.button_memorytest.Name = "button_memorytest";
-            this.button_memorytest.Size = new System.Drawing.Size(100, 23);
-            this.button_memorytest.TabIndex = 20;
-            this.button_memorytest.Text = "Memory Test";
-            this.button_memorytest.UseVisualStyleBackColor = true;
-            this.button_memorytest.Click += new System.EventHandler(this.button_memorytest_Click);
             // 
             // FormMain
             // 
@@ -392,6 +409,7 @@
         private System.Windows.Forms.StatusStrip statusStrip_main;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_memory;
         private System.Windows.Forms.Button button_memorytest;
+        private System.Windows.Forms.ComboBox comboBox_memorytest;
     }
 }
 
