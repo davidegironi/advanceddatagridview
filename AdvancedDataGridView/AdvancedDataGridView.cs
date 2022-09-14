@@ -224,6 +224,11 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         protected override void OnDataSourceChanged(EventArgs e)
         {
+            foreach (DataGridViewColumn column in Columns)
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                _menuStripToDispose = _menuStripToDispose.Where(f => f != cell.MenuStrip).ToList();
+            }
             foreach (MenuStrip menustrip in _menuStripToDispose)
             {
                 menustrip.Dispose();
