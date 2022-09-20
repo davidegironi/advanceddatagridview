@@ -240,7 +240,7 @@ namespace Zuby.ADGV
             foreach (DataGridViewColumn column in Columns)
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
-                cell.MenuStrip.ChangeDataType(column.ValueType);
+                cell.MenuStrip.SetDataType(column.ValueType);
             }
         }
         #endregion
