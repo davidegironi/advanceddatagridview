@@ -236,6 +236,12 @@ namespace Zuby.ADGV
             _menuStripToDispose.Clear();
 
             base.OnDataSourceChanged(e);
+
+            foreach (DataGridViewColumn column in Columns)
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                cell.MenuStrip.ChangeDataType(column.ValueType);
+            }
         }
         #endregion
 
