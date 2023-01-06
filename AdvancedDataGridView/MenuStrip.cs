@@ -115,15 +115,15 @@ namespace Zuby.ADGV
             //initialize components
             InitializeComponent();
 
+            //set type
+            SetDataType(dataType);
+
             //set component translations
             cancelSortMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearSort.ToString()];
             cancelFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVClearFilter.ToString()];
             customFilterMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVAddCustomFilter.ToString()];
             button_filter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonFilter.ToString()];
             button_undofilter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
-
-            //set type
-            SetDataType(dataType);
 
             //set default NOT IN logic
             IsFilterNOTINLogicEnabled = false;
@@ -160,56 +160,6 @@ namespace Zuby.ADGV
             _textFilterTextChangedTimer = new Timer();
             _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
             _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
-        }
-
-        internal void SetDataType(Type dataType)
-        {
-            DataType = dataType;
-
-            //set components values
-            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan))
-            {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeDESC.ToString()];
-                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
-                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
-            }
-            else if (DataType == typeof(bool))
-            {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolDESC.ToString()];
-                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCbool;
-                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCbool;
-            }
-            else if (DataType == typeof(Int32) || DataType == typeof(Int64) || DataType == typeof(Int16) ||
-                DataType == typeof(UInt32) || DataType == typeof(UInt64) || DataType == typeof(UInt16) ||
-                DataType == typeof(Byte) || DataType == typeof(SByte) || DataType == typeof(Decimal) ||
-                DataType == typeof(Single) || DataType == typeof(Double))
-            {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumDESC.ToString()];
-                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
-                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
-            }
-            else
-            {
-                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
-                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextASC.ToString()];
-                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextDESC.ToString()];
-                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCtxt;
-                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
-            }
-
-            //set check filter textbox
-            if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan) || DataType == typeof(bool))
-                checkTextFilter.Enabled = false;
-
-            //set default compoents
-            customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
-            customFilterLastFiltersListMenuItem.Checked = ActiveFilterType == FilterType.Custom;
         }
 
         /// <summary>
@@ -1882,6 +1832,66 @@ namespace Zuby.ADGV
         {
             if ((sender as ToolStripMenuItem).Enabled)
                 (sender as ToolStripMenuItem).Select();
+        }
+
+        #endregion
+
+
+        #region datatype functions
+
+        /// <summary>
+        /// Update datatype
+        /// </summary>
+        /// <param name="dataType"></param>
+        internal void SetDataType(Type dataType)
+        {
+            // set current datatype
+            DataType = dataType;
+
+            //set components values
+            if (dataType == typeof(DateTime) || dataType == typeof(TimeSpan))
+            {
+                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeASC.ToString()];
+                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortDateTimeDESC.ToString()];
+                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
+                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
+            }
+            else if (dataType == typeof(bool))
+            {
+                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolASC.ToString()];
+                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortBoolDESC.ToString()];
+                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCbool;
+                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCbool;
+            }
+            else if (dataType == typeof(Int32) || dataType == typeof(Int64) || dataType == typeof(Int16) ||
+                dataType == typeof(UInt32) || dataType == typeof(UInt64) || dataType == typeof(UInt16) ||
+                dataType == typeof(Byte) || dataType == typeof(SByte) || dataType == typeof(Decimal) ||
+                dataType == typeof(Single) || dataType == typeof(Double))
+            {
+                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumASC.ToString()];
+                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortNumDESC.ToString()];
+                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCnum;
+                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCnum;
+            }
+            else
+            {
+                customFilterLastFiltersListMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCustomFilter.ToString()];
+                sortASCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextASC.ToString()];
+                sortDESCMenuItem.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVSortTextDESC.ToString()];
+                sortASCMenuItem.Image = Properties.Resources.MenuStrip_OrderASCtxt;
+                sortDESCMenuItem.Image = Properties.Resources.MenuStrip_OrderDESCtxt;
+            }
+
+            //set check filter textbox
+            if (dataType == typeof(DateTime) || dataType == typeof(TimeSpan) || dataType == typeof(bool))
+                checkTextFilter.Enabled = false;
+
+            //set default components
+            customFilterLastFiltersListMenuItem.Enabled = dataType != typeof(bool);
+            customFilterLastFiltersListMenuItem.Checked = ActiveFilterType == FilterType.Custom;
         }
 
         #endregion

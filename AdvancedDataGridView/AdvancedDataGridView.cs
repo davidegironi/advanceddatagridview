@@ -224,6 +224,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         protected override void OnDataSourceChanged(EventArgs e)
         {
+            //dispose unactive menustrips
             foreach (DataGridViewColumn column in Columns)
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
@@ -235,13 +236,14 @@ namespace Zuby.ADGV
             }
             _menuStripToDispose.Clear();
 
-            base.OnDataSourceChanged(e);
-
+            //update datatype for active menustrips
             foreach (DataGridViewColumn column in Columns)
             {
                 ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
                 cell.MenuStrip.SetDataType(column.ValueType);
             }
+
+            base.OnDataSourceChanged(e);
         }
         #endregion
 
