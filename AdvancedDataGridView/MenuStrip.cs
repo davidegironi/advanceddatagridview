@@ -123,6 +123,47 @@ namespace Zuby.ADGV
             button_undofilter.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVButtonUndofilter.ToString()];
 
             //set type
+            SetDataType(dataType);
+
+            //set default NOT IN logic
+            IsFilterNOTINLogicEnabled = false;
+
+            //sent enablers default
+            IsSortEnabled = true;
+            IsFilterEnabled = true;
+            IsFilterChecklistEnabled = true;
+            IsFilterDateAndTimeEnabled = true;
+
+            //resize before hitting ResizeBox so the grip works correctly
+            float scalingfactor = GetScalingFactor();
+            MinimumSize = new Size(Scale(PreferredSize.Width, scalingfactor), Scale(PreferredSize.Height, scalingfactor));
+            //once the size is set resize the ones that wont change      
+            resizeBoxControlHost.Height = Scale(resizeBoxControlHost.Height, scalingfactor);
+            resizeBoxControlHost.Width = Scale(resizeBoxControlHost.Width, scalingfactor);
+            toolStripSeparator1MenuItem.Height = Scale(toolStripSeparator1MenuItem.Height, scalingfactor);
+            toolStripSeparator2MenuItem.Height = Scale(toolStripSeparator2MenuItem.Height, scalingfactor);
+            toolStripSeparator3MenuItem.Height = Scale(toolStripSeparator3MenuItem.Height, scalingfactor);
+            sortASCMenuItem.Height = Scale(sortASCMenuItem.Height, scalingfactor);
+            sortDESCMenuItem.Height = Scale(sortDESCMenuItem.Height, scalingfactor);
+            cancelSortMenuItem.Height = Scale(cancelSortMenuItem.Height, scalingfactor);
+            cancelFilterMenuItem.Height = Scale(cancelFilterMenuItem.Height, scalingfactor);
+            customFilterMenuItem.Height = Scale(customFilterMenuItem.Height, scalingfactor);
+            customFilterLastFiltersListMenuItem.Height = Scale(customFilterLastFiltersListMenuItem.Height, scalingfactor);
+            checkTextFilterControlHost.Height = Scale(checkTextFilterControlHost.Height, scalingfactor);
+            button_filter.Width = Scale(button_filter.Width, scalingfactor);
+            button_filter.Height = Scale(button_filter.Height, scalingfactor);
+            button_undofilter.Width = Scale(button_undofilter.Width, scalingfactor);
+            button_undofilter.Height = Scale(button_undofilter.Height, scalingfactor);
+            //resize
+            ResizeBox(MinimumSize.Width, MinimumSize.Height);
+
+            _textFilterTextChangedTimer = new Timer();
+            _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
+            _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
+        }
+
+        internal void SetDataType(Type dataType)
+        {
             DataType = dataType;
 
             //set components values
@@ -166,45 +207,9 @@ namespace Zuby.ADGV
             if (DataType == typeof(DateTime) || DataType == typeof(TimeSpan) || DataType == typeof(bool))
                 checkTextFilter.Enabled = false;
 
-            //set default NOT IN logic
-            IsFilterNOTINLogicEnabled = false;
-
-            //sent enablers default
-            IsSortEnabled = true;
-            IsFilterEnabled = true;
-            IsFilterChecklistEnabled = true;
-            IsFilterDateAndTimeEnabled = true;
-
             //set default compoents
             customFilterLastFiltersListMenuItem.Enabled = DataType != typeof(bool);
             customFilterLastFiltersListMenuItem.Checked = ActiveFilterType == FilterType.Custom;
-
-            //resize before hitting ResizeBox so the grip works correctly
-            float scalingfactor = GetScalingFactor();
-            MinimumSize = new Size(Scale(PreferredSize.Width, scalingfactor), Scale(PreferredSize.Height, scalingfactor));
-            //once the size is set resize the ones that wont change      
-            resizeBoxControlHost.Height = Scale(resizeBoxControlHost.Height, scalingfactor);
-            resizeBoxControlHost.Width = Scale(resizeBoxControlHost.Width, scalingfactor);
-            toolStripSeparator1MenuItem.Height = Scale(toolStripSeparator1MenuItem.Height, scalingfactor);
-            toolStripSeparator2MenuItem.Height = Scale(toolStripSeparator2MenuItem.Height, scalingfactor);
-            toolStripSeparator3MenuItem.Height = Scale(toolStripSeparator3MenuItem.Height, scalingfactor);
-            sortASCMenuItem.Height = Scale(sortASCMenuItem.Height, scalingfactor);
-            sortDESCMenuItem.Height = Scale(sortDESCMenuItem.Height, scalingfactor);
-            cancelSortMenuItem.Height = Scale(cancelSortMenuItem.Height, scalingfactor);
-            cancelFilterMenuItem.Height = Scale(cancelFilterMenuItem.Height, scalingfactor);
-            customFilterMenuItem.Height = Scale(customFilterMenuItem.Height, scalingfactor);
-            customFilterLastFiltersListMenuItem.Height = Scale(customFilterLastFiltersListMenuItem.Height, scalingfactor);
-            checkTextFilterControlHost.Height = Scale(checkTextFilterControlHost.Height, scalingfactor);
-            button_filter.Width = Scale(button_filter.Width, scalingfactor);
-            button_filter.Height = Scale(button_filter.Height, scalingfactor);
-            button_undofilter.Width = Scale(button_undofilter.Width, scalingfactor);
-            button_undofilter.Height = Scale(button_undofilter.Height, scalingfactor);
-            //resize
-            ResizeBox(MinimumSize.Width, MinimumSize.Height);
-
-            _textFilterTextChangedTimer = new Timer();
-            _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
-            _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
         }
 
         /// <summary>
