@@ -28,6 +28,20 @@ namespace Zuby.ADGV
     public class AdvancedDataGridView : DataGridView
     {
 
+        #region public enum
+
+        /// <summary>
+        /// Filter builder mode
+        /// </summary>
+        public enum FilterBuilerMode : byte
+        {
+            And = 0,
+            Or = 1
+        }
+
+        #endregion
+
+
         #region public events
 
         public class SortEventArgs : EventArgs
@@ -179,6 +193,8 @@ namespace Zuby.ADGV
 
         private bool _sortStringChangedInvokeBeforeDatasourceUpdate = true;
         private bool _filterStringChangedInvokeBeforeDatasourceUpdate = true;
+
+        private FilterBuilerMode _filterBuilerMode = FilterBuilerMode.And;
 
         #endregion
 
@@ -1093,6 +1109,53 @@ namespace Zuby.ADGV
             return ret;
         }
 
+
+        /// <summary>
+        /// Return the filtered strings by column name
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetColumnsFilteredStrings()
+        {
+            Dictionary<string, string> ret = new Dictionary<string, string>();
+
+            foreach (string filterOrder in _filterOrderList)
+            {
+                DataGridViewColumn Column = Columns[filterOrder];
+
+                if (Column != null)
+                {
+                    ColumnHeaderCell cell = Column.HeaderCell as ColumnHeaderCell;
+                    if (cell != null)
+                    {
+                        if (cell.FilterAndSortEnabled && cell.ActiveFilterType != MenuStrip.FilterType.None)
+                        {
+                            if (!ret.ContainsKey(Column.DataPropertyName))
+                            {
+                                ret.Add(Column.DataPropertyName, cell.FilterString);
+                            }
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Set the filter builder mode
+        /// </summary>
+        public void SetFilterBuilderMode(FilterBuilerMode filterBuilerMode)
+        {
+            _filterBuilerMode = filterBuilerMode;
+        }
+
+        /// <summary>
+        /// Get the filter builder mode
+        /// </summary>
+        public FilterBuilerMode GetFilterBuilderMode()
+        {
+            return _filterBuilerMode;
+        }
+
         #endregion
 
 
@@ -1317,7 +1380,10 @@ namespace Zuby.ADGV
                         if (cell.FilterAndSortEnabled && cell.ActiveFilterType != MenuStrip.FilterType.None)
                         {
                             sb.AppendFormat(appx + "(" + cell.FilterString + ")", Column.DataPropertyName);
-                            appx = " AND ";
+                            if (_filterBuilerMode == FilterBuilerMode.And)
+                                appx = " AND ";
+                            else if (_filterBuilerMode == FilterBuilerMode.Or)
+                                appx = " OR ";
                         }
                     }
                 }
