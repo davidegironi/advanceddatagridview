@@ -786,11 +786,21 @@ namespace Zuby.ADGV
             }
             //sort datasource
             if (sortEventArgs.Cancel == false)
-            {
-                BindingSource datasource = this.DataSource as BindingSource;
-                if (datasource != null)
-                    datasource.Sort = sortEventArgs.SortString;
-            }
+			{
+				if (this.DataSource is BindingSource bindingsource)
+				{
+					bindingsource.Sort = sortEventArgs.SortString;
+				}
+				else if (this.DataSource is DataView dataview)
+				{
+					dataview.Sort = sortEventArgs.SortString;
+				}
+				else if (this.DataSource is DataTable datatable)
+				{
+					if (datatable.DefaultView != null)
+						datatable.DefaultView.Sort = sortEventArgs.SortString;
+				}
+			}
             //invoke SortStringChanged
             if (!_sortStringChangedInvokeBeforeDatasourceUpdate)
             {
