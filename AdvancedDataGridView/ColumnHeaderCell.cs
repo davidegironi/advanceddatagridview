@@ -75,6 +75,8 @@ namespace Zuby.ADGV
             Style = oldCell.Style;
             _filterEnabled = filterEnabled;
 
+            _filterButtonImageSize = new Size((int)Math.Round(oldCell.Size.Height * 0.8), (int)Math.Round(oldCell.Size.Height * 0.8));
+
             ColumnHeaderCell oldCellt = oldCell as ColumnHeaderCell;
             if (oldCellt != null && oldCellt.MenuStrip != null)
             {
@@ -653,7 +655,7 @@ namespace Zuby.ADGV
 
             Point p = new Point(
                 (withOffset ? cell.Right : cell.Width) - _filterButtonImageSize.Width - _filterButtonMargin.Right,
-                (withOffset ? cell.Bottom : cell.Height) - _filterButtonImageSize.Height - _filterButtonMargin.Bottom);
+                (withOffset ? cell.Bottom + 2 : cell.Height) - _filterButtonImageSize.Height - _filterButtonMargin.Bottom);
 
             return new Rectangle(p, _filterButtonImageSize);
         }

@@ -786,21 +786,21 @@ namespace Zuby.ADGV
             }
             //sort datasource
             if (sortEventArgs.Cancel == false)
-			{
-				if (this.DataSource is BindingSource bindingsource)
-				{
-					bindingsource.Sort = sortEventArgs.SortString;
-				}
-				else if (this.DataSource is DataView dataview)
-				{
-					dataview.Sort = sortEventArgs.SortString;
-				}
-				else if (this.DataSource is DataTable datatable)
-				{
-					if (datatable.DefaultView != null)
-						datatable.DefaultView.Sort = sortEventArgs.SortString;
-				}
-			}
+            {
+                if (this.DataSource is BindingSource bindingsource)
+                {
+                    bindingsource.Sort = sortEventArgs.SortString;
+                }
+                else if (this.DataSource is DataView dataview)
+                {
+                    dataview.Sort = sortEventArgs.SortString;
+                }
+                else if (this.DataSource is DataTable datatable)
+                {
+                    if (datatable.DefaultView != null)
+                        datatable.DefaultView.Sort = sortEventArgs.SortString;
+                }
+            }
             //invoke SortStringChanged
             if (!_sortStringChangedInvokeBeforeDatasourceUpdate)
             {
@@ -1423,7 +1423,7 @@ namespace Zuby.ADGV
                     if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
                         filterMenu.Show(this, rect.Left, rect.Bottom, true);
                     else
-                        filterMenu.Show(this, rect.Left, rect.Bottom, MenuStrip.GetValuesForFilter(this, column.Name));
+                        filterMenu.Show(this, rect.Left, rect.Bottom, column.Name);
                 }
             }
         }

@@ -511,20 +511,26 @@ namespace Zuby.ADGV
         /// <param name="control"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <param name="vals"></param>
-        public void Show(Control control, int x, int y, IEnumerable<DataGridViewCell> vals)
+        /// <param name="columnName"></param>
+        public void Show(Control control, int x, int y, string columnName)
         {
             _removedNodes = new TreeNodeItemSelector[] { };
             _removedsessionNodes = new TreeNodeItemSelector[] { };
 
             //add nodes
-            BuildNodes(vals);
+            DataGridView dataGridView = control as DataGridView;
+            IEnumerable<DataGridViewCell> vals = dataGridView != null ? GetValuesForFilter(dataGridView, columnName) : Enumerable.Empty<DataGridViewCell>();
+            BuildNodes(vals, dataGridView, columnName);
             //set the starting nodes
             _startingNodes = DuplicateNodes(_loadedNodes);
 
             if (_activeFilterType == FilterType.Custom)
                 SetNodesCheckState(_loadedNodes, false);
             base.Show(control, x, y);
+
+            //force checklist refresh
+            checkList.BeginUpdate();
+            checkList.EndUpdate();
 
             _filterclick = false;
 
@@ -927,7 +933,9 @@ namespace Zuby.ADGV
         /// Add nodes to checkList
         /// </summary>
         /// <param name="vals"></param>
-        private void BuildNodes(IEnumerable<DataGridViewCell> vals)
+        /// <param name="dataGridView"></param>
+        /// <param name="columnName"></param>
+        private void BuildNodes(IEnumerable<DataGridViewCell> vals, DataGridView dataGridView, string columnName)
         {
             if (!IsFilterChecklistEnabled)
                 return;
@@ -1105,9 +1113,16 @@ namespace Zuby.ADGV
                     //add string nodes
                     else
                     {
+                        //get custom font by columnName
+                        Font nodeFont = null;
+                        if (dataGridView != null && !String.IsNullOrEmpty(columnName))
+                            nodeFont = dataGridView.Columns[columnName].DefaultCellStyle.Font;
+
                         foreach (var v in nonulls.GroupBy(c => c.Value).OrderBy(g => g.Key))
                         {
                             TreeNodeItemSelector node = TreeNodeItemSelector.CreateNode(v.First().FormattedValue.ToString(), v.Key, CheckState.Checked, TreeNodeItemSelector.CustomNodeType.Default);
+                            if (nodeFont != null)
+                                node.NodeFont = nodeFont;
                             ChecklistAddNode(node);
                         }
                     }
