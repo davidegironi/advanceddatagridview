@@ -34,13 +34,20 @@ namespace Zuby.ADGV
         /// </summary>
         private const bool FilterDateAndTimeDefaultEnabled = false;
 
+        /// <summary>
+        /// Default filter button image width and height
+        /// </summary>
+        public const int FilterButtonImageDefaultSize = 23;
+
         #endregion
 
 
         #region class properties and fields
 
+        private readonly AdvancedDataGridView dataGridView;
+
         private Image _filterImage = Properties.Resources.ColumnHeader_UnFiltered;
-        private Size _filterButtonImageSize = new Size(16, 16);
+        private Size _filterButtonImageSize = new Size(FilterButtonImageDefaultSize, FilterButtonImageDefaultSize);
         private bool _filterButtonPressed = false;
         private bool _filterButtonOver = false;
         private Rectangle _filterButtonOffsetBounds = Rectangle.Empty;
@@ -61,11 +68,14 @@ namespace Zuby.ADGV
         /// <summary>
         /// ColumnHeaderCell constructor
         /// </summary>
+        /// <param name="dataGridView"></param>
         /// <param name="oldCell"></param>
         /// <param name="filterEnabled"></param>
-        public ColumnHeaderCell(DataGridViewColumnHeaderCell oldCell, bool filterEnabled)
+        public ColumnHeaderCell(AdvancedDataGridView dataGridView, DataGridViewColumnHeaderCell oldCell, bool filterEnabled)
             : base()
         {
+            this.dataGridView = dataGridView;
+
             Tag = oldCell.Tag;
             ErrorText = oldCell.ErrorText;
             ToolTipText = oldCell.ToolTipText;
@@ -75,7 +85,10 @@ namespace Zuby.ADGV
             Style = oldCell.Style;
             _filterEnabled = filterEnabled;
 
-            _filterButtonImageSize = new Size((int)Math.Round(oldCell.Size.Height * 0.8), (int)Math.Round(oldCell.Size.Height * 0.8));
+            if (oldCell.Size.Height > dataGridView.MaxAllCellHeight)
+                dataGridView.MaxAllCellHeight = oldCell.Size.Height;
+            int filterButtonImageHeight = dataGridView.MaxFilterButtonImageHeight < dataGridView.MaxAllCellHeight ? dataGridView.MaxFilterButtonImageHeight : dataGridView.MaxAllCellHeight;
+            _filterButtonImageSize = new Size((int)Math.Round(filterButtonImageHeight * 0.8), (int)Math.Round(filterButtonImageHeight * 0.8));
 
             ColumnHeaderCell oldCellt = oldCell as ColumnHeaderCell;
             if (oldCellt != null && oldCellt.MenuStrip != null)
@@ -217,7 +230,7 @@ namespace Zuby.ADGV
         /// <returns></returns>
         public override object Clone()
         {
-            return new ColumnHeaderCell(this, FilterAndSortEnabled);
+            return new ColumnHeaderCell(dataGridView, this, FilterAndSortEnabled);
         }
 
         /// <summary>

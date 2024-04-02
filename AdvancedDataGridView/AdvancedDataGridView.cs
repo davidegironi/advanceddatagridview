@@ -179,7 +179,6 @@ namespace Zuby.ADGV
 
         #endregion
 
-
         #region class properties and fields
 
         private List<string> _sortOrderList = new List<string>();
@@ -195,6 +194,10 @@ namespace Zuby.ADGV
         private bool _filterStringChangedInvokeBeforeDatasourceUpdate = true;
 
         private FilterBuilerMode _filterBuilerMode = FilterBuilerMode.And;
+
+        internal int _maxFilterButtonImageHeight = ColumnHeaderCell.FilterButtonImageDefaultSize;
+
+        internal int _maxAllCellHeight = ColumnHeaderCell.FilterButtonImageDefaultSize;
 
         #endregion
 
@@ -428,7 +431,7 @@ namespace Zuby.ADGV
                 else
                 {
                     column.SortMode = DataGridViewColumnSortMode.Programmatic;
-                    cell = new ColumnHeaderCell(column.HeaderCell, true);
+                    cell = new ColumnHeaderCell(this, column.HeaderCell, true);
                     cell.SortChanged += new ColumnHeaderCellEventHandler(Cell_SortChanged);
                     cell.FilterChanged += new ColumnHeaderCellEventHandler(Cell_FilterChanged);
                     cell.FilterPopup += new ColumnHeaderCellEventHandler(Cell_FilterPopup);
@@ -1253,6 +1256,41 @@ namespace Zuby.ADGV
             }
         }
 
+        /// <summary>
+        /// Get or Set the max filter button image height
+        /// </summary>
+        public int MaxFilterButtonImageHeight
+        {
+            get
+            {
+                return _maxFilterButtonImageHeight;
+            }
+            set
+            {
+                _maxFilterButtonImageHeight = value > ColumnHeaderCell.FilterButtonImageDefaultSize ? value : ColumnHeaderCell.FilterButtonImageDefaultSize;
+            }
+        }
+
+        #endregion
+
+
+        #region internal Cell methods
+
+        /// <summary>
+        /// Get or Set the max filter button image height of all cells
+        /// </summary>
+        internal int MaxAllCellHeight
+        {
+            get
+            {
+                return _maxAllCellHeight;
+            }
+            set
+            {
+                _maxAllCellHeight = value > ColumnHeaderCell.FilterButtonImageDefaultSize ? value : ColumnHeaderCell.FilterButtonImageDefaultSize;
+            }
+        }
+
         #endregion
 
 
@@ -1283,7 +1321,7 @@ namespace Zuby.ADGV
         protected override void OnColumnAdded(DataGridViewColumnEventArgs e)
         {
             e.Column.SortMode = DataGridViewColumnSortMode.Programmatic;
-            ColumnHeaderCell cell = new ColumnHeaderCell(e.Column.HeaderCell, FilterAndSortEnabled);
+            ColumnHeaderCell cell = new ColumnHeaderCell(this, e.Column.HeaderCell, FilterAndSortEnabled);
             cell.SortChanged += new ColumnHeaderCellEventHandler(Cell_SortChanged);
             cell.FilterChanged += new ColumnHeaderCellEventHandler(Cell_FilterChanged);
             cell.FilterPopup += new ColumnHeaderCellEventHandler(Cell_FilterPopup);
