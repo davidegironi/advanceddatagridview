@@ -99,11 +99,11 @@ namespace Zuby.ADGV
         private Timer _textFilterTextChangedTimer;
         private int _textFilterTextChangedDelayNodes = DefaultTextFilterTextChangedDelayNodes;
         private int _textFilterTextChangedDelayMs = DefaultTextFilterTextChangedDelayMs;
-
+        private bool _notContainingChecksNull;
         #endregion
 
 
-        #region costructors
+        #region constructors
 
         /// <summary>
         /// MenuStrip constructor
@@ -375,6 +375,18 @@ namespace Zuby.ADGV
             set
             {
                 _textFilterTextChangedDelayMs = value;
+            }
+        }
+
+        public bool NotContainingChecksNull
+        {
+            get
+            {
+                return _notContainingChecksNull;
+            }
+            set
+            {
+                _notContainingChecksNull = value;
             }
         }
 
@@ -1539,7 +1551,7 @@ namespace Zuby.ADGV
                 return;
 
             //open a new Custom filter window
-            FormCustomFilter flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled);
+            FormCustomFilter flt = new FormCustomFilter(DataType, IsFilterDateAndTimeEnabled, NotContainingChecksNull);
 
             if (flt.ShowDialog() == DialogResult.OK)
             {

@@ -406,6 +406,18 @@ namespace Zuby.ADGV
             }
         }
 
+        public bool NotContainingChecksNull
+        {
+            get
+            {
+                return MenuStrip.NotContainingChecksNull;
+            }
+            set
+            {
+                MenuStrip.NotContainingChecksNull = value;
+            }
+        }
+
         /// <summary>
         /// Enabled or disable Sort capabilities
         /// </summary>
@@ -515,7 +527,6 @@ namespace Zuby.ADGV
                 MenuStrip.TextFilterTextChangedDelayMs = milliseconds;
             }
         }
-
         #endregion
 
 

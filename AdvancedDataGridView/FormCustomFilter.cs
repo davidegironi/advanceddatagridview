@@ -39,6 +39,7 @@ namespace Zuby.ADGV
         private string _filterString = null;
         private string _filterStringDescription = null;
 
+        private bool _notContainingChecksNull = false;
         #endregion
 
 
@@ -49,11 +50,13 @@ namespace Zuby.ADGV
         /// </summary>
         /// <param name="dataType"></param>
         /// <param name="filterDateAndTimeEnabled"></param>
-        public FormCustomFilter(Type dataType, bool filterDateAndTimeEnabled)
+        public FormCustomFilter(Type dataType, bool filterDateAndTimeEnabled, bool notContainingChecksNull = false)
             : base()
         {
             //initialize components
             InitializeComponent();
+
+            this._notContainingChecksNull = notContainingChecksNull;
 
             //set component translations
             this.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVFormTitle.ToString()];
@@ -318,19 +321,19 @@ namespace Zuby.ADGV
                     if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString += "LIKE '" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
-                        filterString += "NOT LIKE '" + txt + "'";
+                        filterString += "NOT LIKE '" + txt + "'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBeginsWith.ToString()])
                         filterString += "LIKE '" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEndsWith.ToString()])
                         filterString += "LIKE '%" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()])
-                        filterString += "NOT LIKE '" + txt + "%'";
+                        filterString += "NOT LIKE '" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "'";
+                        filterString += "NOT LIKE '%" + txt + "'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()])
                         filterString += "LIKE '%" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "%'";
+                        filterString += "NOT LIKE '%" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
                     break;
             }
 

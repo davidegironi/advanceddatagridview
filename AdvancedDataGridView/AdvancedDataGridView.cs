@@ -617,6 +617,23 @@ namespace Zuby.ADGV
             }
         }
 
+        // <summary>
+        /// Sets whether or not "Not Containing" custom filters will include nulls (i.e. null is also not containing)
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="checkNulls"></param>
+        public void SetNotContainingChecksNull(DataGridViewColumn column, bool checkNulls)
+        {
+            if (Columns.Contains(column))
+            {
+                ColumnHeaderCell cell = column.HeaderCell as ColumnHeaderCell;
+                if (cell != null)
+                {
+                    cell.NotContainingChecksNull = checkNulls;
+                }
+            }
+        }
+
         /// <summary>
         /// Set nodes to enable TextChanged delay on filter checklist
         /// </summary>
