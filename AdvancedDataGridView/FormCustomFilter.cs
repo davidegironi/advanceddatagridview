@@ -321,19 +321,19 @@ namespace Zuby.ADGV
                     if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString += "LIKE '" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
-                        filterString += "NOT LIKE '" + txt + "'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
+                        filterString += "NOT LIKE '" + txt + "'" + (_notContainingChecksNull ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBeginsWith.ToString()])
                         filterString += "LIKE '" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEndsWith.ToString()])
                         filterString += "LIKE '%" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()])
-                        filterString += "NOT LIKE '" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
+                        filterString += "NOT LIKE '" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
+                        filterString += "NOT LIKE '%" + txt + "'" + (_notContainingChecksNull ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()])
                         filterString += "LIKE '%" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + " IS NULL" : "");
+                        filterString += "NOT LIKE '%" + txt + "%'" + (_notContainingChecksNull ? " OR " + column + "IS NULL" : "");
                     break;
             }
 
