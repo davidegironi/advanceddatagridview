@@ -35,6 +35,7 @@
   "ADGVDoesNotEndWith": "nekončí",
   "ADGVContains": "obsahuje",
   "ADGVDoesNotContain": "neobsahuje",
+  "ADGVIncludeNullValues": "obsahovat prázdné řetězce",
   "ADGVInvalidValue": "Nesprávná hodnota",
   "ADGVFilterStringDescription": "Zobrazit řady, kde hodnota {0} \"{1}\"",
   "ADGVFormTitle": "Uživatelský filtr",

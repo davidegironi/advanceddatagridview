@@ -118,6 +118,7 @@ namespace Zuby.ADGV
             ADGVDoesNotEndWith,
             ADGVContains,
             ADGVDoesNotContain,
+            ADGVIncludeNullValues,
             ADGVInvalidValue,
             ADGVFilterStringDescription,
             ADGVFormTitle,
@@ -168,6 +169,7 @@ namespace Zuby.ADGV
             { TranslationKey.ADGVDoesNotEndWith.ToString(), "does not end with" },
             { TranslationKey.ADGVContains.ToString(), "contains" },
             { TranslationKey.ADGVDoesNotContain.ToString(), "does not contain" },
+            { TranslationKey.ADGVIncludeNullValues.ToString(), "include empty strings" },
             { TranslationKey.ADGVInvalidValue.ToString(), "Invalid Value" },
             { TranslationKey.ADGVFilterStringDescription.ToString(), "Show rows where value {0} \"{1}\"" },
             { TranslationKey.ADGVFormTitle.ToString(), "Custom Filter" },
@@ -178,6 +180,7 @@ namespace Zuby.ADGV
         };
 
         #endregion
+
 
         #region class properties and fields
 

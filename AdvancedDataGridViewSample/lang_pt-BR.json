@@ -35,6 +35,7 @@
   "ADGVDoesNotEndWith": "não termina com",
   "ADGVContains": "contém",
   "ADGVDoesNotContain": "não contém",
+  "ADGVIncludeNullValues": "incluir strings vazias",
   "ADGVInvalidValue": "Valor inválido",
   "ADGVFilterStringDescription": "Mostrar linhas com valor {0} \"{1}\"",
   "ADGVFormTitle": "Filtro personalizado",

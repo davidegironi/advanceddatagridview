@@ -35,6 +35,7 @@
   "ADGVDoesNotEndWith": "eindigt niet op",
   "ADGVContains": "bevat",
   "ADGVDoesNotContain": "bevat niet",
+  "ADGVIncludeNullValues": "lege tekenreeksen bevatten",
   "ADGVInvalidValue": "Ongeldige Waarde",
   "ADGVFilterStringDescription": "Toont rijen waar de waarde {0} \"{1}\"",
   "ADGVFormTitle": "Aangepaste Filter",

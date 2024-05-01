@@ -35,6 +35,7 @@
   "ADGVDoesNotEndWith": "no termina con",
   "ADGVContains": "contiene",
   "ADGVDoesNotContain": "no contiene",
+  "ADGVIncludeNullValues": "incluir cadenas vacías",
   "ADGVInvalidValue": "Valor no válido",
   "ADGVFilterStringDescription": "Mostrar filas donde el valor {0} \"{1}\"",
   "ADGVFormTitle": "Filtro personalizado",

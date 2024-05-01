@@ -35,6 +35,7 @@
   "ADGVDoesNotEndWith": "does not end with",
   "ADGVContains": "contains",
   "ADGVDoesNotContain": "does not contain",
+  "ADGVIncludeNullValues": "include empty strings",
   "ADGVInvalidValue": "Invalid Value",
   "ADGVFilterStringDescription": "Show rows where value {0} \"{1}\"",
   "ADGVFormTitle": "Custom Filter",

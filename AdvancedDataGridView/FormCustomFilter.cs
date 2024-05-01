@@ -141,7 +141,9 @@ namespace Zuby.ADGV
 
                 default:
                     _valControl1 = new TextBox();
-                    _valControl2 = new TextBox();
+                    CheckBox includeNullCheckBox = new CheckBox();
+                    includeNullCheckBox.Text = AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVIncludeNullValues.ToString()];
+                    _valControl2 = includeNullCheckBox;
                     comboBox_filterType.Items.AddRange(new string[] {
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()],
                         AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()],
@@ -170,11 +172,12 @@ namespace Zuby.ADGV
             _valControl2.Width = comboBox_filterType.Width - 20;
             _valControl2.TabIndex = 5;
             _valControl2.Visible = false;
-            _valControl2.VisibleChanged += new EventHandler(valControl2_VisibleChanged);
             _valControl2.KeyDown += valControl_KeyDown;
 
             Controls.Add(_valControl1);
             Controls.Add(_valControl2);
+
+            comboBox_filterType_SelectedIndexChanged(null, null);
 
             errorProvider.SetIconAlignment(_valControl1, ErrorIconAlignment.MiddleRight);
             errorProvider.SetIconPadding(_valControl1, -18);
@@ -318,19 +321,19 @@ namespace Zuby.ADGV
                     if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEquals.ToString()])
                         filterString += "LIKE '" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()])
-                        filterString += "NOT LIKE '" + txt + "'";
+                        filterString += "NOT LIKE '" + txt + "'" + ((_valControl2 as CheckBox).Checked ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBeginsWith.ToString()])
                         filterString += "LIKE '" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVEndsWith.ToString()])
                         filterString += "LIKE '%" + txt + "'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()])
-                        filterString += "NOT LIKE '" + txt + "%'";
+                        filterString += "NOT LIKE '" + txt + "%'" + ((_valControl2 as CheckBox).Checked ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "'";
+                        filterString += "NOT LIKE '%" + txt + "'" + ((_valControl2 as CheckBox).Checked ? " OR " + column + "IS NULL" : "");
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVContains.ToString()])
                         filterString += "LIKE '%" + txt + "%'";
                     else if (filterTypeConditionText == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()])
-                        filterString += "NOT LIKE '%" + txt + "%'";
+                        filterString += "NOT LIKE '%" + txt + "%'" + ((_valControl2 as CheckBox).Checked ? " OR " + column + "IS NULL" : "");
                     break;
             }
 
@@ -424,19 +427,31 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void comboBox_filterType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _valControl2.Visible = comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()];
+            if (
+                _filterType == FilterType.String &&
+                (
+                    comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEqual.ToString()] ||
+                    comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotBeginWith.ToString()] ||
+                    comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotEndWith.ToString()] ||
+                    comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVDoesNotContain.ToString()]
+                ))
+            {
+                _valControl2.Visible = true;
+                (_valControl2 as CheckBox).Checked = false;
+                label_and.Visible = false;
+            }
+            else if (comboBox_filterType.Text == AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVBetween.ToString()])
+            {
+                _valControl2.Visible = true;
+                label_and.Visible = true;
+            }
+            else
+            {
+                _valControl2.Visible = false;
+                label_and.Visible = false;
+            }
             button_ok.Enabled = !(_valControl1.Visible && _valControl1.Tag != null && ((bool)_valControl1.Tag)) ||
                 (_valControl2.Visible && _valControl2.Tag != null && ((bool)_valControl2.Tag));
-        }
-
-        /// <summary>
-        /// Changed control2 visibility
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void valControl2_VisibleChanged(object sender, EventArgs e)
-        {
-            label_and.Visible = _valControl2.Visible;
         }
 
         /// <summary>
