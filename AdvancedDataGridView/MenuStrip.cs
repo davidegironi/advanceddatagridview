@@ -1375,14 +1375,17 @@ namespace Zuby.ADGV
         private void CheckList_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             TreeNodeItemSelector n = e.Node as TreeNodeItemSelector;
-            //set the new node check status
-            SetNodesCheckState(_loadedNodes, false);
-            n.CheckState = CheckState.Unchecked;
-            NodeCheckChange(n);
-            //set filter button enabled
-            CheckFilterButtonEnabled();
-            //do Filter by checkList
-            Button_ok_Click(this, new EventArgs());
+            if (n != null)
+            {
+                //set the new node check status
+                SetNodesCheckState(_loadedNodes, false);
+                n.CheckState = CheckState.Unchecked;
+                NodeCheckChange(n);
+                //set filter button enabled
+                CheckFilterButtonEnabled();
+                //do Filter by checkList
+                Button_ok_Click(this, new EventArgs());
+            }
         }
 
         /// <summary>
