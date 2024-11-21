@@ -360,7 +360,7 @@ namespace Zuby.ADGV
                     result += s;
             }
 
-            return result.Replace("'", "''");
+            return result.Replace("'", "''").Replace("{", "{{").Replace("}", "}}");
         }
 
 

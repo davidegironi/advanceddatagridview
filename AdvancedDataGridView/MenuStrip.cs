@@ -796,6 +796,7 @@ namespace Zuby.ADGV
                                         && n.CheckState != CheckState.Unchecked
                                 ))
                         );
+                        filter = filter.Replace("{", "{{").Replace("}", "}}");
 
                         if (filter.Length > 0)
                         {
