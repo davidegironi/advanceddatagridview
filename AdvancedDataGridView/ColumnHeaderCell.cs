@@ -407,6 +407,21 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Get or Set the Filter Text focus OnShow
+        /// </summary>
+        public bool FilterTextFocusOnShow
+        {
+            get
+            {
+                return MenuStrip.FilterTextFocusOnShow;
+            }
+            set
+            {
+                MenuStrip.FilterTextFocusOnShow = value;
+            }
+        }
+
+        /// <summary>
         /// Enabled or disable Sort capabilities
         /// </summary>
         /// <param name="enabled"></param>

@@ -128,11 +128,12 @@ namespace Zuby.ADGV
             //set default NOT IN logic
             IsFilterNOTINLogicEnabled = false;
 
-            //sent enablers default
+            //set enablers default
             IsSortEnabled = true;
             IsFilterEnabled = true;
             IsFilterChecklistEnabled = true;
             IsFilterDateAndTimeEnabled = true;
+            FilterTextFocusOnShow = false;
 
             //resize before hitting ResizeBox so the grip works correctly
             float scalingfactor = GetScalingFactor();
@@ -378,6 +379,11 @@ namespace Zuby.ADGV
             }
         }
 
+        /// <summary>
+        /// Get or Set the Filter Text focus OnShow
+        /// </summary>
+        public bool FilterTextFocusOnShow { get; set; }
+
         #endregion
 
 
@@ -537,6 +543,9 @@ namespace Zuby.ADGV
             _checkTextFilterChangedEnabled = false;
             checkTextFilter.Text = "";
             _checkTextFilterChangedEnabled = true;
+
+            if (FilterTextFocusOnShow)
+                checkTextFilter.Focus();
         }
 
         /// <summary>
@@ -568,6 +577,9 @@ namespace Zuby.ADGV
             base.Show(control, x, y);
 
             _filterclick = false;
+
+            if (FilterTextFocusOnShow)
+                checkTextFilter.Focus();
         }
 
         /// <summary>

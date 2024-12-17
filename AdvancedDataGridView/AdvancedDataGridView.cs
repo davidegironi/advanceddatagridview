@@ -747,6 +747,16 @@ namespace Zuby.ADGV
         }
         private bool _filterAndSortEnabled = true;
 
+        /// <summary>
+        /// Set the Filter Text focus OnShow
+        /// </summary>
+        /// <param name="enabled"></param>
+        public void SetFilterTextFocusOnShow(bool enabled)
+        {
+            foreach (ColumnHeaderCell c in FilterableCells)
+                c.FilterTextFocusOnShow = enabled;
+        }
+
         #endregion
 
 
