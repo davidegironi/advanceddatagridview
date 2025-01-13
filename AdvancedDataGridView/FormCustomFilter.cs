@@ -8,6 +8,7 @@
 #endregion
 
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -159,7 +160,7 @@ namespace Zuby.ADGV
             comboBox_filterType.SelectedIndex = 0;
 
             _valControl1.Name = "valControl1";
-            _valControl1.Location = new System.Drawing.Point(20, 66);
+            _valControl1.Location = new Point(20, comboBox_filterType.Location.Y + comboBox_filterType.Size.Height + 10);
             _valControl1.Size = new System.Drawing.Size(166, 20);
             _valControl1.Width = comboBox_filterType.Width - 20;
             _valControl1.TabIndex = 4;
@@ -167,12 +168,14 @@ namespace Zuby.ADGV
             _valControl1.KeyDown += valControl_KeyDown;
 
             _valControl2.Name = "valControl2";
-            _valControl2.Location = new System.Drawing.Point(20, 108);
+            _valControl2.Location = new Point(20, label_and.Location.Y + label_and.Size.Height + 10);
             _valControl2.Size = new System.Drawing.Size(166, 20);
             _valControl2.Width = comboBox_filterType.Width - 20;
             _valControl2.TabIndex = 5;
             _valControl2.Visible = false;
             _valControl2.KeyDown += valControl_KeyDown;
+
+            label_and.Location = new Point(12, ((_valControl1.Location.Y + _valControl1.Size.Height + _valControl2.Location.Y) - label_and.Size.Height) / 2);
 
             Controls.Add(_valControl1);
             Controls.Add(_valControl2);

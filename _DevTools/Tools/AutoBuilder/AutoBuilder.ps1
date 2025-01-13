@@ -1,5 +1,5 @@
 ﻿#-------------------------------------
-# AutoBuild 1.0.2.2
+# AutoBuild 1.0.2.3
 # Copyright (c) 2012 Davide Gironi
 #
 # a Build automation script that runs on psake (https://github.com/psake/psake)
@@ -481,11 +481,17 @@ task Test -depends Build {
 			
 			ForEach ($test in $tests)
 			{
+				$targetFrameworks = GetTargetFrameworks($projectDirectoryFileInfo)
 				if ($projectName -eq $test.Name)
 				{
-					Write-Host -ForegroundColor Green "Running tests " $test.Name
+					ForEach($targetFramework in $targetFrameworks)
+					{	
+						$targetFrameworkName = $targetFramework.Name
+						
+						Write-Host -ForegroundColor Green "Running tests " $test.Name " on " $targetFrameworkName
 										
-					exec { dotnet test "$sourceDir\$projectFile" -c "Release" | Out-Default }
+						exec { dotnet test "$sourceDir\$projectFile" -c "Release" -f "$targetFrameworkName" | Out-Default }
+					}
 				}
 			}
 		}
@@ -516,6 +522,21 @@ function GetProjects($solutionPath) {
 			}
 		}
 
+	return $results
+}
+
+#get project targetframeworks
+function GetTargetFrameworks($projectPath) {
+	$results = @()
+	[xml]$projectPathXml = Get-Content -Path $projectPath
+	$targetFrameworks = $projectPathXml.Project.PropertyGroup.TargetFrameworks
+	if ($targetFrameworks) {
+		$frameworks = $targetFrameworks -split ';'
+		foreach ($framework in $frameworks) {
+			$results += New-Object PSObject -Property @{ Name = $framework }
+		}
+	}
+	
 	return $results
 }
 
