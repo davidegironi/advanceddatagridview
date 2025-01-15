@@ -10,7 +10,7 @@ About
 
 ## Requirements
 
-* Microsoft Windows with .NET Framework 4, .NET Core 5 or later
+* Microsoft Windows with .NET Framework 4, .NET Core 3.1, .NET 5 or later
 
 ## FAQ
 

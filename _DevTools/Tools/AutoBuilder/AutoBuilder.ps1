@@ -266,7 +266,7 @@ task ReleaseBin -depends CleanWorking, UpdateVersion, Build {
 			}
 			
 			#check if is SDK project
-			$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern '<Project Sdk="Microsoft.NET.Sdk">' -SimpleMatch -Quiet
+			$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern 'Microsoft.NET.Sdk' -SimpleMatch -Quiet
 			
 			#copy project release files
 			robocopy @("$projectDirectory\bin\Release", "$workingDir\Bin\$projectName", '*.*', '/S', '/NP', '/XO', '/XF', '*.pdb', '*.xml') | Out-Default
@@ -479,18 +479,36 @@ task Test -depends Build {
 			$projectDirectoryFileInfo = Get-ChildItem "$sourceDir\$projectFile"
 			$projectDirectory = $projectDirectoryFileInfo.DirectoryName
 			
-			ForEach ($test in $tests)
+			#check if is SDK project
+			$isSdk = Select-String -Path "$sourceDir\$projectFile" -Pattern 'Microsoft.NET.Sdk' -SimpleMatch -Quiet
+			
+			if($isSdk)
 			{
-				$targetFrameworks = GetTargetFrameworks($projectDirectoryFileInfo)
-				if ($projectName -eq $test.Name)
+				ForEach ($test in $tests)
 				{
-					ForEach($targetFramework in $targetFrameworks)
-					{	
-						$targetFrameworkName = $targetFramework.Name
-						
-						Write-Host -ForegroundColor Green "Running tests " $test.Name " on " $targetFrameworkName
-										
-						exec { dotnet test "$sourceDir\$projectFile" -c "Release" -f "$targetFrameworkName" | Out-Default }
+					$targetFrameworks = GetTargetFrameworks($projectDirectoryFileInfo)
+					if ($projectName -eq $test.Name)
+					{
+						ForEach($targetFramework in $targetFrameworks)
+						{	
+							$targetFrameworkName = $targetFramework.Name
+							
+							Write-Host -ForegroundColor Green "Running tests " $test.Name " on " $targetFrameworkName
+											
+							exec { dotnet test "$sourceDir\$projectFile" -c "Release" -f "$targetFrameworkName" | Out-Default }
+						}
+					}
+				}
+			}
+			else
+			{
+				ForEach ($test in $tests)
+				{
+					if ($projectName -eq $test.Name)
+					{
+						Write-Host -ForegroundColor Green "Running tests " $test.Name
+											
+						exec { dotnet test "$sourceDir\$projectFile" -c "Release" | Out-Default }
 					}
 				}
 			}
