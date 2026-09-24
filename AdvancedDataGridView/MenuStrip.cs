@@ -170,7 +170,7 @@ namespace Zuby.ADGV
         /// <param name="e"></param>
         private void MenuStrip_Closed(Object sender, EventArgs e)
         {
-            ResizeClean();
+           // ResizeClean();
 
             if (_checkTextFilterRemoveNodesOnSearch && !_filterclick)
             {
@@ -1931,6 +1931,20 @@ namespace Zuby.ADGV
         #region resize methods
 
         /// <summary>
+        /// Get the maximum width available on the monitor containing the menu.
+        /// </summary>
+        /// <returns></returns>
+        private int GetMaximumWidth()
+        {
+            if (!IsHandleCreated)
+                return int.MaxValue;
+
+            Point startPoint = PointToScreen(MenuStrip._resizeStartPoint);
+            Rectangle workingArea = Screen.FromPoint(startPoint).WorkingArea;
+            return Math.Max(MinimumSize.Width, workingArea.Right - startPoint.X);
+        }
+
+        /// <summary>
         /// Get the scaling factor
         /// </summary>
         /// <returns></returns>
@@ -1967,6 +1981,8 @@ namespace Zuby.ADGV
         /// 
         private void ResizeBox(int w, int h)
         {
+            w = Math.Min(w, GetMaximumWidth());
+
             sortASCMenuItem.Width = w - 1;
             sortDESCMenuItem.Width = w - 1;
             cancelSortMenuItem.Width = w - 1; ;
@@ -2017,6 +2033,7 @@ namespace Zuby.ADGV
         {
             if (_resizeEndPoint.X != -1)
             {
+                /*
                 Point startPoint = PointToScreen(MenuStrip._resizeStartPoint);
 
                 Rectangle rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y)
@@ -2028,8 +2045,9 @@ namespace Zuby.ADGV
                     Height = Math.Abs(startPoint.Y - _resizeEndPoint.Y)
                 };
 
+                
                 ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
-
+                */
                 _resizeEndPoint.X = -1;
             }
         }
@@ -2066,15 +2084,13 @@ namespace Zuby.ADGV
                     int x = e.X;
                     int y = e.Y;
 
-                    ResizeClean();
-
                     x += Width - resizeBoxControlHost.Width;
                     y += Height - resizeBoxControlHost.Height;
 
                     x = Math.Max(x, MinimumSize.Width - 1);
                     y = Math.Max(y, MinimumSize.Height - 1);
-
-                    Point StartPoint = PointToScreen(MenuStrip._resizeStartPoint);
+                    x = Math.Min(x, GetMaximumWidth() + MenuStrip._resizeStartPoint.X);
+                    Point StartPoint =  PointToScreen(MenuStrip._resizeStartPoint);
                     Point EndPoint = PointToScreen(new Point(x, y));
 
                     Rectangle rc = new Rectangle
@@ -2086,8 +2102,7 @@ namespace Zuby.ADGV
                         Height = Math.Abs(StartPoint.Y - EndPoint.Y)
                     };
 
-                    ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
-
+                    ResizeBox(rc.Width, rc.Height);
                     _resizeEndPoint.X = EndPoint.X;
                     _resizeEndPoint.Y = EndPoint.Y;
                 }
