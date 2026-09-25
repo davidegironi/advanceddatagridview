@@ -1967,6 +1967,8 @@ namespace Zuby.ADGV
         /// 
         private void ResizeBox(int w, int h)
         {
+            Invalidate();
+            Refresh();
             sortASCMenuItem.Width = w - 1;
             sortDESCMenuItem.Width = w - 1;
             cancelSortMenuItem.Width = w - 1; ;
