@@ -1967,6 +1967,8 @@ namespace Zuby.ADGV
         /// 
         private void ResizeBox(int w, int h)
         {
+            Invalidate();
+            Refresh();
             sortASCMenuItem.Width = w - 1;
             sortDESCMenuItem.Width = w - 1;
             cancelSortMenuItem.Width = w - 1; ;
@@ -2017,6 +2019,7 @@ namespace Zuby.ADGV
         {
             if (_resizeEndPoint.X != -1)
             {
+                /*
                 Point startPoint = PointToScreen(MenuStrip._resizeStartPoint);
 
                 Rectangle rc = new Rectangle(startPoint.X, startPoint.Y, _resizeEndPoint.X, _resizeEndPoint.Y)
@@ -2029,7 +2032,7 @@ namespace Zuby.ADGV
                 };
 
                 ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
-
+                */
                 _resizeEndPoint.X = -1;
             }
         }
@@ -2086,7 +2089,7 @@ namespace Zuby.ADGV
                         Height = Math.Abs(StartPoint.Y - EndPoint.Y)
                     };
 
-                    ControlPaint.DrawReversibleFrame(rc, Color.Black, FrameStyle.Dashed);
+                    ResizeBox(rc.Width, rc.Height);
 
                     _resizeEndPoint.X = EndPoint.X;
                     _resizeEndPoint.Y = EndPoint.Y;
