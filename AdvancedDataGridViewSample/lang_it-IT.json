@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "includi stringhe vuote",
   "ADGVInvalidValue": "Valore Non Valido",
   "ADGVFilterStringDescription": "Visualizza le righe con valore {0} \"{1}\"",
+  "ADGVCheckListCounter": "Elementi {0} / {1}",
   "ADGVFormTitle": "Filtro Personalizzato",
   "ADGVLabelColumnNameText": "Visualizza le righe con valore",
   "ADGVLabelAnd": "E",

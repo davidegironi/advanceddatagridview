@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "incluir strings vazias",
   "ADGVInvalidValue": "Valor inválido",
   "ADGVFilterStringDescription": "Mostrar linhas com valor {0} \"{1}\"",
+  "ADGVCheckListCounter": "Itens {0} / {1}",
   "ADGVFormTitle": "Filtro personalizado",
   "ADGVLabelColumnNameText": "Mostrar linhas com valor",
   "ADGVLabelAnd": "E",

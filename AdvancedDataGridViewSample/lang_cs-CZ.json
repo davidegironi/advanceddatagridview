@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "obsahovat prázdné řetězce",
   "ADGVInvalidValue": "Nesprávná hodnota",
   "ADGVFilterStringDescription": "Zobrazit řady, kde hodnota {0} \"{1}\"",
+  "ADGVCheckListCounter": "Položky {0} / {1}",
   "ADGVFormTitle": "Uživatelský filtr",
   "ADGVLabelColumnNameText": "Zobrazit řady, kde hodnota",
   "ADGVLabelAnd": "a",

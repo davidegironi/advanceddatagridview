@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "lege tekenreeksen bevatten",
   "ADGVInvalidValue": "Ongeldige Waarde",
   "ADGVFilterStringDescription": "Toont rijen waar de waarde {0} \"{1}\"",
+  "ADGVCheckListCounter": "Items {0} / {1}",
   "ADGVFormTitle": "Aangepaste Filter",
   "ADGVLabelColumnNameText": "Toont rijen waar de waarde",
   "ADGVLabelAnd": "En",

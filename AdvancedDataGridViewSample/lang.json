@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "include empty strings",
   "ADGVInvalidValue": "Invalid Value",
   "ADGVFilterStringDescription": "Show rows where value {0} \"{1}\"",
+  "ADGVCheckListCounter": "Items {0} / {1}",
   "ADGVFormTitle": "Custom Filter",
   "ADGVLabelColumnNameText": "Show rows where value",
   "ADGVLabelAnd": "And",

@@ -161,6 +161,7 @@ namespace Zuby.ADGV
             _textFilterTextChangedTimer = new Timer();
             _textFilterTextChangedTimer.Interval = _textFilterTextChangedDelayMs;
             _textFilterTextChangedTimer.Tick += new EventHandler(this.CheckTextFilterTextChangedTimer_Tick);
+            UpdateChecklistCounter();
         }
 
         /// <summary>
@@ -416,6 +417,8 @@ namespace Zuby.ADGV
             button_undofilter.Enabled = enabled;
             checkList.Enabled = enabled;
             checkTextFilter.Enabled = enabled;
+
+            UpdateChecklistCounter();
         }
 
         /// <summary>
@@ -439,6 +442,8 @@ namespace Zuby.ADGV
                 ChecklistAddNode(disablednode);
                 ChecklistReloadNodes();
             }
+
+            UpdateChecklistCounter();
         }
 
         /// <summary>
@@ -540,6 +545,8 @@ namespace Zuby.ADGV
 
             _filterclick = false;
 
+            UpdateChecklistCounter();
+
             _checkTextFilterChangedEnabled = false;
             checkTextFilter.Text = "";
             _checkTextFilterChangedEnabled = true;
@@ -577,6 +584,8 @@ namespace Zuby.ADGV
             base.Show(control, x, y);
 
             _filterclick = false;
+
+            UpdateChecklistCounter();
 
             if (FilterTextFocusOnShow)
                 checkTextFilter.Focus();
@@ -1154,6 +1163,44 @@ namespace Zuby.ADGV
         }
 
         /// <summary>
+        /// Update the checklist selected and total item count
+        /// </summary>
+        private void UpdateChecklistCounter()
+        {
+            int selectedCount = 0;
+            int totalCount = 0;
+
+            // count the selectable checklist leaves
+            foreach (TreeNodeItemSelector node in _loadedNodes)
+                CountChecklistItems(node, ref selectedCount, ref totalCount);
+
+            // update the label
+            checkListCounterLabel.Text = String.Format(AdvancedDataGridView.Translations[AdvancedDataGridView.TranslationKey.ADGVCheckListCounter.ToString()], selectedCount, totalCount);
+            checkListCounterLabel.Visible = IsFilterEnabled && IsFilterChecklistEnabled;
+        }
+
+        /// <summary>
+        /// Count selectable checklist leaves, excluding the select-all node
+        /// </summary>
+        private static void CountChecklistItems(TreeNodeItemSelector node, ref int selectedCount, ref int totalCount)
+        {
+            if (node.NodeType == TreeNodeItemSelector.CustomNodeType.SelectAll)
+                return;
+
+            if (node.Nodes.Count == 0)
+            {
+                totalCount++;
+                if (node.CheckState == CheckState.Checked)
+                    selectedCount++;
+                return;
+            }
+
+            // count the childrens
+            foreach (TreeNodeItemSelector child in node.Nodes)
+                CountChecklistItems(child, ref selectedCount, ref totalCount);
+        }
+
+        /// <summary>
         /// Check if selected nodes exists
         /// </summary>
         /// <param name="nodes"></param>
@@ -1217,6 +1264,8 @@ namespace Zuby.ADGV
                 CheckState state = UpdateNodesCheckState(ChecklistNodes());
                 GetSelectAllNode().CheckState = state;
             }
+
+            UpdateChecklistCounter();
         }
 
         /// <summary>
@@ -1943,7 +1992,8 @@ namespace Zuby.ADGV
                 {
                     ret = Gscale.DpiX / 96.0F;
                 }
-                catch { };
+                catch { }
+                ;
             }
             return ret;
         }
@@ -1985,6 +2035,7 @@ namespace Zuby.ADGV
             checkFilterListButtonsControlHost.Size = new Size(Scale(w2 - 35, scalingfactor), Scale(24, scalingfactor));
             button_filter.Location = new Point(Scale(w2 - 35 - 164, scalingfactor), 0);
             button_undofilter.Location = new Point(Scale(w2 - 35 - 79, scalingfactor), 0);
+            checkListCounterLabel.Location = new Point(Scale(4, scalingfactor), (checkFilterListButtonsControlHost.Height - checkListCounterLabel.Height) / 2);
             resizeBoxControlHost.Margin = new Padding(Scale(w2 - 46, scalingfactor), 0, 0, 0);
 
             //get all objects height to make sure we have room for the grip

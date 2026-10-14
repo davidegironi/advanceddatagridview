@@ -38,6 +38,7 @@
   "ADGVIncludeNullValues": "incluir cadenas vacías",
   "ADGVInvalidValue": "Valor no válido",
   "ADGVFilterStringDescription": "Mostrar filas donde el valor {0} \"{1}\"",
+  "ADGVCheckListCounter": "Elementos {0} / {1}",
   "ADGVFormTitle": "Filtro personalizado",
   "ADGVLabelColumnNameText": "Mostrar filas donde el valor",
   "ADGVLabelAnd": "Y",

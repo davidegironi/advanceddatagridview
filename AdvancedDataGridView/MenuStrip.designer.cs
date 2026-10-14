@@ -47,6 +47,7 @@ namespace Zuby.ADGV
             this.checkList = new System.Windows.Forms.TreeView();
             this.button_filter = new System.Windows.Forms.Button();
             this.button_undofilter = new System.Windows.Forms.Button();
+            this.checkListCounterLabel = new System.Windows.Forms.Label();
             this.checkFilterListPanel = new System.Windows.Forms.Panel();
             this.checkFilterListButtonsPanel = new System.Windows.Forms.Panel();
             this.checkFilterListButtonsControlHost = new System.Windows.Forms.ToolStripControlHost(checkFilterListButtonsPanel);
@@ -219,6 +220,13 @@ namespace Zuby.ADGV
             this.button_filter.Click += new System.EventHandler(Button_ok_Click);
             this.button_filter.Location = new System.Drawing.Point(this.checkFilterListButtonsPanel.Width - 164, 0);
             //
+            // checkListCounterLabel
+            //
+            this.checkListCounterLabel.Name = "checkListCounterLabel";
+            this.checkListCounterLabel.AutoSize = true;
+            this.checkListCounterLabel.Text = "0/0";
+            this.checkListCounterLabel.Visible = false;
+            //
             // button_undofilter
             //
             this.button_undofilter.Name = "button_undofilter";
@@ -312,6 +320,7 @@ namespace Zuby.ADGV
             this.checkFilterListButtonsPanel.BackColor = BackColor;
             this.checkFilterListButtonsPanel.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.checkFilterListButtonsPanel.Controls.AddRange(new System.Windows.Forms.Control[] {
+            checkListCounterLabel,
             button_filter,
             button_undofilter
             });
@@ -339,6 +348,7 @@ namespace Zuby.ADGV
         private System.Windows.Forms.TreeView checkList;
         private System.Windows.Forms.Button button_filter;
         private System.Windows.Forms.Button button_undofilter;
+        private System.Windows.Forms.Label checkListCounterLabel;
         private System.Windows.Forms.ToolStripControlHost checkFilterListControlHost;
         private System.Windows.Forms.ToolStripControlHost checkFilterListButtonsControlHost;
         private System.Windows.Forms.ToolStripControlHost resizeBoxControlHost;
