@@ -1993,7 +1993,6 @@ namespace Zuby.ADGV
                     ret = Gscale.DpiX / 96.0F;
                 }
                 catch { }
-                ;
             }
             return ret;
         }
