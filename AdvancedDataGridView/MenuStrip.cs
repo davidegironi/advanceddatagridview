@@ -561,17 +561,13 @@ namespace Zuby.ADGV
         /// <param name="control"></param>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <param name="_restoreFilter"></param>
-        public void Show(Control control, int x, int y, bool _restoreFilter)
+        public new void Show(Control control, int x, int y)
         {
             _checkTextFilterChangedEnabled = false;
             checkTextFilter.Text = "";
             _checkTextFilterChangedEnabled = true;
-            if (_restoreFilter || _checkTextFilterRemoveNodesOnSearch)
-            {
-                //reset the starting nodes
-                _startingNodes = DuplicateNodes(_loadedNodes);
-            }
+            //reset the starting nodes
+            _startingNodes = DuplicateNodes(_loadedNodes);
             //reset removed nodes
             if (_checkTextFilterRemoveNodesOnSearch)
             {

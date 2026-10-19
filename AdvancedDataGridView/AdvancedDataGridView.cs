@@ -1469,12 +1469,12 @@ namespace Zuby.ADGV
                 Rectangle rect = GetCellDisplayRectangle(column.Index, -1, true);
 
                 if (_filteredColumns.Contains(column.Name))
-                    filterMenu.Show(this, rect.Left, rect.Bottom, false);
+                    filterMenu.Show(this, rect.Left, rect.Bottom);
                 else
                 {
                     _filteredColumns.Add(column.Name);
                     if (_filterOrderList.Count() > 0 && _filterOrderList.Last() == column.Name)
-                        filterMenu.Show(this, rect.Left, rect.Bottom, true);
+                        filterMenu.Show(this, rect.Left, rect.Bottom);
                     else
                         filterMenu.Show(this, rect.Left, rect.Bottom, column.Name);
                 }
